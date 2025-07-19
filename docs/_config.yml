@@ -1,18 +1,39 @@
 title: "AIエージェント・コミュニケーション実践ガイド"
 description: "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法"
-author: "ITDO Inc."
+author: "株式会社アイティードゥ"
 version: "1.0.0"
 lang: "ja"
+url: "https://itdojp.github.io"
+baseurl: "/ai-communication-book"
+
+# リポジトリ情報
+repository:
+  github: "https://github.com/itdojp/ai-communication-book"
+  name: "ai-communication-book"
 
 # Jekyll設定
 markdown: kramdown
 highlighter: rouge
+# GitHub Pages標準テーマを使用しない
+# theme: minima
 
 # プラグイン
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+
+# デフォルト設定
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "book"
+  - scope:
+      path: "src"
+    values:
+      layout: "book"
 
 # 除外ファイル
 exclude:
@@ -21,18 +42,19 @@ exclude:
   - package-lock.json
   - scripts/
   - tests/
-  - templates/
-  - book-config.json
   - README.md
-  - CHANGELOG.md
+  - CLAUDE.md
+  - book-config.json
+  - templates/
 
 # 日本語対応
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    line_numbers: false
   
 # GitHub Pages設定
-baseurl: "/ai-communication-book"
-url: "https://itdojp.github.io"
-repository: "itdojp/ai-communication-book"
+github:
+  is_project_page: true
 
