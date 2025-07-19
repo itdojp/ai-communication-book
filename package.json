@@ -1,0 +1,30 @@
+{
+  "name": "aiエージェント・コミュニケーション実践ガイド",
+  "version": "1.0.0",
+  "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
+  "main": "index.md",
+  "scripts": {
+    "start": "jekyll serve --livereload",
+    "build": "jekyll build",
+    "test": "npm run lint && npm run check-links",
+    "lint": "markdownlint src/**/*.md",
+    "check-links": "markdown-link-check src/**/*.md",
+    "deploy": "gh-pages -d _site"
+  },
+  "keywords": [
+    "book",
+    "documentation",
+    "ja"
+  ],
+  "author": "ITDO Inc.",
+  "license": "MIT",
+  "devDependencies": {
+    "markdownlint-cli": "^0.37.0",
+    "markdown-link-check": "^3.11.2",
+    "gh-pages": "^6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itdojp/ai-communication-book.git"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "title": "AIエージェント・コミュニケーション実践ガイド",
+  "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
+  "author": "ITDO Inc.",
+  "version": "1.0.0",
+  "structure": {
+    "chapters": [
+      {
+        "id": "introduction",
+        "title": "はじめに",
+        "description": "AI時代のコミュニケーションについて"
+      },
+      {
+        "id": "chapter01",
+        "title": "第1章：即座に活用できるAIコミュニケーション基礎",
+        "description": "基本的なAIコミュニケーション技術の習得"
+      },
+      {
+        "id": "chapter02",
+        "title": "第2章：構造化思考でプロンプトを設計する",
+        "description": "効果的なプロンプト設計の理論と実践"
+      },
+      {
+        "id": "chapter03",
+        "title": "第3章：コンテキスト制御による対話の最適化",
+        "description": "コンテキストを意識した対話設計"
+      },
+      {
+        "id": "chapter04",
+        "title": "第4章：フィードバックループによる継続的改善",
+        "description": "継続的な改善メカニズムの構築"
+      },
+      {
+        "id": "chapter05",
+        "title": "第5章：エラーハンドリングと例外対応",
+        "description": "予期しない状況への対処法"
+      },
+      {
+        "id": "chapter06",
+        "title": "第6章：チーム活用とワークフロー統合",
+        "description": "チームでのAI活用とワークフロー設計"
+      },
+      {
+        "id": "chapter07",
+        "title": "第7章：ドメイン特化型AI活用法",
+        "description": "専門分野でのAI活用事例"
+      },
+      {
+        "id": "chapter08",
+        "title": "第8章：品質保証とリスク管理",
+        "description": "AI活用における品質管理とリスク対策"
+      }
+    ],
+    "appendices": [
+      {
+        "id": "appendix-a",
+        "title": "付録A：プロンプトテンプレート集"
+      },
+      {
+        "id": "appendix-b",
+        "title": "付録B：参考文献"
+      }
+    ]
+  }
+}

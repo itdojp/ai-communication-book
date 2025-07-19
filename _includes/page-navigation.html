@@ -1,0 +1,182 @@
+<!-- Page Navigation (Previous/Next) -->
+{% assign current_url = page.url %}
+{% assign previous_page_url = nil %}
+{% assign previous_page_title = nil %}
+{% assign next_page_url = nil %}
+{% assign next_page_title = nil %}
+
+{% if current_url contains '/chapter-introduction/' %}
+    {% assign next_page_url = '/src/chapter-chapter01/index.html' %}
+    {% assign next_page_title = '第1章：即座に活用できるAIコミュニケーション基礎' %}
+{% elsif current_url contains '/chapter-chapter01/' %}
+    {% assign previous_page_url = '/src/chapter-introduction/index.html' %}
+    {% assign previous_page_title = 'はじめに' %}
+    {% assign next_page_url = '/src/chapter-chapter02/index.html' %}
+    {% assign next_page_title = '第2章：構造化思考でプロンプトを設計する' %}
+{% elsif current_url contains '/chapter-chapter02/' %}
+    {% assign previous_page_url = '/src/chapter-chapter01/index.html' %}
+    {% assign previous_page_title = '第1章：即座に活用できるAIコミュニケーション基礎' %}
+    {% assign next_page_url = '/src/chapter-chapter03/index.html' %}
+    {% assign next_page_title = '第3章：コンテキスト制御による対話の最適化' %}
+{% elsif current_url contains '/chapter-chapter03/' %}
+    {% assign previous_page_url = '/src/chapter-chapter02/index.html' %}
+    {% assign previous_page_title = '第2章：構造化思考でプロンプトを設計する' %}
+    {% assign next_page_url = '/src/chapter-chapter04/index.html' %}
+    {% assign next_page_title = '第4章：フィードバックループによる継続的改善' %}
+{% elsif current_url contains '/chapter-chapter04/' %}
+    {% assign previous_page_url = '/src/chapter-chapter03/index.html' %}
+    {% assign previous_page_title = '第3章：コンテキスト制御による対話の最適化' %}
+    {% assign next_page_url = '/src/chapter-chapter05/index.html' %}
+    {% assign next_page_title = '第5章：エラーハンドリングと例外対応' %}
+{% elsif current_url contains '/chapter-chapter05/' %}
+    {% assign previous_page_url = '/src/chapter-chapter04/index.html' %}
+    {% assign previous_page_title = '第4章：フィードバックループによる継続的改善' %}
+    {% assign next_page_url = '/src/chapter-chapter06/index.html' %}
+    {% assign next_page_title = '第6章：チーム活用とワークフロー統合' %}
+{% elsif current_url contains '/chapter-chapter06/' %}
+    {% assign previous_page_url = '/src/chapter-chapter05/index.html' %}
+    {% assign previous_page_title = '第5章：エラーハンドリングと例外対応' %}
+    {% assign next_page_url = '/src/chapter-chapter07/index.html' %}
+    {% assign next_page_title = '第7章：ドメイン特化型AI活用法' %}
+{% elsif current_url contains '/chapter-chapter07/' %}
+    {% assign previous_page_url = '/src/chapter-chapter06/index.html' %}
+    {% assign previous_page_title = '第6章：チーム活用とワークフロー統合' %}
+    {% assign next_page_url = '/src/chapter-chapter08/index.html' %}
+    {% assign next_page_title = '第8章：品質保証とリスク管理' %}
+{% elsif current_url contains '/chapter-chapter08/' %}
+    {% assign previous_page_url = '/src/chapter-chapter07/index.html' %}
+    {% assign previous_page_title = '第7章：ドメイン特化型AI活用法' %}
+{% endif %}
+
+<div class="page-nav">
+    <!-- Previous Page -->
+    <div class="page-nav-item page-nav-prev">
+        {% if previous_page_url %}
+        <a href="{{ previous_page_url | relative_url }}" class="page-nav-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <div class="page-nav-content">
+                <span class="page-nav-label">前のページ</span>
+                <span class="page-nav-title">{{ previous_page_title }}</span>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Next Page -->
+    <div class="page-nav-item page-nav-next">
+        {% if next_page_url %}
+        <a href="{{ next_page_url | relative_url }}" class="page-nav-link">
+            <div class="page-nav-content">
+                <span class="page-nav-label">次のページ</span>
+                <span class="page-nav-title">{{ next_page_title }}</span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.page-nav-item {
+    flex: 1;
+    max-width: 45%;
+}
+
+.page-nav-prev {
+    text-align: left;
+}
+
+.page-nav-next {
+    text-align: right;
+    margin-left: auto;
+}
+
+.page-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+}
+
+.page-nav-link:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.page-nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.page-nav-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.page-nav-title {
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .page-nav-link {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .page-nav-link:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .page-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .page-nav-item {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .page-nav-next {
+        margin-left: 0;
+    }
+    
+    .page-nav-link {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .page-nav-prev .page-nav-link {
+        flex-direction: row;
+    }
+    
+    .page-nav-next .page-nav-link {
+        flex-direction: row-reverse;
+    }
+}
+</style>
