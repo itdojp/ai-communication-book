@@ -7,7 +7,6 @@ lang: "ja"
 # Jekyll設定
 markdown: kramdown
 highlighter: rouge
-theme: minima
 
 # プラグイン
 plugins:
@@ -22,8 +21,10 @@ exclude:
   - package-lock.json
   - scripts/
   - tests/
-  - "*.md"
-  - "README.md"
+  - templates/
+  - book-config.json
+  - README.md
+  - CHANGELOG.md
 
 # 日本語対応
 kramdown:
