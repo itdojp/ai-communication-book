@@ -46,6 +46,16 @@
 {% elsif current_url contains '/chapter-chapter08/' %}
     {% assign previous_page_url = '/src/chapter-chapter07/index.html' %}
     {% assign previous_page_title = '第7章：ドメイン特化型AI活用法' %}
+    {% assign next_page_url = '/src/appendices/appendix-a.html' %}
+    {% assign next_page_title = '付録A プロンプトテンプレート集' %}
+{% elsif current_url contains '/appendices/appendix-a' %}
+    {% assign previous_page_url = '/src/chapter-chapter08/index.html' %}
+    {% assign previous_page_title = '第8章：品質保証とリスク管理' %}
+    {% assign next_page_url = '/src/appendices/appendix-b.html' %}
+    {% assign next_page_title = '付録B 参考文献' %}
+{% elsif current_url contains '/appendices/appendix-b' %}
+    {% assign previous_page_url = '/src/appendices/appendix-a.html' %}
+    {% assign previous_page_title = '付録A プロンプトテンプレート集' %}
 {% endif %}
 
 <div class="page-nav">
