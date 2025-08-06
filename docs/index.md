@@ -1,9 +1,11 @@
 ---
+layout: book
 title: "AIエージェント・コミュニケーション実践ガイド"
 description: "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法"
 author: "株式会社アイティードゥ"
 version: "1.0.0"
-layout: book
+order: 1
+permalink: /
 ---
 
 # {{ page.title }}

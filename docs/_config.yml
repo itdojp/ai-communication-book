@@ -7,21 +7,20 @@ url: "https://itdojp.github.io"
 baseurl: "/ai-communication-book"
 
 # リポジトリ情報
-repository:
-  github: "https://github.com/itdojp/ai-communication-book"
-  name: "ai-communication-book"
+repository: "https://github.com/itdojp/ai-communication-book"
 
 # Jekyll設定
 markdown: kramdown
 highlighter: rouge
-# GitHub Pages標準テーマを使用しない
-# theme: minima
+permalink: pretty
 
 # プラグイン
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
 
 # デフォルト設定
 defaults:
