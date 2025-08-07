@@ -2,6 +2,7 @@
 title: "第1章：即座に活用できるAIコミュニケーション基礎"
 chapter: chapter01
 layout: book
+order: 3
 ---
 
 # 第1章：即効性のある活用法

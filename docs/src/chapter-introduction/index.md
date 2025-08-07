@@ -2,6 +2,7 @@
 title: "はじめに"
 chapter: introduction
 layout: book
+order: 2
 ---
 
 # はじめに

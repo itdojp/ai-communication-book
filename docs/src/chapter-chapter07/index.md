@@ -2,6 +2,7 @@
 title: "第7章：ドメイン特化型AI活用法"
 chapter: chapter07
 layout: book
+order: 9
 ---
 
 # 第7章：業務プロセス統合設計

@@ -2,6 +2,7 @@
 title: "第8章：品質保証とリスク管理"
 chapter: chapter08
 layout: book
+order: 10
 ---
 
 # 第8章：品質保証とリスク管理

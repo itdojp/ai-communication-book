@@ -2,6 +2,7 @@
 title: "第5章：エラーハンドリングと例外対応"
 chapter: chapter05
 layout: book
+order: 7
 ---
 
 # 第5章：高度プロンプト技術

@@ -2,6 +2,7 @@
 title: "第4章：フィードバックループによる継続的改善"
 chapter: chapter04
 layout: book
+order: 6
 ---
 
 # 第4章：基礎プロンプト設計

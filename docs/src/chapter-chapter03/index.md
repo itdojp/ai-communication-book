@@ -2,6 +2,7 @@
 title: "第3章：コンテキスト制御による対話の最適化"
 chapter: chapter03
 layout: book
+order: 5
 ---
 
 # 第3章：モデル評価と選択基準

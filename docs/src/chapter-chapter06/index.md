@@ -2,6 +2,7 @@
 title: "第6章：チーム活用とワークフロー統合"
 chapter: chapter06
 layout: book
+order: 8
 ---
 
 # 第6章：先進技術活用
