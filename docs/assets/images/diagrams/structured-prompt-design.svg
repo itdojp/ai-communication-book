@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: 'Noto Sans JP', sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .layer-title { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: bold; fill: #fff; }
+      .component-title { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; font-weight: bold; fill: #2c3e50; }
+      .text-content { font-family: 'Noto Sans JP', sans-serif; font-size: 11px; fill: #2c3e50; }
+      .small-text { font-family: 'Noto Sans JP', sans-serif; font-size: 10px; fill: #7f8c8d; }
+      .context-box { fill: #3498db; stroke: #2980b9; stroke-width: 2; }
+      .task-box { fill: #e74c3c; stroke: #c0392b; stroke-width: 2; }
+      .format-box { fill: #2ecc71; stroke: #27ae60; stroke-width: 2; }
+      .example-box { fill: #f39c12; stroke: #e67e22; stroke-width: 2; }
+      .constraint-box { fill: #9b59b6; stroke: #8e44ad; stroke-width: 2; }
+      .component { fill: #fff; stroke: #95a5a6; stroke-width: 1; }
+      .flow-arrow { stroke: #34495e; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .structure-line { stroke: #95a5a6; stroke-width: 1; stroke-dasharray: 3,2; fill: none; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" class="title" text-anchor="middle">構造化プロンプト設計フレームワーク</text>
+
+  <!-- Context Layer -->
+  <g id="context">
+    <rect x="50" y="60" width="160" height="120" class="context-box" rx="10"/>
+    <text x="130" y="85" class="layer-title" text-anchor="middle">コンテキスト</text>
+    <text x="130" y="105" class="layer-title" text-anchor="middle">(Context)</text>
+    
+    <rect x="65" y="115" width="130" height="55" class="component" rx="3"/>
+    <text x="130" y="135" class="component-title" text-anchor="middle">背景情報</text>
+    <text x="75" y="150" class="text-content">• 役割定義</text>
+    <text x="75" y="165" class="text-content">• 前提条件</text>
+  </g>
+
+  <!-- Task Layer -->
+  <g id="task">
+    <rect x="230" y="60" width="160" height="120" class="task-box" rx="10"/>
+    <text x="310" y="85" class="layer-title" text-anchor="middle">タスク</text>
+    <text x="310" y="105" class="layer-title" text-anchor="middle">(Task)</text>
+    
+    <rect x="245" y="115" width="130" height="55" class="component" rx="3"/>
+    <text x="310" y="135" class="component-title" text-anchor="middle">具体的指示</text>
+    <text x="255" y="150" class="text-content">• 実行内容</text>
+    <text x="255" y="165" class="text-content">• 期待結果</text>
+  </g>
+
+  <!-- Format Layer -->
+  <g id="format">
+    <rect x="410" y="60" width="160" height="120" class="format-box" rx="10"/>
+    <text x="490" y="85" class="layer-title" text-anchor="middle">出力形式</text>
+    <text x="490" y="105" class="layer-title" text-anchor="middle">(Format)</text>
+    
+    <rect x="425" y="115" width="130" height="55" class="component" rx="3"/>
+    <text x="490" y="135" class="component-title" text-anchor="middle">構造指定</text>
+    <text x="435" y="150" class="text-content">• データ形式</text>
+    <text x="435" y="165" class="text-content">• 文書構造</text>
+  </g>
+
+  <!-- Example Layer -->
+  <g id="example">
+    <rect x="590" y="60" width="160" height="120" class="example-box" rx="10"/>
+    <text x="670" y="85" class="layer-title" text-anchor="middle">例示</text>
+    <text x="670" y="105" class="layer-title" text-anchor="middle">(Examples)</text>
+    
+    <rect x="605" y="115" width="130" height="55" class="component" rx="3"/>
+    <text x="670" y="135" class="component-title" text-anchor="middle">具体例</text>
+    <text x="615" y="150" class="text-content">• サンプル</text>
+    <text x="615" y="165" class="text-content">• パターン</text>
+  </g>
+
+  <!-- Constraint Layer -->
+  <g id="constraint">
+    <rect x="770" y="60" width="120" height="120" class="constraint-box" rx="10"/>
+    <text x="830" y="85" class="layer-title" text-anchor="middle">制約</text>
+    <text x="830" y="105" class="layer-title" text-anchor="middle">(Constraints)</text>
+    
+    <rect x="785" y="115" width="90" height="55" class="component" rx="3"/>
+    <text x="830" y="135" class="component-title" text-anchor="middle">条件設定</text>
+    <text x="795" y="150" class="text-content">• 制限事項</text>
+    <text x="795" y="165" class="text-content">• 品質基準</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <path d="M 210 120 L 230 120" class="flow-arrow"/>
+  <path d="M 390 120 L 410 120" class="flow-arrow"/>
+  <path d="M 570 120 L 590 120" class="flow-arrow"/>
+  <path d="M 750 120 L 770 120" class="flow-arrow"/>
+
+  <!-- Detailed Framework -->
+  <g id="framework">
+    <rect x="50" y="200" width="800" height="460" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" rx="5"/>
+    <text x="450" y="225" class="component-title" text-anchor="middle">プロンプト構造化メソッド</text>
+    
+    <!-- CTFEC Framework -->
+    <rect x="70" y="240" width="760" height="80" fill="#fff" stroke="#bdc3c7" stroke-width="1" rx="3"/>
+    <text x="80" y="260" class="component-title">CTFECフレームワーク構成要素</text>
+    <text x="80" y="280" class="text-content">Context（背景） → Task（タスク） → Format（形式） → Examples（例示） → Constraints（制約）</text>
+    <text x="80" y="295" class="small-text">各要素を段階的に構築することで、AIとの効果的な対話を実現</text>
+    <text x="80" y="310" class="small-text">順序性が重要：コンテキストから制約まで論理的に構成する</text>
+
+    <!-- Context Design -->
+    <rect x="70" y="340" width="180" height="110" fill="#e6f3ff" stroke="#3498db" stroke-width="1" rx="3"/>
+    <text x="160" y="360" class="text-content" text-anchor="middle" font-weight="bold">コンテキスト設計</text>
+    <text x="80" y="380" class="small-text">役割定義の要素:</text>
+    <text x="80" y="395" class="small-text">• 専門性（エンジニア、分析者等）</text>
+    <text x="80" y="410" class="small-text">• 経験レベル（初心者〜エキスパート）</text>
+    <text x="80" y="425" class="small-text">• 作業環境・制約条件</text>
+    <text x="80" y="440" class="small-text">効果: AIの応答品質・適切性向上</text>
+
+    <!-- Task Specification -->
+    <rect x="270" y="340" width="180" height="110" fill="#ffe6e6" stroke="#e74c3c" stroke-width="1" rx="3"/>
+    <text x="360" y="360" class="text-content" text-anchor="middle" font-weight="bold">タスク仕様設計</text>
+    <text x="280" y="380" class="small-text">明確化の要素:</text>
+    <text x="280" y="395" class="small-text">• 動作の明確化（分析する、生成する）</text>
+    <text x="280" y="410" class="small-text">• 対象の特定（データ、コード、文書）</text>
+    <text x="280" y="425" class="small-text">• 成果物の定義</text>
+    <text x="280" y="440" class="small-text">効果: 意図した結果の確実な取得</text>
+
+    <!-- Format Control -->
+    <rect x="470" y="340" width="180" height="110" fill="#e6ffe6" stroke="#2ecc71" stroke-width="1" rx="3"/>
+    <text x="560" y="360" class="text-content" text-anchor="middle" font-weight="bold">出力形式制御</text>
+    <text x="480" y="380" class="small-text">構造化指定:</text>
+    <text x="480" y="395" class="small-text">• データ形式（JSON, CSV, Markdown）</text>
+    <text x="480" y="410" class="small-text">• 文書構造（見出し、箇条書き）</text>
+    <text x="480" y="425" class="small-text">• 長さ・詳細度の指定</text>
+    <text x="480" y="440" class="small-text">効果: 後処理の効率化</text>
+
+    <!-- Examples & Constraints -->
+    <rect x="670" y="340" width="160" height="110" fill="#fff3cd" stroke="#f39c12" stroke-width="1" rx="3"/>
+    <text x="750" y="360" class="text-content" text-anchor="middle" font-weight="bold">例示と制約</text>
+    <text x="680" y="380" class="small-text">品質担保要素:</text>
+    <text x="680" y="395" class="small-text">• 期待する出力例</text>
+    <text x="680" y="410" class="small-text">• 避けるべき内容</text>
+    <text x="680" y="425" class="small-text">• 品質基準の明示</text>
+    <text x="680" y="440" class="small-text">効果: 安定した品質確保</text>
+
+    <!-- Practical Templates -->
+    <text x="450" y="480" class="component-title" text-anchor="middle">実践的テンプレート例</text>
+    
+    <!-- Code Review Template -->
+    <rect x="70" y="500" width="200" height="120" fill="#f3e6ff" stroke="#9b59b6" stroke-width="1" rx="3"/>
+    <text x="170" y="520" class="text-content" text-anchor="middle" font-weight="bold">コードレビュー</text>
+    <text x="80" y="540" class="small-text">Context: シニアエンジニアとして</text>
+    <text x="80" y="555" class="small-text">Task: コードの品質評価と改善提案</text>
+    <text x="80" y="570" class="small-text">Format: 問題点リスト + 修正案</text>
+    <text x="80" y="585" class="small-text">Examples: 具体的な修正コード例</text>
+    <text x="80" y="600" class="small-text">Constraints: セキュリティ・性能重視</text>
+
+    <!-- Documentation Template -->
+    <rect x="290" y="500" width="200" height="120" fill="#e6f3ff" stroke="#3498db" stroke-width="1" rx="3"/>
+    <text x="390" y="520" class="text-content" text-anchor="middle" font-weight="bold">技術文書作成</text>
+    <text x="300" y="540" class="small-text">Context: 技術者向け解説書作成者</text>
+    <text x="300" y="555" class="small-text">Task: 複雑な技術概念の分かりやすい説明</text>
+    <text x="300" y="570" class="small-text">Format: 見出し構造 + 図表挿入指示</text>
+    <text x="300" y="585" class="small-text">Examples: 既存の優良文書参照</text>
+    <text x="300" y="600" class="small-text">Constraints: 初心者にも理解可能</text>
+
+    <!-- Analysis Template -->
+    <rect x="510" y="500" width="200" height="120" fill="#ffe6e6" stroke="#e74c3c" stroke-width="1" rx="3"/>
+    <text x="610" y="520" class="text-content" text-anchor="middle" font-weight="bold">データ分析</text>
+    <text x="520" y="540" class="small-text">Context: データアナリストの役割</text>
+    <text x="520" y="555" class="small-text">Task: パターン発見と洞察抽出</text>
+    <text x="520" y="570" class="small-text">Format: 統計値 + 視覚化提案</text>
+    <text x="520" y="585" class="small-text">Examples: グラフ形式の指定</text>
+    <text x="520" y="600" class="small-text">Constraints: 統計的有意性確保</text>
+
+    <!-- Problem Solving Template -->
+    <rect x="730" y="500" width="100" height="120" fill="#e6ffe6" stroke="#2ecc71" stroke-width="1" rx="3"/>
+    <text x="780" y="520" class="text-content" text-anchor="middle" font-weight="bold">問題解決</text>
+    <text x="740" y="540" class="small-text">Context: 問題解決者</text>
+    <text x="740" y="555" class="small-text">Task: 根本原因分析</text>
+    <text x="740" y="570" class="small-text">Format: 構造化分析</text>
+    <text x="740" y="585" class="small-text">Examples: 類似事例</text>
+    <text x="740" y="600" class="small-text">Constraints: 実現可能</text>
+
+    <!-- Best Practices -->
+    <text x="450" y="645" class="component-title" text-anchor="middle">構造化プロンプト設計のベストプラクティス</text>
+    <text x="80" y="665" class="text-content">• 段階的構築: 基本構造から詳細へ徐々に精緻化　• 反復改善: フィードバックを基にした継続的な最適化</text>
+    <text x="80" y="680" class="text-content">• 文脈適応: タスクの性質に応じた構造の調整　• 品質検証: 期待結果との比較による効果測定</text>
+  </g>
+
+  <!-- Connection Lines -->
+  <line x1="160" y1="320" x2="160" y2="340" class="structure-line"/>
+  <line x1="360" y1="320" x2="360" y2="340" class="structure-line"/>
+  <line x1="560" y1="320" x2="560" y2="340" class="structure-line"/>
+  <line x1="750" y1="320" x2="750" y2="340" class="structure-line"/>
+</svg>

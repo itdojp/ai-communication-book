@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: 'Noto Sans JP', sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .role-title { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: bold; fill: #fff; }
+      .component-title { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; font-weight: bold; fill: #2c3e50; }
+      .text-content { font-family: 'Noto Sans JP', sans-serif; font-size: 11px; fill: #2c3e50; }
+      .small-text { font-family: 'Noto Sans JP', sans-serif; font-size: 10px; fill: #7f8c8d; }
+      .individual-box { fill: #3498db; stroke: #2980b9; stroke-width: 2; }
+      .team-box { fill: #2ecc71; stroke: #27ae60; stroke-width: 2; }
+      .ai-assistant-box { fill: #e74c3c; stroke: #c0392b; stroke-width: 2; }
+      .workflow-box { fill: #f39c12; stroke: #e67e22; stroke-width: 2; }
+      .component { fill: #fff; stroke: #95a5a6; stroke-width: 1; }
+      .workflow-arrow { stroke: #34495e; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .integration-line { stroke: #9b59b6; stroke-width: 2; stroke-dasharray: 8,4; fill: none; }
+      .collaboration-circle { stroke: #2ecc71; stroke-width: 2; fill: none; stroke-dasharray: 10,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#34495e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" class="title" text-anchor="middle">AIチーム活用とワークフロー統合</text>
+
+  <!-- Individual Level -->
+  <g id="individual">
+    <rect x="50" y="70" width="180" height="120" class="individual-box" rx="10"/>
+    <text x="140" y="95" class="role-title" text-anchor="middle">個人レベル</text>
+    
+    <rect x="65" y="105" width="150" height="75" class="component" rx="3"/>
+    <text x="140" y="125" class="component-title" text-anchor="middle">個人生産性向上</text>
+    <text x="75" y="145" class="text-content">• パーソナルAIアシスタント</text>
+    <text x="75" y="160" class="text-content">• 作業効率化</text>
+    <text x="75" y="175" class="small-text">効果: 個人スキル向上</text>
+  </g>
+
+  <!-- Team Level -->
+  <g id="team">
+    <rect x="250" y="70" width="180" height="120" class="team-box" rx="10"/>
+    <text x="340" y="95" class="role-title" text-anchor="middle">チームレベル</text>
+    
+    <rect x="265" y="105" width="150" height="75" class="component" rx="3"/>
+    <text x="340" y="125" class="component-title" text-anchor="middle">協働AI活用</text>
+    <text x="275" y="145" class="text-content">• 共有ナレッジベース</text>
+    <text x="275" y="160" class="text-content">• 集合知活用</text>
+    <text x="275" y="175" class="small-text">効果: チーム能力向上</text>
+  </g>
+
+  <!-- AI Assistant Integration -->
+  <g id="ai-assistant">
+    <rect x="450" y="70" width="180" height="120" class="ai-assistant-box" rx="10"/>
+    <text x="540" y="95" class="role-title" text-anchor="middle">AI統合レベル</text>
+    
+    <rect x="465" y="105" width="150" height="75" class="component" rx="3"/>
+    <text x="540" y="125" class="component-title" text-anchor="middle">AI-人間協働</text>
+    <text x="475" y="145" class="text-content">• 自動化との連携</text>
+    <text x="475" y="160" class="text-content">• インテリジェント支援</text>
+    <text x="475" y="175" class="small-text">効果: シナジー創出</text>
+  </g>
+
+  <!-- Workflow Integration -->
+  <g id="workflow">
+    <rect x="650" y="70" width="200" height="120" class="workflow-box" rx="10"/>
+    <text x="750" y="95" class="role-title" text-anchor="middle">ワークフロー統合</text>
+    
+    <rect x="665" y="105" width="170" height="75" class="component" rx="3"/>
+    <text x="750" y="125" class="component-title" text-anchor="middle">プロセス最適化</text>
+    <text x="675" y="145" class="text-content">• 業務プロセス改革</text>
+    <text x="675" y="160" class="text-content">• 組織効率向上</text>
+    <text x="675" y="175" class="small-text">効果: 組織変革促進</text>
+  </g>
+
+  <!-- Integration Arrows -->
+  <path d="M 230 130 L 250 130" class="workflow-arrow"/>
+  <path d="M 430 130 L 450 130" class="workflow-arrow"/>
+  <path d="M 630 130 L 650 130" class="workflow-arrow"/>
+
+  <!-- Collaboration Circle -->
+  <circle cx="450" cy="130" r="220" class="collaboration-circle"/>
+  <text x="450" y="380" class="small-text" text-anchor="middle">統合的協働エコシステム</text>
+
+  <!-- Integration Framework -->
+  <g id="framework">
+    <rect x="50" y="210" width="800" height="450" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" rx="5"/>
+    <text x="450" y="235" class="component-title" text-anchor="middle">AI統合ワークフロー設計フレームワーク</text>
+    
+    <!-- Planning Phase -->
+    <rect x="70" y="250" width="180" height="100" fill="#e6f3ff" stroke="#3498db" stroke-width="1" rx="3"/>
+    <text x="160" y="270" class="text-content" text-anchor="middle" font-weight="bold">計画フェーズ</text>
+    <text x="80" y="290" class="small-text">AI活用戦略策定:</text>
+    <text x="80" y="305" class="small-text">• 現状分析とギャップ識別</text>
+    <text x="80" y="320" class="small-text">• AI導入目標の設定</text>
+    <text x="80" y="335" class="small-text">• ロードマップ作成</text>
+
+    <!-- Implementation Phase -->
+    <rect x="270" y="250" width="180" height="100" fill="#e6ffe6" stroke="#2ecc71" stroke-width="1" rx="3"/>
+    <text x="360" y="270" class="text-content" text-anchor="middle" font-weight="bold">実装フェーズ</text>
+    <text x="280" y="290" class="small-text">段階的統合実施:</text>
+    <text x="280" y="305" class="small-text">• パイロットプロジェクト</text>
+    <text x="280" y="320" class="small-text">• ツール・プロセス統合</text>
+    <text x="280" y="335" class="small-text">• チーム研修・サポート</text>
+
+    <!-- Optimization Phase -->
+    <rect x="470" y="250" width="180" height="100" fill="#ffe6e6" stroke="#e74c3c" stroke-width="1" rx="3"/>
+    <text x="560" y="270" class="text-content" text-anchor="middle" font-weight="bold">最適化フェーズ</text>
+    <text x="480" y="290" class="small-text">継続的改善実施:</text>
+    <text x="480" y="305" class="small-text">• パフォーマンス監視</text>
+    <text x="480" y="320" class="small-text">• フィードバック収集</text>
+    <text x="480" y="335" class="small-text">• 調整・改善実行</text>
+
+    <!-- Scaling Phase -->
+    <rect x="670" y="250" width="160" height="100" fill="#fff3cd" stroke="#f39c12" stroke-width="1" rx="3"/>
+    <text x="750" y="270" class="text-content" text-anchor="middle" font-weight="bold">拡張フェーズ</text>
+    <text x="680" y="290" class="small-text">組織全体への展開:</text>
+    <text x="680" y="305" class="small-text">• 成功事例の横展開</text>
+    <text x="680" y="320" class="small-text">• 標準化・体系化</text>
+    <text x="680" y="335" class="small-text">• 文化浸透促進</text>
+
+    <!-- Collaboration Patterns -->
+    <text x="450" y="380" class="component-title" text-anchor="middle">チーム協働パターンと実践例</text>
+    
+    <!-- Concurrent Collaboration -->
+    <rect x="70" y="400" width="200" height="120" fill="#f3e6ff" stroke="#9b59b6" stroke-width="1" rx="3"/>
+    <text x="170" y="420" class="text-content" text-anchor="middle" font-weight="bold">並行協働パターン</text>
+    <text x="80" y="440" class="small-text">同時並行作業での AI 活用:</text>
+    <text x="80" y="455" class="small-text">• 複数メンバーでのAI共有</text>
+    <text x="80" y="470" class="small-text">• リアルタイム情報共有</text>
+    <text x="80" y="485" class="small-text">• 集合知の即座活用</text>
+    <text x="80" y="505" class="small-text">例: 分散開発チームでのコード生成</text>
+
+    <!-- Sequential Collaboration -->
+    <rect x="290" y="400" width="200" height="120" fill="#e6f3ff" stroke="#3498db" stroke-width="1" rx="3"/>
+    <text x="390" y="420" class="text-content" text-anchor="middle" font-weight="bold">順次協働パターン</text>
+    <text x="300" y="440" class="small-text">段階的作業でのAI活用:</text>
+    <text x="300" y="455" class="small-text">• 前工程の結果を次で活用</text>
+    <text x="300" y="470" class="small-text">• AI支援の引き継ぎ</text>
+    <text x="300" y="485" class="small-text">• 品質の段階的向上</text>
+    <text x="300" y="505" class="small-text">例: 設計→実装→テストの流れ</text>
+
+    <!-- Hybrid Collaboration -->
+    <rect x="510" y="400" width="200" height="120" fill="#ffe6e6" stroke="#e74c3c" stroke-width="1" rx="3"/>
+    <text x="610" y="420" class="text-content" text-anchor="middle" font-weight="bold">ハイブリッド協働</text>
+    <text x="520" y="440" class="small-text">人間-AIの役割分担最適化:</text>
+    <text x="520" y="455" class="small-text">• 創造的作業は人間主導</text>
+    <text x="520" y="470" class="small-text">• 定型作業はAI主導</text>
+    <text x="520" y="485" class="small-text">• 相互チェック・改善</text>
+    <text x="520" y="505" class="small-text">例: AIが叩き台、人間が精緻化</text>
+
+    <!-- Knowledge Integration -->
+    <rect x="730" y="400" width="100" height="120" fill="#e6ffe6" stroke="#2ecc71" stroke-width="1" rx="3"/>
+    <text x="780" y="420" class="text-content" text-anchor="middle" font-weight="bold">知識統合</text>
+    <text x="780" y="440" class="text-content" text-anchor="middle" font-weight="bold">パターン</text>
+    <text x="740" y="460" class="small-text">チーム知識の集約:</text>
+    <text x="740" y="475" class="small-text">• 個人知識の集合化</text>
+    <text x="740" y="490" class="small-text">• AIによる知識統合</text>
+    <text x="740" y="505" class="small-text">例: FAQ自動生成</text>
+
+    <!-- Success Metrics -->
+    <text x="450" y="550" class="component-title" text-anchor="middle">統合成功指標と品質管理</text>
+    
+    <rect x="70" y="570" width="760" height="80" fill="#fff" stroke="#95a5a6" stroke-width="1" rx="3"/>
+    <text x="80" y="590" class="text-content" font-weight="bold">効率性指標:</text>
+    <text x="240" y="590" class="text-content" font-weight="bold">品質指標:</text>
+    <text x="440" y="590" class="text-content" font-weight="bold">協働指標:</text>
+    <text x="640" y="590" class="text-content" font-weight="bold">満足度指標:</text>
+    
+    <text x="80" y="605" class="small-text">• 作業時間短縮率</text>
+    <text x="240" y="605" class="small-text">• 成果物品質向上</text>
+    <text x="440" y="605" class="small-text">• チーム連携度</text>
+    <text x="640" y="605" class="small-text">• メンバー満足度</text>
+    
+    <text x="80" y="620" class="small-text">• プロセス効率化</text>
+    <text x="240" y="620" class="small-text">• エラー削減率</text>
+    <text x="440" y="620" class="small-text">• 知識共有頻度</text>
+    <text x="640" y="620" class="small-text">• AI活用度評価</text>
+    
+    <text x="80" y="635" class="small-text">• コスト削減効果</text>
+    <text x="240" y="635" class="small-text">• 一貫性の維持</text>
+    <text x="440" y="635" class="small-text">• 学習効果</text>
+    <text x="640" y="635" class="small-text">• 継続使用意向</text>
+  </g>
+
+  <!-- Integration Lines -->
+  <line x1="160" y1="350" x2="160" y2="400" class="integration-line"/>
+  <line x1="360" y1="350" x2="390" y2="400" class="integration-line"/>
+  <line x1="560" y1="350" x2="610" y2="400" class="integration-line"/>
+  <line x1="750" y1="350" x2="780" y2="400" class="integration-line"/>
+</svg>
