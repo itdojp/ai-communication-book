@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: 'Noto Sans JP', sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .layer-title { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: bold; fill: #fff; }
+      .component-title { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; font-weight: bold; fill: #2c3e50; }
+      .text-content { font-family: 'Noto Sans JP', sans-serif; font-size: 11px; fill: #2c3e50; }
+      .small-text { font-family: 'Noto Sans JP', sans-serif; font-size: 10px; fill: #7f8c8d; }
+      .session-box { fill: #3498db; stroke: #2980b9; stroke-width: 2; }
+      .memory-box { fill: #e74c3c; stroke: #c0392b; stroke-width: 2; }
+      .state-box { fill: #2ecc71; stroke: #27ae60; stroke-width: 2; }
+      .optimization-box { fill: #f39c12; stroke: #e67e22; stroke-width: 2; }
+      .component { fill: #fff; stroke: #95a5a6; stroke-width: 1; }
+      .context-flow { stroke: #9b59b6; stroke-width: 3; fill: none; marker-end: url(#arrowhead-purple); }
+      .feedback-line { stroke: #34495e; stroke-width: 2; stroke-dasharray: 5,3; fill: none; }
+      .optimization-curve { stroke: #f39c12; stroke-width: 2; fill: none; }
+    </style>
+    <marker id="arrowhead-purple" markerWidth="12" markerHeight="12" refX="10" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#9b59b6"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" class="title" text-anchor="middle">コンテキスト制御による対話最適化</text>
+
+  <!-- Session Management -->
+  <g id="session">
+    <rect x="50" y="70" width="200" height="140" class="session-box" rx="10"/>
+    <text x="150" y="95" class="layer-title" text-anchor="middle">セッション管理</text>
+    
+    <rect x="65" y="105" width="170" height="95" class="component" rx="3"/>
+    <text x="150" y="125" class="component-title" text-anchor="middle">対話セッション制御</text>
+    <text x="75" y="145" class="text-content">• 会話の初期化設定</text>
+    <text x="75" y="160" class="text-content">• セッション状態の管理</text>
+    <text x="75" y="175" class="text-content">• 対話履歴の保持</text>
+    <text x="75" y="190" class="small-text">効果: 一貫した対話品質</text>
+  </g>
+
+  <!-- Context Memory -->
+  <g id="memory">
+    <rect x="270" y="70" width="200" height="140" class="memory-box" rx="10"/>
+    <text x="370" y="95" class="layer-title" text-anchor="middle">コンテキストメモリ</text>
+    
+    <rect x="285" y="105" width="170" height="95" class="component" rx="3"/>
+    <text x="370" y="125" class="component-title" text-anchor="middle">記憶・参照機構</text>
+    <text x="295" y="145" class="text-content">• 重要情報の保持</text>
+    <text x="295" y="160" class="text-content">• 参照データの管理</text>
+    <text x="295" y="175" class="text-content">• 過去の学習内容活用</text>
+    <text x="295" y="190" class="small-text">効果: 効率的情報活用</text>
+  </g>
+
+  <!-- State Tracking -->
+  <g id="state">
+    <rect x="490" y="70" width="200" height="140" class="state-box" rx="10"/>
+    <text x="590" y="95" class="layer-title" text-anchor="middle">状態追跡</text>
+    
+    <rect x="505" y="105" width="170" height="95" class="component" rx="3"/>
+    <text x="590" y="125" class="component-title" text-anchor="middle">対話状態の監視</text>
+    <text x="515" y="145" class="text-content">• 進捗状況の把握</text>
+    <text x="515" y="160" class="text-content">• 理解度の測定</text>
+    <text x="515" y="175" class="text-content">• 目標達成度の評価</text>
+    <text x="515" y="190" class="small-text">効果: 動的な対話調整</text>
+  </g>
+
+  <!-- Dynamic Optimization -->
+  <g id="optimization">
+    <rect x="710" y="70" width="140" height="140" class="optimization-box" rx="10"/>
+    <text x="780" y="95" class="layer-title" text-anchor="middle">動的最適化</text>
+    
+    <rect x="725" y="105" width="110" height="95" class="component" rx="3"/>
+    <text x="780" y="125" class="component-title" text-anchor="middle">適応的調整</text>
+    <text x="735" y="145" class="text-content">• 応答品質改善</text>
+    <text x="735" y="160" class="text-content">• パラメータ調整</text>
+    <text x="735" y="175" class="text-content">• 戦略変更</text>
+    <text x="735" y="190" class="small-text">効果: 最適化学習</text>
+  </g>
+
+  <!-- Context Flow -->
+  <path d="M 250 140 L 270 140" class="context-flow"/>
+  <path d="M 470 140 L 490 140" class="context-flow"/>
+  <path d="M 690 140 L 710 140" class="context-flow"/>
+
+  <!-- Context Control Strategies -->
+  <g id="strategies">
+    <rect x="50" y="240" width="800" height="420" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" rx="5"/>
+    <text x="450" y="265" class="component-title" text-anchor="middle">コンテキスト制御戦略</text>
+    
+    <!-- Context Windowing -->
+    <rect x="70" y="280" width="180" height="120" fill="#e6f3ff" stroke="#3498db" stroke-width="1" rx="3"/>
+    <text x="160" y="300" class="text-content" text-anchor="middle" font-weight="bold">コンテキストウィンドウ制御</text>
+    <text x="80" y="320" class="small-text" font-weight="bold">動的制御技術:</text>
+    <text x="80" y="335" class="small-text">• 重要度に基づく情報選択</text>
+    <text x="80" y="350" class="small-text">• トークン使用量の最適化</text>
+    <text x="80" y="365" class="small-text">• 時系列情報の圧縮</text>
+    <text x="80" y="385" class="small-text">効果: コスト削減、応答速度向上</text>
+
+    <!-- Memory Architecture -->
+    <rect x="270" y="280" width="180" height="120" fill="#ffe6e6" stroke="#e74c3c" stroke-width="1" rx="3"/>
+    <text x="360" y="300" class="text-content" text-anchor="middle" font-weight="bold">メモリアーキテクチャ</text>
+    <text x="280" y="320" class="small-text" font-weight="bold">階層化記憶構造:</text>
+    <text x="280" y="335" class="small-text">• 短期記憶: 現在の対話内容</text>
+    <text x="280" y="350" class="small-text">• 中期記憶: セッション履歴</text>
+    <text x="280" y="365" class="small-text">• 長期記憶: 知識ベース</text>
+    <text x="280" y="385" class="small-text">効果: 一貫性のある対話維持</text>
+
+    <!-- Adaptive Learning -->
+    <rect x="470" y="280" width="180" height="120" fill="#e6ffe6" stroke="#2ecc71" stroke-width="1" rx="3"/>
+    <text x="560" y="300" class="text-content" text-anchor="middle" font-weight="bold">適応学習機構</text>
+    <text x="480" y="320" class="small-text" font-weight="bold">動的パーソナライズ:</text>
+    <text x="480" y="335" class="small-text">• ユーザー特性の学習</text>
+    <text x="480" y="350" class="small-text">• 応答スタイルの調整</text>
+    <text x="480" y="365" class="small-text">• 専門レベルの適応</text>
+    <text x="480" y="385" class="small-text">効果: 個別最適化された体験</text>
+
+    <!-- Error Recovery -->
+    <rect x="670" y="280" width="160" height="120" fill="#fff3cd" stroke="#f39c12" stroke-width="1" rx="3"/>
+    <text x="750" y="300" class="text-content" text-anchor="middle" font-weight="bold">エラー回復制御</text>
+    <text x="680" y="320" class="small-text" font-weight="bold">堅牢性確保:</text>
+    <text x="680" y="335" class="small-text">• 誤解の検出</text>
+    <text x="680" y="350" class="small-text">• 文脈の修正</text>
+    <text x="680" y="365" class="small-text">• 回復戦略実行</text>
+    <text x="680" y="385" class="small-text">効果: 安定した対話継続</text>
+
+    <!-- Context Optimization Metrics -->
+    <text x="450" y="430" class="component-title" text-anchor="middle">対話品質メトリクス</text>
+    
+    <rect x="70" y="450" width="760" height="80" fill="#fff" stroke="#95a5a6" stroke-width="1" rx="3"/>
+    <text x="80" y="470" class="component-title">測定指標と最適化目標</text>
+    <text x="80" y="490" class="text-content" font-weight="bold">効率性指標:</text>
+    <text x="280" y="490" class="text-content" font-weight="bold">品質指標:</text>
+    <text x="480" y="490" class="text-content" font-weight="bold">一貫性指標:</text>
+    <text x="680" y="490" class="text-content" font-weight="bold">学習指標:</text>
+    
+    <text x="80" y="505" class="small-text">• 応答時間の短縮</text>
+    <text x="280" y="505" class="small-text">• 回答精度の向上</text>
+    <text x="480" y="505" class="small-text">• 文脈の維持率</text>
+    <text x="680" y="505" class="small-text">• 適応速度</text>
+    
+    <text x="80" y="520" class="small-text">• コスト効率の改善</text>
+    <text x="280" y="520" class="small-text">• 理解度の測定</text>
+    <text x="480" y="520" class="small-text">• 情報の一貫性</text>
+    <text x="680" y="520" class="small-text">• パーソナライズ度</text>
+
+    <!-- Practical Implementation -->
+    <text x="450" y="560" class="component-title" text-anchor="middle">実装パターンとワークフロー</text>
+    
+    <!-- Sequential Processing -->
+    <rect x="70" y="580" width="200" height="110" fill="#f3e6ff" stroke="#9b59b6" stroke-width="1" rx="3"/>
+    <text x="170" y="600" class="text-content" text-anchor="middle" font-weight="bold">シーケンシャル処理</text>
+    <text x="80" y="620" class="small-text">段階的情報処理パターン:</text>
+    <text x="80" y="635" class="small-text">1. コンテキスト初期化</text>
+    <text x="80" y="650" class="small-text">2. 情報収集・整理</text>
+    <text x="80" y="665" class="small-text">3. 処理実行・応答生成</text>
+    <text x="80" y="680" class="small-text">4. 結果の評価・学習</text>
+
+    <!-- Parallel Processing -->
+    <rect x="290" y="580" width="200" height="110" fill="#e6f3ff" stroke="#3498db" stroke-width="1" rx="3"/>
+    <text x="390" y="600" class="text-content" text-anchor="middle" font-weight="bold">並列処理</text>
+    <text x="300" y="620" class="small-text">効率的並行処理パターン:</text>
+    <text x="300" y="635" class="small-text">• 複数文脈の同時管理</text>
+    <text x="300" y="650" class="small-text">• 分散された情報の統合</text>
+    <text x="300" y="665" class="small-text">• リアルタイム応答調整</text>
+    <text x="300" y="680" class="small-text">効果: 高速・高品質な対話</text>
+
+    <!-- Adaptive Pipeline -->
+    <rect x="510" y="580" width="200" height="110" fill="#ffe6e6" stroke="#e74c3c" stroke-width="1" rx="3"/>
+    <text x="610" y="600" class="text-content" text-anchor="middle" font-weight="bold">適応パイプライン</text>
+    <text x="520" y="620" class="small-text">動的調整機能付きワークフロー:</text>
+    <text x="520" y="635" class="small-text">• 状況に応じた処理切り替え</text>
+    <text x="520" y="650" class="small-text">• パフォーマンス監視</text>
+    <text x="520" y="665" class="small-text">• 自動最適化実行</text>
+    <text x="520" y="680" class="small-text">効果: 柔軟で堅牢な対話システム</text>
+
+    <!-- Context Feedback Loop -->
+    <rect x="730" y="580" width="100" height="110" fill="#e6ffe6" stroke="#2ecc71" stroke-width="1" rx="3"/>
+    <text x="780" y="600" class="text-content" text-anchor="middle" font-weight="bold">フィードバック</text>
+    <text x="780" y="620" class="text-content" text-anchor="middle" font-weight="bold">ループ</text>
+    <text x="740" y="640" class="small-text">継続改善サイクル:</text>
+    <text x="740" y="655" class="small-text">• 結果評価</text>
+    <text x="740" y="670" class="small-text">• パラメータ調整</text>
+    <text x="740" y="685" class="small-text">• 学習更新</text>
+  </g>
+
+  <!-- Feedback Lines -->
+  <line x1="150" y1="210" x2="160" y2="280" class="feedback-line"/>
+  <line x1="370" y1="210" x2="360" y2="280" class="feedback-line"/>
+  <line x1="590" y1="210" x2="560" y2="280" class="feedback-line"/>
+  <line x1="780" y1="210" x2="750" y2="280" class="feedback-line"/>
+
+  <!-- Optimization Curve -->
+  <path d="M 100 400 Q 200 350 300 380 Q 450 400 600 360 Q 750 340 800 380" class="optimization-curve"/>
+  <text x="450" y="375" class="small-text" text-anchor="middle">対話品質の継続的改善</text>
+</svg>
