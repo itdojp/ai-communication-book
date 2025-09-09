@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <title>AIコラボレーションパターン</title>
+  <desc>人間とAIの効果的な協働パターンとコミュニケーションフレームワーク</desc>
+  <defs>
+    <style>
+      :root {
+        --svg-bg: #FFFFFF;
+        --svg-bg-alt: #F8F9FA;
+        --svg-text: #1A1A1A;
+        --svg-text-secondary: #666666;
+        --svg-border: #E0E0E0;
+        --svg-primary: #0066CC;
+        --svg-success: #059669;
+        --svg-warning: #D97706;
+        --svg-error: #DC2626;
+        --svg-neutral: #6B7280;
+      }
+      .title-text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: var(--svg-text); }
+      .pattern-title { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: white; }
+      .component-text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: var(--svg-text); }
+      .label-text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 400; fill: var(--svg-text-secondary); }
+      .copilot-pattern { fill: var(--svg-primary); stroke: var(--svg-primary); stroke-width: 2; }
+      .reviewer-pattern { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 2; }
+      .generator-pattern { fill: var(--svg-warning); stroke: var(--svg-warning); stroke-width: 2; }
+      .advisor-pattern { fill: var(--svg-error); stroke: var(--svg-error); stroke-width: 2; }
+      .collaboration-flow { stroke: var(--svg-primary); stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .feedback-loop { stroke: var(--svg-success); stroke-width: 2; stroke-dasharray: 5,3; fill: none; marker-end: url(#arrowhead-green); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-primary)"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-success)"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" class="title-text" text-anchor="middle">AIコラボレーションパターン</text>
+
+  <!-- Copilot Pattern -->
+  <g id="copilot-pattern">
+    <rect x="40" y="60" width="360" height="120" class="copilot-pattern" rx="4"/>
+    <text x="220" y="80" class="pattern-title" text-anchor="middle">コパイロットパターン</text>
+    
+    <rect x="56" y="90" width="160" height="70" fill="white" stroke="var(--svg-primary)" stroke-width="1" rx="4"/>
+    <text x="136" y="110" class="component-text" text-anchor="middle" font-weight="500">リアルタイム支援</text>
+    <text x="66" y="125" class="label-text">• コード補完</text>
+    <text x="66" y="140" class="label-text">• 文章サジェスト</text>
+    <text x="66" y="155" class="label-text">• エラー検出</text>
+    
+    <rect x="226" y="90" width="160" height="70" fill="white" stroke="var(--svg-primary)" stroke-width="1" rx="4"/>
+    <text x="306" y="110" class="component-text" text-anchor="middle" font-weight="500">協調作業</text>
+    <text x="236" y="125" class="label-text">• ペアプログラミング</text>
+    <text x="236" y="140" class="label-text">• 継続的フィードバック</text>
+    <text x="236" y="155" class="label-text">• 学習と改善</text>
+  </g>
+
+  <!-- Reviewer Pattern -->
+  <g id="reviewer-pattern">
+    <rect x="420" y="60" width="340" height="120" class="reviewer-pattern" rx="4"/>
+    <text x="590" y="80" class="pattern-title" text-anchor="middle">レビュアーパターン</text>
+    
+    <rect x="436" y="90" width="150" height="70" fill="white" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="511" y="110" class="component-text" text-anchor="middle" font-weight="500">品質チェック</text>
+    <text x="446" y="125" class="label-text">• コードレビュー</text>
+    <text x="446" y="140" class="label-text">• 文書校正</text>
+    <text x="446" y="155" class="label-text">• セキュリティ監査</text>
+    
+    <rect x="596" y="90" width="150" height="70" fill="white" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="671" y="110" class="component-text" text-anchor="middle" font-weight="500">改善提案</text>
+    <text x="606" y="125" class="label-text">• 最適化案</text>
+    <text x="606" y="140" class="label-text">• ベストプラクティス</text>
+    <text x="606" y="155" class="label-text">• リファクタリング</text>
+  </g>
+
+  <!-- Generator Pattern -->
+  <g id="generator-pattern">
+    <rect x="40" y="200" width="360" height="120" class="generator-pattern" rx="4"/>
+    <text x="220" y="220" class="pattern-title" text-anchor="middle">ジェネレーターパターン</text>
+    
+    <rect x="56" y="230" width="160" height="70" fill="white" stroke="var(--svg-warning)" stroke-width="1" rx="4"/>
+    <text x="136" y="250" class="component-text" text-anchor="middle" font-weight="500">コンテンツ生成</text>
+    <text x="66" y="265" class="label-text">• テンプレート作成</text>
+    <text x="66" y="280" class="label-text">• ボイラープレート</text>
+    <text x="66" y="295" class="label-text">• テストケース生成</text>
+    
+    <rect x="226" y="230" width="160" height="70" fill="white" stroke="var(--svg-warning)" stroke-width="1" rx="4"/>
+    <text x="306" y="250" class="component-text" text-anchor="middle" font-weight="500">自動化</text>
+    <text x="236" y="265" class="label-text">• ドキュメント生成</text>
+    <text x="236" y="280" class="label-text">• コード変換</text>
+    <text x="236" y="295" class="label-text">• データ処理</text>
+  </g>
+
+  <!-- Advisor Pattern -->
+  <g id="advisor-pattern">
+    <rect x="420" y="200" width="340" height="120" class="advisor-pattern" rx="4"/>
+    <text x="590" y="220" class="pattern-title" text-anchor="middle">アドバイザーパターン</text>
+    
+    <rect x="436" y="230" width="150" height="70" fill="white" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="511" y="250" class="component-text" text-anchor="middle" font-weight="500">戦略的助言</text>
+    <text x="446" y="265" class="label-text">• アーキテクチャ設計</text>
+    <text x="446" y="280" class="label-text">• 技術選定</text>
+    <text x="446" y="295" class="label-text">• 問題解決</text>
+    
+    <rect x="596" y="230" width="150" height="70" fill="white" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="671" y="250" class="component-text" text-anchor="middle" font-weight="500">知識共有</text>
+    <text x="606" y="265" class="label-text">• ナレッジベース</text>
+    <text x="606" y="280" class="label-text">• トレーニング</text>
+    <text x="606" y="295" class="label-text">• メンタリング</text>
+  </g>
+
+  <!-- Communication Framework -->
+  <g id="communication-framework">
+    <rect x="40" y="340" width="720" height="100" fill="var(--svg-bg-alt)" stroke="var(--svg-border)" stroke-width="2" rx="4"/>
+    <text x="400" y="360" class="component-text" text-anchor="middle" font-weight="500">効果的なコミュニケーションフレームワーク</text>
+    
+    <!-- Context Setting -->
+    <rect x="56" y="370" width="140" height="50" fill="white" stroke="var(--svg-border)" stroke-width="1" rx="4"/>
+    <text x="126" y="390" class="component-text" text-anchor="middle" font-weight="500">コンテキスト設定</text>
+    <text x="126" y="405" class="label-text" text-anchor="middle">背景・目的・制約</text>
+    
+    <!-- Clear Instructions -->
+    <rect x="206" y="370" width="140" height="50" fill="white" stroke="var(--svg-border)" stroke-width="1" rx="4"/>
+    <text x="276" y="390" class="component-text" text-anchor="middle" font-weight="500">明確な指示</text>
+    <text x="276" y="405" class="label-text" text-anchor="middle">具体的・段階的</text>
+    
+    <!-- Iterative Refinement -->
+    <rect x="356" y="370" width="140" height="50" fill="white" stroke="var(--svg-border)" stroke-width="1" rx="4"/>
+    <text x="426" y="390" class="component-text" text-anchor="middle" font-weight="500">反復的改善</text>
+    <text x="426" y="405" class="label-text" text-anchor="middle">フィードバック循環</text>
+    
+    <!-- Validation -->
+    <rect x="506" y="370" width="140" height="50" fill="white" stroke="var(--svg-border)" stroke-width="1" rx="4"/>
+    <text x="576" y="390" class="component-text" text-anchor="middle" font-weight="500">検証と確認</text>
+    <text x="576" y="405" class="label-text" text-anchor="middle">品質保証</text>
+    
+    <!-- Learning -->
+    <rect x="656" y="370" width="88" height="50" fill="white" stroke="var(--svg-border)" stroke-width="1" rx="4"/>
+    <text x="700" y="390" class="component-text" text-anchor="middle" font-weight="500">学習</text>
+    <text x="700" y="405" class="label-text" text-anchor="middle">継続改善</text>
+  </g>
+
+  <!-- Success Factors -->
+  <g id="success-factors">
+    <rect x="40" y="460" width="350" height="120" fill="var(--svg-bg-alt)" stroke="var(--svg-border)" stroke-width="2" rx="4"/>
+    <text x="215" y="480" class="component-text" text-anchor="middle" font-weight="500">成功要因</text>
+    
+    <rect x="56" y="490" width="160" height="70" fill="white" stroke="var(--svg-primary)" stroke-width="2" rx="4"/>
+    <text x="136" y="510" class="component-text" text-anchor="middle" font-weight="500">人間の役割</text>
+    <text x="66" y="525" class="label-text">• 創造的思考</text>
+    <text x="66" y="540" class="label-text">• 倫理的判断</text>
+    <text x="66" y="555" class="label-text">• 最終決定権</text>
+    
+    <rect x="226" y="490" width="150" height="70" fill="white" stroke="var(--svg-success)" stroke-width="2" rx="4"/>
+    <text x="301" y="510" class="component-text" text-anchor="middle" font-weight="500">AIの役割</text>
+    <text x="236" y="525" class="label-text">• データ処理</text>
+    <text x="236" y="540" class="label-text">• パターン認識</text>
+    <text x="236" y="555" class="label-text">• 効率化支援</text>
+  </g>
+
+  <!-- Metrics -->
+  <g id="metrics">
+    <rect x="410" y="460" width="350" height="120" fill="var(--svg-bg-alt)" stroke="var(--svg-border)" stroke-width="2" rx="4"/>
+    <text x="585" y="480" class="component-text" text-anchor="middle" font-weight="500">効果測定指標</text>
+    
+    <rect x="426" y="490" width="150" height="70" fill="white" stroke="var(--svg-warning)" stroke-width="2" rx="4"/>
+    <text x="501" y="510" class="component-text" text-anchor="middle" font-weight="500">生産性向上</text>
+    <text x="436" y="525" class="label-text">• 作業時間短縮 40%</text>
+    <text x="436" y="540" class="label-text">• エラー削減 60%</text>
+    <text x="436" y="555" class="label-text">• 品質向上 30%</text>
+    
+    <rect x="586" y="490" width="158" height="70" fill="white" stroke="var(--svg-error)" stroke-width="2" rx="4"/>
+    <text x="665" y="510" class="component-text" text-anchor="middle" font-weight="500">満足度向上</text>
+    <text x="596" y="525" class="label-text">• ユーザー満足度 85%</text>
+    <text x="596" y="540" class="label-text">• 学習効率 50%向上</text>
+    <text x="596" y="555" class="label-text">• ストレス軽減 70%</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <path d="M 220 180 L 220 200" class="collaboration-flow"/>
+  <path d="M 590 180 L 590 200" class="collaboration-flow"/>
+  <path d="M 400 260 L 420 260" class="collaboration-flow"/>
+  
+  <!-- Feedback Loops -->
+  <path d="M 196 395 L 206 395" class="feedback-loop"/>
+  <path d="M 346 395 L 356 395" class="feedback-loop"/>
+  <path d="M 496 395 L 506 395" class="feedback-loop"/>
+  <path d="M 646 395 L 656 395" class="feedback-loop"/>
+</svg>
