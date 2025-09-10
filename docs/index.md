@@ -29,23 +29,23 @@ permalink: /
 ## 目次
 
 ### はじめに
-- [はじめに](src/chapter-introduction/index.html) - 本書の目的と構成
+- [はじめに](src/chapter-introduction/) - 本書の目的と構成
 
 ### Part I: AIコミュニケーション基礎
 
-**第1章: [即座に活用できるAIコミュニケーション基礎](src/chapter-chapter01/index.html)**  
+**第1章: [即座に活用できるAIコミュニケーション基礎](src/chapter-chapter01/)**  
 基本的なプロンプト設計と効果的な対話パターン
 - 効果的なプロンプト設計の原則
 - よくある失敗パターンと対策
 - 成果測定の手法
 
-**第2章: [構造化思考でプロンプトを設計する](src/chapter-chapter02/index.html)**  
+**第2章: [構造化思考でプロンプトを設計する](src/chapter-chapter02/)**  
 論理的なプロンプト構造と思考フレームワーク
 - 構造化プロンプトの設計手法
 - 思考フレームワークの活用
 - 複雑な課題の分解技法
 
-**第3章: [コンテキスト制御による対話の最適化](src/chapter-chapter03/index.html)**  
+**第3章: [コンテキスト制御による対話の最適化](src/chapter-chapter03/)**  
 文脈管理と対話品質の向上
 - コンテキストウィンドウの効果的活用
 - 長期対話での一貫性維持
@@ -53,19 +53,19 @@ permalink: /
 
 ### Part II: 高度なAI活用法
 
-**第4章: [フィードバックループによる継続的改善](src/chapter-chapter04/index.html)**  
+**第4章: [フィードバックループによる継続的改善](src/chapter-chapter04/)**  
 AI性能の継続的向上とプロセス最適化
 - フィードバック収集と分析
 - プロンプトの反復改善
 - 成果の定量評価
 
-**第5章: [エラーハンドリングと例外対応](src/chapter-chapter05/index.html)**  
+**第5章: [エラーハンドリングと例外対応](src/chapter-chapter05/)**  
 想定外の状況への対処と堅牢性確保
 - よくあるエラーパターンと対策
 - 例外処理の設計
 - 復旧手順の確立
 
-**第6章: [チーム活用とワークフロー統合](src/chapter-chapter06/index.html)**  
+**第6章: [チーム活用とワークフロー統合](src/chapter-chapter06/)**  
 組織でのAI活用とプロセス統合
 - チーム間の知識共有
 - ワークフローへの組み込み
@@ -73,21 +73,21 @@ AI性能の継続的向上とプロセス最適化
 
 ### Part III: 専門活用と品質管理
 
-**第7章: [ドメイン特化型AI活用法](src/chapter-chapter07/index.html)**  
+**第7章: [ドメイン特化型AI活用法](src/chapter-chapter07/)**  
 業界・職種別の専門的活用手法
 - 技術分野での活用法
 - ビジネス分野での活用法
 - クリエイティブ分野での活用法
 
-**第8章: [品質保証とリスク管理](src/chapter-chapter08/index.html)**  
+**第8章: [品質保証とリスク管理](src/chapter-chapter08/)**  
 AI出力の品質確保とリスク対応
 - 品質評価指標の設定
 - リスクアセスメントと対策
 - コンプライアンス対応
 
 ### 付録
-- [付録A：プロンプトテンプレート集](src/appendices/appendix-a.html)
-- [付録B：参考文献](src/appendices/appendix-b.html)
+- [付録A：プロンプトテンプレート集](src/appendices/appendix-a/)
+- [付録B：参考文献](src/appendices/appendix-b/)
 
 ## 想定読者
 
@@ -104,7 +104,7 @@ AI技術の実践的活用とビジネス変革を支援する企業です。
 
 ---
 
-[はじめにお読みください](src/chapter-introduction/index.html){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[はじめにお読みください](src/chapter-introduction/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 
 
