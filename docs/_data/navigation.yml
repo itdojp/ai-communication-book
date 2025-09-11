@@ -1,3 +1,7 @@
+# updated by automation to avoid 404 on appendices root without index.md
+
 appendices:
-- title: 付録
-  path: /src/appendices/
+- title: 付録A：プロンプトテンプレート集
+  path: /src/appendices/appendix-a/
+- title: 付録B：参考文献
+  path: /src/appendices/appendix-b/
