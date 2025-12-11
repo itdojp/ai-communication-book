@@ -2,6 +2,6 @@
 
 appendices:
 - title: 付録A：プロンプトテンプレート集
-  path: /src/appendices/appendix-a/
+  path: /appendices/appendix-a/
 - title: 付録B：参考文献
-  path: /src/appendices/appendix-b/
+  path: /appendices/appendix-b/
