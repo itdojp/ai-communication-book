@@ -1,5 +1,5 @@
 ---
-title: "第2章：構造化思考でプロンプトを設計する"
+title: "第2章：技術アーキテクチャの本質"
 chapter: chapter02
 layout: book
 order: 4
