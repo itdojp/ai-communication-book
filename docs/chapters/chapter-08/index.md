@@ -32,7 +32,7 @@ AI出力の品質を確保するため、複数の自動検証機能を段階的
 
 **第1層：形式検証（Format Validation）**
 
-```
+```text
 【基本構造チェック】
 目的：期待された形式・構造での出力確保
 
@@ -64,7 +64,7 @@ AI出力の品質を確保するため、複数の自動検証機能を段階的
     }
   }
 }
-```
+```text
 
 自動チェック機能：
 ```python
@@ -98,7 +98,7 @@ def validate_document_format(document):
             )
     
     return validation_results
-```
+```text
 
 【データ整合性チェック】
 数値・日付・参照の妥当性確認
@@ -130,12 +130,12 @@ if 売上高 < 0:
 
 if 図表番号に欠番がある:
     warnings.append("図表番号に欠番があります")
-```
+```text
 ```
 
 **第2層：内容検証（Content Validation）**
 
-```
+```text
 【論理的整合性チェック】
 目的：内容の論理的一貫性確保
 
@@ -170,7 +170,7 @@ if 図表番号に欠番がある:
 因果関係エラー：
 「気温上昇により売上増加」（根拠不十分）
 → 論理的根拠の補強を要求
-```
+```text
 
 【専門性検証（Domain-Specific Validation）】
 業界・分野特有の要件確認
@@ -210,7 +210,7 @@ if 図表番号に欠番がある:
   }
 }
 ```
-```
+```text
 
 **第3層：品質評価（Quality Assessment）**
 
@@ -224,7 +224,7 @@ if 図表番号に欠番がある:
 - 過去の高品質事例との比較
 
 実装フレームワーク：
-```
+```text
 品質評価システム：
 1. 多観点評価
    - 正確性（Accuracy）：事実の正確性
@@ -258,7 +258,7 @@ if 図表番号に欠番がある:
 過去の優秀事例との比較評価
 
 比較手法：
-```
+```text
 ベンチマーク比較プロセス：
 1. 類似文書の特定
    - 文書タイプの一致
@@ -292,7 +292,7 @@ if 図表番号に欠番がある:
 - 図表の充実（ベンチマークは5図、対象文書は2図）
 - リスク記述の詳細化（ベンチマークは各リスクに対策付き）」
 ```
-```
+```text
 
 ### 人間レビューシステムの最適化
 
@@ -312,7 +312,7 @@ if 図表番号に欠番がある:
 - 明らかな誤り・不適切表現
 
 レビューガイド：
-```
+```text
 基本確認チェックリスト：
 □ 依頼した内容に回答している
 □ 明らかに間違った情報はない
@@ -338,7 +338,7 @@ if 図表番号に欠番がある:
 所要時間：15-30分
 
 確認項目：
-```
+```text
 専門レビュー項目：
 技術的正確性：
 - 専門用語の適切な使用
@@ -384,7 +384,7 @@ if 図表番号に欠番がある:
 所要時間：30-60分
 
 確認項目：
-```
+```text
 最終承認レビュー：
 組織代表性：
 - 組織の立場・価値観の適切な反映
@@ -414,7 +414,7 @@ if 図表番号に欠番がある:
 4. 必要に応じた修正指示
 5. 最終承認・公開決定
 ```
-```
+```text
 
 ### 継続的品質改善メカニズム
 
@@ -467,7 +467,7 @@ if 図表番号に欠番がある:
 品質問題のパターン化と対策立案
 
 分析手法：
-```
+```text
 品質問題分析フレームワーク：
 1. 問題分類
    - 技術的問題（精度、速度、安定性）
@@ -507,7 +507,7 @@ if 図表番号に欠番がある:
 継続的な品質向上の自動化
 
 改善システム：
-```
+```text
 自動品質改善エンジン：
 1. 問題検出
    - 品質メトリクスの異常値検出
@@ -565,7 +565,7 @@ class QualityImprovementEngine:
                 ])
         
         return proposals
-```
+```text
 ```
 
 ---
@@ -578,7 +578,7 @@ AI出力の最大のリスクであるハルシネーション（事実に反す
 
 **多重事実確認システム**
 
-```
+```text
 【レベル1：内部一貫性チェック】
 目的：出力内容の内部矛盾検出
 
@@ -617,7 +617,7 @@ AI出力の最大のリスクであるハルシネーション（事実に反す
 自動修正案：
 「A社の売上は2023年に100億円、2024年に90億円で、
  前年比10%の減少となった」
-```
+```text
 
 【レベル2：外部情報源との照合】
 信頼できる外部情報源との整合性確認
@@ -669,7 +669,7 @@ AI出力の最大のリスクであるハルシネーション（事実に反す
   }
 }
 ```
-```
+```text
 
 【レベル3：専門家ネットワーク活用】
 人間専門家による高度な事実確認
@@ -723,7 +723,7 @@ class ExpertVerificationSystem:
         
         return expert.request_verification(verification_request)
 ```
-```
+```text
 
 ### 不確実性の定量化と表示
 
@@ -740,7 +740,7 @@ AI出力の確信度を定量化し、適切にユーザーに伝達する手法
 - 専門家評価：過去の専門家確認結果
 
 計算手法：
-```
+```text
 確信度計算フレームワーク：
 1. 基本確信度（AI モデル出力）
    - モデルの内部確信度スコア
@@ -796,12 +796,12 @@ def calculate_confidence(content, model_confidence, verification_results):
         'source': source_confidence,
         'verification': verification_confidence
     }
-```
+```text
 ```
 
 **不確実性の効果的な伝達**
 
-```
+```text
 【確信度レベルの分類】
 レベル分類とユーザー表示：
 
@@ -834,7 +834,7 @@ def calculate_confidence(content, model_confidence, verification_results):
 不確実性に応じた適切な注意喚起
 
 警告設計：
-```
+```text
 リスクレベル別警告メッセージ：
 
 低リスク（確信度70%以上）：
@@ -859,7 +859,7 @@ def calculate_confidence(content, model_confidence, verification_results):
 - 外部提供時の免責事項自動付与
 - リスクレベルに応じた承認フロー
 ```
-```
+```text
 
 ### 外部情報源との整合性検証
 
@@ -938,7 +938,7 @@ class ExternalVerificationSystem:
             
         return results
 ```
-```
+```text
 
 **動的情報更新メカニズム**
 
@@ -1005,7 +1005,7 @@ class InformationFreshnessManager:
 情報源の信頼性評価と重み付け：
 
 評価基準：
-```
+```text
 信頼性評価フレームワーク：
 1. 権威性（Authority）
    - 政府・公的機関：0.95-1.0
@@ -1052,7 +1052,7 @@ class InformationFreshnessManager:
     }
   }
 }
-```
+```text
 ```
 
 ---
@@ -1065,7 +1065,7 @@ AI活用において機密情報の適切な保護を確保する技術的・運
 
 **データ分類と保護レベル設定**
 
-```
+```text
 【情報分類システム】
 機密度レベルの定義：
 
@@ -1128,12 +1128,12 @@ class InformationClassifier:
             'detected_patterns': detected_patterns,
             'protection_requirements': self.get_protection_requirements(max_level)
         }
-```
+```text
 ```
 
 **入力データのサニタイゼーション**
 
-```
+```text
 【機密情報の自動検出・マスキング】
 入力段階での機密情報保護：
 
@@ -1198,7 +1198,7 @@ class DataSanitizer:
             text
         )
         return text
-```
+```text
 
 【出力データのフィルタリング】
 AIの出力から機密情報を除去：
@@ -1241,7 +1241,7 @@ class OutputFilter:
             'applied_filters': applied_filters,
             'safety_level': self.calculate_safety_level(filtered_output)
         }
-```
+```text
 ```
 
 ### データ匿名化と差分プライバシー
@@ -1250,7 +1250,7 @@ class OutputFilter:
 
 **k-匿名化の実装**
 
-```
+```text
 【k-匿名化アルゴリズム】
 個人を特定できないレベルまでデータを一般化：
 
@@ -1317,12 +1317,12 @@ k-匿名化後：
     {'age': '20代', 'gender': '男', 'zipcode': '100****', 'occupation': '会社員'},
     {'age': '20代', 'gender': '女', 'zipcode': '100****', 'occupation': '会社員'}
 ]
-```
+```text
 ```
 
 **差分プライバシーの適用**
 
-```
+```text
 【ノイズ注入による保護】
 統計的な有用性を保持しながらプライバシーを保護：
 
@@ -1394,7 +1394,7 @@ avg_salary = dp.private_mean(
 
 print(f"高所得者数: {high_income_count}名（概算）")
 print(f"平均年収: {avg_salary:,.0f}円（概算）")
-```
+```text
 ```
 
 ### 規制要件への対応
@@ -1403,7 +1403,7 @@ GDPR、個人情報保護法等の法的要件への準拠。
 
 **GDPR対応システム**
 
-```
+```text
 【データ主体の権利実装】
 GDPR Article 15-22の権利への対応：
 
@@ -1443,7 +1443,7 @@ class GDPRComplianceSystem:
         }
         
         return access_response
-```
+```text
 
 2. 削除権（Article 17）
 個人データの削除を要求する権利
@@ -1480,7 +1480,7 @@ def handle_erasure_request(self, data_subject_id, erasure_reason):
             'reason': erasure_assessment['decline_reason'],
             'legal_basis': erasure_assessment['legal_basis']
         }
-```
+```text
 
 3. データポータビリティ権（Article 20）
 構造化されたデータの取得・移転権
@@ -1515,12 +1515,12 @@ def handle_portability_request(self, data_subject_id, target_format='json'):
         'format': target_format,
         'file_size': len(formatted_data)
     }
-```
+```text
 ```
 
 **個人情報保護法対応**
 
-```
+```text
 【日本の個人情報保護法への準拠】
 改正個人情報保護法（2022年施行）への対応：
 
@@ -1613,12 +1613,12 @@ class JapanPrivacyLawCompliance:
             'notification_required': False,
             'internal_handling': 'documented_and_addressed'
         }
-```
+```text
 ```
 
 **国際データ移転の管理**
 
-```
+```text
 【十分性認定・適切性認定への対応】
 国際的なデータ移転における法的要件の確保：
 
@@ -1690,7 +1690,7 @@ class InternationalDataTransferManager:
             'transfer_authorized': True,
             'monitoring_requirements': self.get_monitoring_requirements(transfer_details)
         }
-```
+```text
 ```
 
 ---
@@ -1703,7 +1703,7 @@ AI システムに潜在するバイアスを特定し、公平性を確保す�
 
 **統計的バイアス検出手法**
 
-```
+```text
 【群間格差分析】
 異なる属性グループ間での AI 出力の差異を定量的に測定：
 
@@ -1802,12 +1802,12 @@ for attribute, analysis in bias_results.items():
     if analysis['bias_detected']:
         print(f"⚠ {attribute}によるバイアスが検出されました")
         print(f"最大群間格差: {analysis['group_differences']['max_group_difference']:.2%}")
-```
+```text
 ```
 
 **言語的バイアス検出**
 
-```
+```text
 【テキスト出力のバイアス分析】
 AI が生成するテキストに含まれる偏見・ステレオタイプの検出：
 
@@ -1920,7 +1920,7 @@ sentiment_bias = language_bias_detector.detect_sentiment_bias(
 if occupational_bias['engineer']['bias_detected']:
     print("⚠ エンジニア職において性別バイアスが検出されました")
     print(f"男性代名詞使用率: {occupational_bias['engineer']['male_pronoun_ratio']:.1%}")
-```
+```text
 ```
 
 ### 多様性確保のための評価指標
@@ -1929,7 +1929,7 @@ if occupational_bias['engineer']['bias_detected']:
 
 **包括性指標の設計**
 
-```
+```text
 【多次元多様性評価】
 複数の属性軸での包括性を総合的に評価：
 
@@ -2045,12 +2045,12 @@ inclusion_quality = diversity_metrics.assess_inclusion_quality(
 
 print(f"全体多様性指数: {candidate_diversity['overall_diversity_index']:.2f}")
 print(f"包括性スコア: {inclusion_quality['demographic']['overall_inclusion_score']:.2f}")
-```
+```text
 ```
 
 **公平性監視システム**
 
-```
+```text
 【リアルタイム公平性監視】
 AI システムの継続的な公平性監視と自動アラート：
 
@@ -2160,7 +2160,7 @@ monitoring_dashboard = {
         'Implement post-processing calibration'
     ]
 }
-```
+```text
 ```
 
 ### 継続的モニタリングシステム
@@ -2169,7 +2169,7 @@ monitoring_dashboard = {
 
 **長期トレンド分析**
 
-```
+```text
 【公平性の時系列分析】
 AI システムの公平性が時間とともにどう変化するかの追跡：
 
@@ -2290,12 +2290,12 @@ print(f"全体的傾向: {annual_trends['overall_fairness_trajectory']}")
 print(f"リスクレベル: {annual_trends['risk_assessment']['overall_risk']}")
 if degradation_patterns['rapid_decline']:
     print("⚠ 急激な公平性劣化が検出されました")
-```
+```text
 ```
 
 **自動改善システム**
 
-```
+```text
 【適応的公平性調整】
 検出されたバイアスに対する自動的な改善措置：
 
@@ -2434,7 +2434,7 @@ optimization_result = adaptive_fairness.continuous_fairness_optimization()
 print("=== 自動公平性改善結果 ===")
 print(f"実装された対策: {len(mitigation_result['implemented_mitigations'])}件")
 print(f"最適化目標: {optimization_result['optimization_targets']}")
-```
+```text
 ```
 
 ---
