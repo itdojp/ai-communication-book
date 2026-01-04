@@ -141,6 +141,6 @@ Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
 
 **著者:** ITDO Inc.  
 **バージョン:** 1.0.0  
-**最終更新:** 2025-07-19
+**最終更新:** 2026-01-04
 
 {% include page-navigation.html %}
