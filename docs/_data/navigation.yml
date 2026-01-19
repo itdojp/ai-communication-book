@@ -27,9 +27,9 @@ chapters:
 appendices:
   - title: 付録A：プロンプトテンプレート集
     path: /appendices/appendix-a/
+  - title: 付録B：参考文献
+    path: /appendices/appendix-b/
   - title: 付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）
     path: /appendices/appendix-c/
   - title: 付録D：実務会話例集（成果物まで落とす）
     path: /appendices/appendix-d/
-  - title: 付録B：参考文献
-    path: /appendices/appendix-b/

@@ -92,9 +92,9 @@ AI出力の品質担保とリスク対応
 
 ### 付録
 - [付録A：プロンプトテンプレート集](appendices/appendix-a/)
+- [付録B：参考文献](appendices/appendix-b/)
 - [付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）](appendices/appendix-c/)
 - [付録D：実務会話例集（成果物まで落とす）](appendices/appendix-d/)
-- [付録B：参考文献](appendices/appendix-b/)
 
 ## 想定読者
 
