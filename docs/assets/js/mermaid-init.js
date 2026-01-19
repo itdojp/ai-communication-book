@@ -7,9 +7,27 @@
 (function () {
   'use strict';
 
+  var initialized = false;
+  var lastTheme = null;
+
   function getTheme() {
     var theme = document.documentElement.getAttribute('data-theme') || 'light';
     return theme === 'dark' ? 'dark' : 'default';
+  }
+
+  function ensureInitialized() {
+    if (!window.mermaid) return;
+
+    var theme = getTheme();
+    if (initialized && lastTheme === theme) return;
+
+    lastTheme = theme;
+    try {
+      window.mermaid.initialize({ startOnLoad: false, theme: theme });
+      initialized = true;
+    } catch (e) {
+      // ignore init failures and try rendering anyway
+    }
   }
 
   function convertMermaidBlocks() {
@@ -54,11 +72,7 @@
       }
     }
 
-    try {
-      window.mermaid.initialize({ startOnLoad: false, theme: getTheme() });
-    } catch (e) {
-      // ignore init failures and try rendering anyway
-    }
+    ensureInitialized();
 
     try {
       if (typeof window.mermaid.run === 'function') {
