@@ -67,7 +67,8 @@ AI出力の品質を確保するため、複数の自動検証機能を段階的
       "max_length": 10000,
       "min_length": 2000,
       "required_elements": ["図表", "箇条書き"],
-      "prohibited_terms": ["推測", "おそらく", "可能性"]
+      "uncertainty_terms": ["推測", "おそらく", "可能性"],
+      "uncertainty_policy": "warn_and_require_evidence"
     },
     "structure_validation": {
       "heading_hierarchy": true,
@@ -77,6 +78,8 @@ AI出力の品質を確保するため、複数の自動検証機能を段階的
   }
 }
 ```
+
+> 注: ここで挙げた「不確実性表現」は原則として禁止ではない。業務では「要確認のサイン」として扱い、根拠・検証手順の明示を促す（[AIエージェント協働の標準手順（SOP）](../../introduction/agent-protocol/) の「出力フォーマット」参照）。
 ```text
 
 自動チェック機能：
@@ -103,12 +106,12 @@ def validate_document_format(document):
             "文書が短すぎる可能性（2000文字未満）"
         )
     
-    # 禁止用語チェック
-    prohibited_terms = ["推測", "おそらく", "可能性"]
-    for term in prohibited_terms:
+    # 不確実性表現の検知（要レビュー）
+    uncertainty_terms = ["推測", "おそらく", "可能性"]
+    for term in uncertainty_terms:
         if term in document.content:
-            validation_results["errors"].append(
-                f"禁止用語 '{term}' が含まれています"
+            validation_results["warnings"].append(
+                f"不確実性表現 '{term}' が含まれています（根拠/検証手順の明示を推奨）"
             )
     
     return validation_results
