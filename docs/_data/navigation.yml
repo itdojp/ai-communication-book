@@ -3,6 +3,8 @@
 introduction:
   - title: はじめに
     path: /introduction/
+  - title: AIエージェント協働の標準手順（SOP）
+    path: /introduction/agent-protocol/
 
 chapters:
   - title: 第1章：即効性のある活用法
