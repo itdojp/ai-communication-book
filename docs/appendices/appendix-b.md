@@ -227,6 +227,20 @@ layout: book
 53. **Wired - AI Section**
 54. **IEEE Spectrum - AI Content**
 
+### セキュリティ・安全運用（LLMアプリ/エージェント運用）
+
+55. **OWASP Top 10 for Large Language Model Applications**  
+    https://owasp.org/www-project-top-10-for-large-language-model-applications/
+
+56. **NIST AI Risk Management Framework (AI RMF)**  
+    https://www.nist.gov/itl/ai-risk-management-framework
+
+57. **MITRE ATLAS (Adversarial Threat Landscape for AI Systems)**  
+    https://atlas.mitre.org/
+
+58. **ISO/IEC 27001（情報セキュリティマネジメント）**  
+    組織の情報セキュリティ統制の基礎（規格文書は入手経路が限定されるため要確認）
+
 ## 更新情報の追跡
 
 本分野の急速な発展に対応するため、以下のリソースで最新動向を追跡することを推奨します。具体的には次のとおりです。
