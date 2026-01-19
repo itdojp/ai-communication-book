@@ -11,13 +11,12 @@
     <!-- Table of Contents -->
     <div class="toc">
         <h3 class="toc-title">目次</h3>
-        
-        <!-- Introduction -->
-        {% if site.structure.introduction %}
+        {% assign navigation = site.data.navigation %}
+        {% if navigation and navigation.introduction %}
         <div class="toc-section">
             <h4 class="toc-section-title">はじめに</h4>
             <ul class="toc-list">
-                {% for item in site.structure.introduction %}
+                {% for item in navigation.introduction %}
                 <li class="toc-item">
                     <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path %}active{% endif %}">
                         {{ item.title }}
@@ -28,91 +27,43 @@
         </div>
         {% endif %}
 
-        <!-- Introduction -->
-        <div class="toc-section">
-            <h4 class="toc-section-title">はじめに</h4>
-            <ul class="toc-list">
-                <li class="toc-item">
-                    <a href="{{ '/introduction/' | relative_url }}" class="toc-link {% if page.url contains '/introduction/' %}active{% endif %}">
-                        はじめに
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Chapters -->
+        {% if navigation and navigation.chapters %}
         <div class="toc-section">
             <h4 class="toc-section-title">本編</h4>
             <ul class="toc-list">
+                {% for item in navigation.chapters %}
+                {% assign _parts = item.title | split: '：' %}
+                {% assign _chapter_number = _parts | first %}
+                {% assign _chapter_title = _parts | slice: 1, 99 | join: '：' %}
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-01/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-01/' %}active{% endif %}">
-                        <span class="chapter-number">第1章</span>
-                        <span class="chapter-title">即座に活用できるAIコミュニケーション基礎</span>
+                    <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
+                        <span class="chapter-number">{{ _chapter_number }}</span>
+                        <span class="chapter-title">{{ _chapter_title }}</span>
                     </a>
                 </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-02/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-02/' %}active{% endif %}">
-                        <span class="chapter-number">第2章</span>
-                        <span class="chapter-title">構造化思考でプロンプトを設計する</span>
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-03/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-03/' %}active{% endif %}">
-                        <span class="chapter-number">第3章</span>
-                        <span class="chapter-title">コンテキスト制御による対話の最適化</span>
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-04/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-04/' %}active{% endif %}">
-                        <span class="chapter-number">第4章</span>
-                        <span class="chapter-title">フィードバックループによる継続的改善</span>
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-05/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-05/' %}active{% endif %}">
-                        <span class="chapter-number">第5章</span>
-                        <span class="chapter-title">エラーハンドリングと例外対応</span>
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-06/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-06/' %}active{% endif %}">
-                        <span class="chapter-number">第6章</span>
-                        <span class="chapter-title">チーム活用とワークフロー統合</span>
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-07/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-07/' %}active{% endif %}">
-                        <span class="chapter-number">第7章</span>
-                        <span class="chapter-title">ドメイン特化型AI活用法</span>
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapters/chapter-08/' | relative_url }}" class="toc-link {% if page.url contains '/chapters/chapter-08/' %}active{% endif %}">
-                        <span class="chapter-number">第8章</span>
-                        <span class="chapter-title">品質保証とリスク管理</span>
-                    </a>
-                </li>
+                {% endfor %}
             </ul>
         </div>
+        {% endif %}
 
-        <!-- Appendices -->
+        {% if navigation and navigation.appendices %}
         <div class="toc-section">
             <h4 class="toc-section-title">付録</h4>
             <ul class="toc-list">
+                {% for item in navigation.appendices %}
+                {% assign _parts = item.title | split: '：' %}
+                {% assign _appendix_label = _parts | first %}
+                {% assign _appendix_title = _parts | slice: 1, 99 | join: '：' %}
                 <li class="toc-item">
-                    <a href="{{ '/appendices/appendix-a/' | relative_url }}" class="toc-link {% if page.url contains '/appendices/appendix-a' %}active{% endif %}">
-                        <span class="appendix-label">付録A</span>
-                        <span class="appendix-title">プロンプトテンプレート集</span>
+                    <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
+                        <span class="appendix-label">{{ _appendix_label }}</span>
+                        <span class="appendix-title">{{ _appendix_title }}</span>
                     </a>
                 </li>
-                <li class="toc-item">
-                    <a href="{{ '/appendices/appendix-b/' | relative_url }}" class="toc-link {% if page.url contains '/appendices/appendix-b' %}active{% endif %}">
-                        <span class="appendix-label">付録B</span>
-                        <span class="appendix-title">参考文献</span>
-                    </a>
-                </li>
+                {% endfor %}
             </ul>
         </div>
+        {% endif %}
 
     </div>
 
@@ -137,9 +88,6 @@
             </li>
         </ul>
     </div>
-
-    </div>
-
     <!-- External Links -->
     <div class="sidebar-footer">
         <div class="external-links">
