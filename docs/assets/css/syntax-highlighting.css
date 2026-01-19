@@ -26,6 +26,17 @@ code {
     color: var(--text-primary);
 }
 
+/* Mermaid Diagrams */
+.mermaid {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Line Numbers */
 .highlight {
     position: relative;
