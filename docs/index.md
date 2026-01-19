@@ -30,6 +30,7 @@ permalink: /
 
 ### はじめに
 - [はじめに](introduction/) - 本書の目的と構成
+- [AIエージェント協働の標準手順（SOP）](introduction/agent-protocol/) - 自律度と承認ゲートを含む共通プロトコル
 
 ### Part I: 即効性のある活用法
 
