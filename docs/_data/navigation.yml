@@ -1,7 +1,29 @@
-# updated by automation to avoid 404 on appendices root without index.md
+# Navigation order for bottom "前へ/次へ" links and link-check workflow.
+
+introduction:
+  - title: はじめに
+    path: /introduction/
+
+chapters:
+  - title: 第1章：即効性のある活用法
+    path: /chapters/chapter-01/
+  - title: 第2章：技術アーキテクチャの本質
+    path: /chapters/chapter-02/
+  - title: 第3章：モデル評価と選択基準
+    path: /chapters/chapter-03/
+  - title: 第4章：基礎プロンプト設計
+    path: /chapters/chapter-04/
+  - title: 第5章：高度プロンプト技術
+    path: /chapters/chapter-05/
+  - title: 第6章：先進技術活用
+    path: /chapters/chapter-06/
+  - title: 第7章：業務プロセス統合設計
+    path: /chapters/chapter-07/
+  - title: 第8章：品質保証とリスク管理
+    path: /chapters/chapter-08/
 
 appendices:
-- title: 付録A：プロンプトテンプレート集
-  path: /appendices/appendix-a/
-- title: 付録B：参考文献
-  path: /appendices/appendix-b/
+  - title: 付録A：プロンプトテンプレート集
+    path: /appendices/appendix-a/
+  - title: 付録B：参考文献
+    path: /appendices/appendix-b/
