@@ -1,7 +1,7 @@
 {
-  "name": "aiエージェント・コミュニケーション実践ガイド",
+  "name": "ai\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u30fb\u30b3\u30df\u30e5\u30cb\u30b1\u30fc\u30b7\u30e7\u30f3\u5b9f\u8df5\u30ac\u30a4\u30c9",
   "version": "1.0.0",
-  "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
+  "description": "AI\u6642\u4ee3\u306e\u30b3\u30df\u30e5\u30cb\u30b1\u30fc\u30b7\u30e7\u30f3\u6280\u8853 - \u52b9\u679c\u7684\u306a\u30d7\u30ed\u30f3\u30d7\u30c8\u8a2d\u8a08\u3068\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u6d3b\u7528\u306e\u5b9f\u8df5\u7684\u624b\u6cd5",
   "main": "index.md",
   "scripts": {
     "start": "jekyll serve --livereload",
@@ -17,7 +17,7 @@
     "ja"
   ],
   "author": "ITDO Inc.",
-  "license": "MIT",
+  "license": "CC-BY-NC-SA-4.0",
   "devDependencies": {
     "markdownlint-cli": "^0.37.0",
     "markdown-link-check": "^3.11.2",
