@@ -1,110 +1,138 @@
-<!-- Sidebar Navigation -->
+<!-- Sidebar Navigation (data-driven) -->
+{% assign navigation = site.data.navigation %}
+
 <div class="sidebar-content">
-    <!-- Book Info -->
     <div class="book-info">
         <h2 class="book-title">{{ site.title | escape }}</h2>
         {% if site.subtitle %}
         <p class="book-subtitle">{{ site.subtitle | escape }}</p>
+        {% elsif site.description %}
+        <p class="book-subtitle">{{ site.description | escape }}</p>
         {% endif %}
     </div>
 
-    <!-- Table of Contents -->
     <div class="toc">
         <h3 class="toc-title">目次</h3>
-        {% assign navigation = site.data.navigation %}
-        {% if navigation and navigation.introduction %}
+
         <div class="toc-section">
-            <h4 class="toc-section-title">はじめに</h4>
             <ul class="toc-list">
-                {% for item in navigation.introduction %}
                 <li class="toc-item">
-                    <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path %}active{% endif %}">
-                        {{ item.title }}
+                    <a href="{{ '/' | relative_url }}" class="toc-link {% if page.url == '/' %}active{% endif %}">
+                        はじめに
                     </a>
                 </li>
-                {% endfor %}
             </ul>
         </div>
-        {% endif %}
 
-        {% if navigation and navigation.chapters %}
-        <div class="toc-section">
-            <h4 class="toc-section-title">本編</h4>
-            <ul class="toc-list">
-                {% for item in navigation.chapters %}
-                {% assign _parts = item.title | split: '：' %}
-                {% assign _chapter_number = _parts | first %}
-                {% assign _chapter_title = _parts | slice: 1, 99 | join: '：' %}
-                <li class="toc-item toc-chapter">
-                    <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
-                        <span class="chapter-number">{{ _chapter_number }}</span>
-                        <span class="chapter-title">{{ _chapter_title }}</span>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        {% if navigation and navigation.appendices %}
-        <div class="toc-section">
-            <h4 class="toc-section-title">付録</h4>
-            <ul class="toc-list">
-                {% for item in navigation.appendices %}
-                {% assign _parts = item.title | split: '：' %}
-                {% assign _appendix_label = _parts | first %}
-                {% assign _appendix_title = _parts | slice: 1, 99 | join: '：' %}
-                <li class="toc-item">
-                    <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
-                        <span class="appendix-label">{{ _appendix_label }}</span>
-                        <span class="appendix-title">{{ _appendix_title }}</span>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-    </div>
-
-    <!-- Resources Section -->
-    <div class="toc-section">
-        <h4 class="toc-section-title">📚 リソース</h4>
-        <ul class="toc-list">
-            <li class="toc-item">
-                <a href="https://github.com/itdojp/ai-communication-book" class="toc-link" target="_blank" rel="noopener">
-                    💾 GitHubリポジトリ
-                </a>
-            </li>
-            <li class="toc-item">
-                <a href="https://itdojp.github.io/it-engineer-knowledge-architecture/" class="toc-link" target="_blank" rel="noopener">
-                    📚 書籍一覧
-                </a>
-            </li>
-            <li class="toc-item">
-                <a href="https://itdo.jp/" class="toc-link" target="_blank" rel="noopener">
-                    🏢 株式会社アイティードゥ
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- External Links -->
-    <div class="sidebar-footer">
-        <div class="external-links">
-            {% assign repository_url = site.repository.github | default: site.repository %}
-            {% if repository_url %}
-                {% unless repository_url contains '://' %}
-                    {% assign repository_url = 'https://github.com/' | append: repository_url %}
-                {% endunless %}
+        {% if navigation %}
+            {% if navigation.introduction %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">導入</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.introduction %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path %}active{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
             {% endif %}
-            {% if repository_url %}
-            <a href="{{ repository_url }}" target="_blank" rel="noopener" class="external-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                GitHub
-            </a>
+
+            {% if navigation.chapters %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">本編</h4>
+                <ul class="toc-list">
+                    {% for chapter in navigation.chapters %}
+                    <li class="toc-item toc-chapter">
+                        <a href="{{ chapter.path | relative_url }}" class="toc-link {% if page.url == chapter.path or page.url contains chapter.path %}active{% endif %}">
+                            {{ chapter.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if navigation.additional %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">追加</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.additional %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if navigation.resources %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">リソース</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.resources %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if navigation.appendices %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">付録</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.appendices %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if navigation.afterword %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">あとがき</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.afterword %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="sidebar-footer">
+        {% assign repo_url = site.github.repository_url | default: site.repository_url | default: site.repository.github | default: site.repository %}
+        {% if repo_url and repo_url != '' %}
+            {% unless repo_url contains 'http' %}
+                {% assign repo_url = 'https://github.com/' | append: repo_url %}
+            {% endunless %}
+        {% endif %}
+
+        <div class="external-links">
+            {% if repo_url %}
+            <a href="{{ repo_url }}" target="_blank" rel="noopener" class="external-link">GitHub</a>
+            {% endif %}
+            {% if site.contact.email %}
+            <a href="mailto:{{ site.contact.email | escape }}" class="external-link">Contact</a>
             {% endif %}
         </div>
     </div>
 </div>
+
