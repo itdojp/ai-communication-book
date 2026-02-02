@@ -61,5 +61,22 @@
         "title": "付録B：参考文献"
       }
     ]
+  },
+  "ux": {
+    "profile": "A",
+    "modules": {
+      "quickStart": true,
+      "readingGuide": true,
+      "checklistPack": false,
+      "troubleshootingFlow": false,
+      "conceptMap": true,
+      "figureIndex": false,
+      "legalNotice": false,
+      "glossary": true
+    }
+  },
+  "shared": {
+    "version": "3.2.0",
+    "lastSync": "2026-02-02T14:16:14.773Z"
   }
 }

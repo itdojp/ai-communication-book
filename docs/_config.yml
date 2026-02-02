@@ -12,6 +12,10 @@ repository: "https://github.com/itdojp/ai-communication-book"
 # Jekyll設定
 markdown: kramdown
 highlighter: rouge
+
+# Mermaid
+mermaid:
+  enabled: true
 permalink: pretty
 
 # プラグイン
