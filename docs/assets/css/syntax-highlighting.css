@@ -203,7 +203,8 @@ pre[data-lang]::before {
 .code-block-wrapper:hover .copy-button,
 .code-block-wrapper:focus-within .copy-button,
 pre:hover .copy-button,
-pre:focus-within .copy-button {
+pre:focus-within .copy-button,
+.copy-button:focus-visible {
     opacity: 1;
 }
 
