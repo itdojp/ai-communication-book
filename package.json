@@ -4,12 +4,12 @@
   "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
   "main": "index.md",
   "scripts": {
-    "start": "jekyll serve --livereload",
-    "build": "jekyll build",
+    "start": "cd docs && bundle exec jekyll serve --livereload",
+    "build": "cd docs && bundle exec jekyll build",
     "test": "npm run lint && npm run check-links",
-    "lint": "markdownlint src/**/*.md",
-    "check-links": "markdown-link-check src/**/*.md",
-    "deploy": "gh-pages -d _site"
+    "lint": "markdownlint docs/**/*.md",
+    "check-links": "markdown-link-check docs/**/*.md",
+    "deploy": "gh-pages -d docs/_site"
   },
   "keywords": [
     "book",
