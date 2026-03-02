@@ -858,23 +858,23 @@ def calculate_confidence(content, model_confidence, verification_results):
 - Low: Level 1-2
 
 レベル5（確信度90〜100%）：「確実」
-表示：✓ 確認済みの情報です
+表示：[OK] 確認済みの情報です
 説明：複数の信頼できる情報源で確認されています
 
 レベル4（確信度70〜89%）：「高い確信」  
-表示：✓ 信頼性の高い情報です
+表示：[OK] 信頼性の高い情報です
 説明：主要な情報源で確認されていますが、一部未確認の要素があります
 
 レベル3（確信度50〜69%）：「中程度の確信」
-表示：⚠ 参考情報として活用してください
+表示：[WARN] 参考情報として活用してください
 説明：基本的な整合性は確認されていますが、追加確認を推奨します
 
 レベル2（確信度30〜49%）：「低い確信」
-表示：⚠ 不確実な情報を含みます
+表示：[WARN] 不確実な情報を含みます
 説明：情報が限定的で、独立した確認が必要です
 
 レベル1（確信度0〜29%）：「不確実」
-表示：❌ 確認が必要な情報です
+表示：[NG] 確認が必要な情報です
 説明：信頼性が低く、使用前に専門家による確認が必須です
 
 具体的表示例：
@@ -894,15 +894,15 @@ def calculate_confidence(content, model_confidence, verification_results):
 重要な意思決定には最新情報での再確認を推奨します。」
 
 中リスク（確信度40〜69%）：
-「⚠ 注意：この情報には不確実な要素が含まれます。
+「[WARN] 注意：この情報には不確実な要素が含まれます。
 重要な用途での使用前に、信頼できる情報源での確認を必ず行ってください。」
 
 高リスク（確信度40%未満）：
-「❌ 警告：この情報の信頼性は低く、事実と異なる可能性があります。
+「[NG] 警告：この情報の信頼性は低く、事実と異なる可能性があります。
 使用前に専門家による確認を強く推奨します。」
 
 緊急対応警告（重大な不整合検出時）：
-「🚨 重要：この情報には重大な矛盾が検出されました。
+「[CRITICAL] 重要：この情報には重大な矛盾が検出されました。
 即座に使用を中止し、担当者に確認してください。」
 
 使用制限の実装：
@@ -1859,7 +1859,7 @@ bias_results = bias_detector.detect_statistical_bias(
 # 結果の解釈
 for attribute, analysis in bias_results.items():
     if analysis['bias_detected']:
-        print(f"⚠ {attribute}によるバイアスが検出されました")
+        print(f"[WARN] {attribute}によるバイアスが検出されました")
         print(f"最大群間格差: {analysis['group_differences']['max_group_difference']:.2%}")
 ```
 
@@ -1977,7 +1977,7 @@ sentiment_bias = language_bias_detector.detect_sentiment_bias(
 
 # アラート生成
 if occupational_bias['engineer']['bias_detected']:
-    print("⚠ エンジニア職において性別バイアスが検出されました")
+    print("[WARN] エンジニア職において性別バイアスが検出されました")
     print(f"男性代名詞使用率: {occupational_bias['engineer']['male_pronoun_ratio']:.1%}")
 ```
 
@@ -2348,7 +2348,7 @@ print("=== 年次公平性レポート ===")
 print(f"全体的傾向: {annual_trends['overall_fairness_trajectory']}")
 print(f"リスクレベル: {annual_trends['risk_assessment']['overall_risk']}")
 if degradation_patterns['rapid_decline']:
-    print("⚠ 急激な公平性劣化が検出されました")
+    print("[WARN] 急激な公平性劣化が検出されました")
 ```
 
 **自動改善システム**
