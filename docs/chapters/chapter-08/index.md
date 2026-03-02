@@ -1859,7 +1859,7 @@ bias_results = bias_detector.detect_statistical_bias(
 # 結果の解釈
 for attribute, analysis in bias_results.items():
     if analysis['bias_detected']:
-        print(f"⚠ {attribute}によるバイアスが検出されました")
+        print(f"[WARN] {attribute}によるバイアスが検出されました")
         print(f"最大群間格差: {analysis['group_differences']['max_group_difference']:.2%}")
 ```
 
@@ -1977,7 +1977,7 @@ sentiment_bias = language_bias_detector.detect_sentiment_bias(
 
 # アラート生成
 if occupational_bias['engineer']['bias_detected']:
-    print("⚠ エンジニア職において性別バイアスが検出されました")
+    print("[WARN] エンジニア職において性別バイアスが検出されました")
     print(f"男性代名詞使用率: {occupational_bias['engineer']['male_pronoun_ratio']:.1%}")
 ```
 
@@ -2348,7 +2348,7 @@ print("=== 年次公平性レポート ===")
 print(f"全体的傾向: {annual_trends['overall_fairness_trajectory']}")
 print(f"リスクレベル: {annual_trends['risk_assessment']['overall_risk']}")
 if degradation_patterns['rapid_decline']:
-    print("⚠ 急激な公平性劣化が検出されました")
+    print("[WARN] 急激な公平性劣化が検出されました")
 ```
 
 **自動改善システム**
