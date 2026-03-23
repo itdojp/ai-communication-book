@@ -117,6 +117,23 @@
         {% endif %}
     </div>
 
+    <div class="toc">
+        <div class="toc-section">
+            <h3 class="toc-title">クイックアクセス</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="{{ '/' | relative_url }}#quick-start" class="toc-link">30分クイックスタート</a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/' | relative_url }}#glossary-update-notes" class="toc-link">用語・更新確認ノート</a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/' | relative_url }}#related-books" class="toc-link">関連書籍</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <div class="sidebar-footer">
         {% assign repo_url = site.github.repository_url | default: site.repository_url | default: site.repository.github | default: site.repository %}
         {% if repo_url and repo_url != '' %}
@@ -135,4 +152,3 @@
         </div>
     </div>
 </div>
-
