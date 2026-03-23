@@ -143,6 +143,7 @@ RAG / Function Calling など、AIの能力を拡張するシステム設計を�
 - [第1章：即効性のある活用法](../chapters/chapter-01/) で基本テンプレートを一つ試す
 - [第3章：モデル評価と選択基準](../chapters/chapter-03/) で比較観点だけ先に押さえる
 - [付録A：プロンプトテンプレート集](../appendices/appendix-a/) と [付録D：実務会話例集](../appendices/appendix-d/) から、自分の業務に近い型を選ぶ
+- 評価指標や更新確認の観点で迷った場合は、[付録E：用語集と更新確認ノート](../appendices/appendix-e/) に戻って確認する
 
 ### 読み方の分岐
 
