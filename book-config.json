@@ -3,6 +3,11 @@
   "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
   "author": "ITDO Inc.",
   "version": "1.0.0",
+  "license": "CC BY-NC-SA 4.0",
+  "repository": {
+    "url": "https://github.com/itdojp/ai-communication-book",
+    "branch": "main"
+  },
   "structure": {
     "chapters": [
       {
@@ -12,38 +17,38 @@
       },
       {
         "id": "chapter01",
-        "title": "第1章：即座に活用できるAIコミュニケーション基礎",
-        "description": "基本的なAIコミュニケーション技術の習得"
+        "title": "第1章：即効性のある活用法",
+        "description": "基本パターンとプロンプト入門"
       },
       {
         "id": "chapter02",
-        "title": "第2章：構造化思考でプロンプトを設計する",
-        "description": "効果的なプロンプト設計の理論と実践"
+        "title": "第2章：技術アーキテクチャの本質",
+        "description": "生成AIの仕組みと制約の理解"
       },
       {
         "id": "chapter03",
-        "title": "第3章：コンテキスト制御による対話の最適化",
-        "description": "コンテキストを意識した対話設計"
+        "title": "第3章：モデル評価と選択基準",
+        "description": "ベンチマークと実務要件による選定"
       },
       {
         "id": "chapter04",
-        "title": "第4章：フィードバックループによる継続的改善",
-        "description": "継続的な改善メカニズムの構築"
+        "title": "第4章：基礎プロンプト設計",
+        "description": "再利用可能なプロンプトの設計原則"
       },
       {
         "id": "chapter05",
-        "title": "第5章：エラーハンドリングと例外対応",
-        "description": "予期しない状況への対処法"
+        "title": "第5章：高度プロンプト技術",
+        "description": "複雑な推論と創造的課題への対応"
       },
       {
         "id": "chapter06",
-        "title": "第6章：チーム活用とワークフロー統合",
-        "description": "チームでのAI活用とワークフロー設計"
+        "title": "第6章：先進技術活用",
+        "description": "AIの能力を拡張するシステム設計"
       },
       {
         "id": "chapter07",
-        "title": "第7章：ドメイン特化型AI活用法",
-        "description": "専門分野でのAI活用事例"
+        "title": "第7章：業務プロセス統合設計",
+        "description": "組織的価値創出のための導入設計"
       },
       {
         "id": "chapter08",
@@ -59,6 +64,18 @@
       {
         "id": "appendix-b",
         "title": "付録B：参考文献"
+      },
+      {
+        "id": "appendix-c",
+        "title": "付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）"
+      },
+      {
+        "id": "appendix-d",
+        "title": "付録D：実務会話例集（成果物まで落とす）"
+      },
+      {
+        "id": "appendix-e",
+        "title": "付録E：用語集と更新確認ノート"
       }
     ]
   },
@@ -71,7 +88,7 @@
       "troubleshootingFlow": false,
       "conceptMap": true,
       "figureIndex": false,
-      "legalNotice": false,
+      "legalNotice": true,
       "glossary": true
     }
   },

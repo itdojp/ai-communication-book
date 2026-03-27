@@ -138,6 +138,12 @@ AI出力の品質担保とリスク対応
 - そのまま [付録A：プロンプトテンプレート集](appendices/appendix-a/) と [付録D：実務会話例集](appendices/appendix-d/) から、自分の業務に近いテンプレートを選んで転用する。
 - 評価指標や用語で迷った場合は [付録E：用語集と更新確認ノート](appendices/appendix-e/) を参照し、モデル比較や料金確認は公式情報で再確認する。
 
+## 安全に使うための注意
+
+- 社内文書、顧客情報、契約情報、認証情報などの機密データは、利用規約・組織ルールを確認せずに外部AIサービスへ投入しない。
+- 第3章以降で扱うモデル比較、料金、提供機能、API仕様は変化しやすい。意思決定に使う場合は、付録Eで整理した確認観点に沿って一次情報を確認する。
+- 本書のテンプレートは実務で再利用しやすい形にしているが、そのまま本番運用へ流用することは前提にしていない。承認フロー、監査要件、評価指標に合わせて調整すること。
+
 ## 用語・更新確認ノート
 {: #glossary-update-notes }
 
@@ -149,6 +155,13 @@ AI出力の品質担保とリスク対応
 
 - [AI時代に差がつく論理的思考と表現力](https://itdojp.github.io/LogicalThinking-AI-Era-Guide/) - 指示文を論理的に組み立て、評価基準を明文化する力を補強したい場合に適している。
 - [エンジニアのための実践コミュニケーション設計](https://itdojp.github.io/IT-engineer-communication-book/) - AIとの対話をチーム内外の合意形成や文書化に接続したい場合に参照してほしい。
+
+## 利用と更新情報
+
+- 公開ページ: [https://itdojp.github.io/ai-communication-book/](https://itdojp.github.io/ai-communication-book/)
+- リポジトリ: [https://github.com/itdojp/ai-communication-book](https://github.com/itdojp/ai-communication-book)
+- モデル名、料金、API仕様、各社UIは変化しやすい。差分確認はリポジトリのコミット履歴、PR、付録Eの更新確認ノートを起点に行う。
+- 実務導入前には、対象業務の機密区分、保存期間、監査要件、AI利用ポリシーを確認する。
 
 ## 著者について
 
@@ -176,6 +189,6 @@ Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
 
 **著者:** ITDO Inc.  
 **バージョン:** 1.0.0  
-**最終更新:** 2026-01-04
+**最終更新:** 2026-03-25（local rewrite）
 
 {% include page-navigation.html %}
