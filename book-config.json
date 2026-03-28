@@ -3,6 +3,11 @@
   "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
   "author": "ITDO Inc.",
   "version": "1.0.0",
+  "license": "CC-BY-NC-SA-4.0",
+  "repository": {
+    "url": "https://github.com/itdojp/ai-communication-book",
+    "branch": "main"
+  },
   "structure": {
     "chapters": [
       {
@@ -59,6 +64,18 @@
       {
         "id": "appendix-b",
         "title": "付録B：参考文献"
+      },
+      {
+        "id": "appendix-c",
+        "title": "付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）"
+      },
+      {
+        "id": "appendix-d",
+        "title": "付録D：実務会話例集（成果物まで落とす）"
+      },
+      {
+        "id": "appendix-e",
+        "title": "付録E：用語集と更新確認ノート"
       }
     ]
   },
@@ -71,7 +88,7 @@
       "troubleshootingFlow": false,
       "conceptMap": true,
       "figureIndex": false,
-      "legalNotice": false,
+      "legalNotice": true,
       "glossary": true
     }
   },
