@@ -3,7 +3,7 @@
   "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
   "author": "ITDO Inc.",
   "version": "1.0.0",
-  "license": "CC BY-NC-SA 4.0",
+  "license": "CC-BY-NC-SA-4.0",
   "repository": {
     "url": "https://github.com/itdojp/ai-communication-book",
     "branch": "main"
@@ -95,5 +95,6 @@
   "shared": {
     "version": "3.2.2",
     "lastSync": "2026-02-04T23:01:56.018Z"
-  }
+  },
+  "licenseLabel": "CC BY-NC-SA 4.0"
 }
