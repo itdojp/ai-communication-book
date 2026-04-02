@@ -3,7 +3,7 @@
   "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
   "author": "ITDO Inc.",
   "version": "1.0.0",
-  "license": "CC-BY-NC-SA-4.0",
+  "license": "CC BY-NC-SA 4.0",
   "repository": {
     "url": "https://github.com/itdojp/ai-communication-book",
     "branch": "main"
@@ -53,7 +53,7 @@
       {
         "id": "chapter08",
         "title": "第8章：品質保証とリスク管理",
-        "description": "AI出力の品質担保とリスク対応"
+        "description": "AI活用における品質管理とリスク対策"
       }
     ],
     "appendices": [
