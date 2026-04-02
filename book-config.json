@@ -53,7 +53,7 @@
       {
         "id": "chapter08",
         "title": "第8章：品質保証とリスク管理",
-        "description": "AI出力の品質担保とリスク対応"
+        "description": "AI活用における品質管理とリスク対策"
       }
     ],
     "appendices": [
@@ -95,5 +95,6 @@
   "shared": {
     "version": "3.2.2",
     "lastSync": "2026-02-04T23:01:56.018Z"
-  }
+  },
+  "licenseLabel": "CC BY-NC-SA 4.0"
 }
