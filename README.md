@@ -2,9 +2,9 @@
 
 AI時代のコミュニケーション技術として、効果的なプロンプト設計とエージェント活用の実践的手法を体系化した技術書です。
 
-- 公開ページ（GitHub Pages）: https://itdojp.github.io/ai-communication-book/
+- 公開ページ（GitHub Pages）: [ai-communication-book](https://itdojp.github.io/ai-communication-book/)
 - 目次（リポジトリ内）: `docs/index.md`
-- シリーズ: https://github.com/itdojp/it-engineer-knowledge-architecture
+- シリーズ: [it-engineer-knowledge-architecture](https://github.com/itdojp/it-engineer-knowledge-architecture)
 
 ## この本でできるようになること（抜粋）
 
@@ -15,7 +15,7 @@ AI時代のコミュニケーション技術として、効果的なプロンプ
 
 ## フィードバック（誤り指摘・改善提案）
 
-誤字脱字、技術的な誤り、改善提案は Issues / Pull Request で受け付けます。手順は `CONTRIBUTING.md` を参照してください。
+誤字脱字、技術的な誤り、改善提案は Issues / PR で受け付けます。手順は `CONTRIBUTING.md` を参照してください。
 
 ## ライセンス
 
