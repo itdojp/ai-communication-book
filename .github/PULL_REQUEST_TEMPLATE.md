@@ -26,7 +26,7 @@
 ## QA（必須）
 
 - [ ] Book QA（Unicode / textlint(PRH) / 内部リンク・アンカー /
-      Jekyll build / built-site smoke）: PASS
+  Jekyll build / built-site smoke）: PASS
   - 実行URL: （GitHub Actions の workflow run URL）
 
 ## Pages確認（原則必須）
