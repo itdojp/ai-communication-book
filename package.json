@@ -7,8 +7,8 @@
     "start": "cd docs && bundle exec jekyll serve --livereload",
     "build": "cd docs && bundle exec jekyll build",
     "test": "npm run lint && npm run check-links",
-    "lint": "markdownlint docs/**/*.md",
-    "check-links": "markdown-link-check docs/**/*.md",
+    "lint": "markdownlint \"docs/**/*.md\"",
+    "check-links": "find docs -name '*.md' -print0 | xargs -0 markdown-link-check --config .markdown-link-check.json",
     "deploy": "gh-pages -d docs/_site"
   },
   "keywords": [
