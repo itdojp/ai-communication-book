@@ -184,6 +184,10 @@ a:hover {
     border-right: 1px solid var(--border-color);
     overflow-y: auto;
     z-index: 900;
+    /*
+     * mobile-responsive.css is imported above this file and keeps the closed
+     * drawer off-canvas on <=1024px with an !important transform override.
+     */
     transform: translateX(0);
     transition: transform 0.3s ease;
 }
