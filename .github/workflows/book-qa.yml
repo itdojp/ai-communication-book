@@ -83,11 +83,28 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
-      - name: Build (Jekyll; GitHub Pages compatible)
-        uses: actions/jekyll-build-pages@v1
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.314.0
         with:
-          source: ./${{ steps.scan.outputs.dir }}
-          destination: ./_site
+          ruby-version: '3.3'
+          bundler: Gemfile.lock
+          working-directory: ${{ steps.scan.outputs.dir }}
+
+      - name: Build (Jekyll; repository Gemfile)
+        shell: bash
+        env:
+          BUNDLE_PATH: ${{ runner.temp }}/bundle
+          BUNDLE_APP_CONFIG: ${{ runner.temp }}/bundle-config
+        run: |
+          set -euo pipefail
+          scan_dir="${{ steps.scan.outputs.dir }}"
+          if [ ! -f "$scan_dir/Gemfile" ]; then
+            echo "::error file=$scan_dir/Gemfile::Gemfile is required for repository-managed Jekyll build"
+            exit 1
+          fi
+          export BUNDLE_GEMFILE="$PWD/$scan_dir/Gemfile"
+          bundle install --jobs 4 --retry 3
+          bundle exec jekyll build --source "$scan_dir" --destination "_site"
 
       - name: Smoke check built site (top + navigation + assets)
         shell: bash
