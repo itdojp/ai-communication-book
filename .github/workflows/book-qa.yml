@@ -29,9 +29,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
-          cache-dependency-path: book-formatter/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            book-formatter/package-lock.json
+
+      - name: Install local npm dependencies
+        run: npm ci
+
+      - name: Local npm security audit
+        run: npm run check:security
 
       - name: Repository metadata consistency check
         run: node scripts/check-metadata.mjs

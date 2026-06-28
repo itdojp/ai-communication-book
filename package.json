@@ -6,11 +6,12 @@
   "scripts": {
     "start": "cd docs && bundle exec jekyll serve --livereload",
     "build": "cd docs && bundle exec jekyll build",
-    "test": "npm run check:metadata && npm run lint && npm run check-links",
+    "test": "npm run check:metadata && npm run check:security && npm run lint && npm run check-links",
     "lint": "markdownlint \"docs/**/*.md\"",
     "check-links": "find docs -name '*.md' -print0 | xargs -0 markdown-link-check --config .markdown-link-check.json",
     "deploy": "gh-pages -d docs/_site",
-    "check:metadata": "node scripts/check-metadata.mjs"
+    "check:metadata": "node scripts/check-metadata.mjs",
+    "check:security": "npm audit --audit-level=moderate"
   },
   "keywords": [
     "book",
@@ -24,12 +25,15 @@
     "url": "https://github.com/itdojp/ai-communication-book/issues"
   },
   "devDependencies": {
-    "markdownlint-cli": "^0.37.0",
+    "gh-pages": "^6.0.0",
     "markdown-link-check": "^3.11.2",
-    "gh-pages": "^6.0.0"
+    "markdownlint-cli": "^0.49.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/itdojp/ai-communication-book.git"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }
