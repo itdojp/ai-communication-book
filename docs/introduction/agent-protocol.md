@@ -204,13 +204,13 @@ AI依頼は、会話ではなく契約として定義します。
 - [ ] 保存する証拠と保存しないログを分けた
 - [ ] インシデント報告先を定義した
 ## 次に読む章・参照付録
-- まず実務で試す: [第1章：即効性のある活用法](../chapters/chapter-01/)
-- 依頼テンプレートを増やす: [付録A：AIエージェント実務テンプレート集](../appendices/appendix-a/)
-- 実務会話例を確認する: [付録D：実務会話例集](../appendices/appendix-d/)
-- 用語と更新確認の観点を見る: [付録E：用語集と更新確認ノート](../appendices/appendix-e/)
+- まず実務で試す: <a href="{{ '/chapters/chapter-01/' | relative_url }}">第1章：即効性のある活用法</a>
+- 依頼テンプレートを増やす: <a href="{{ '/appendices/appendix-a/' | relative_url }}">付録A：AIエージェント実務テンプレート集</a>
+- 実務会話例を確認する: <a href="{{ '/appendices/appendix-d/' | relative_url }}">付録D：実務会話例集</a>
+- 用語と更新確認の観点を見る: <a href="{{ '/appendices/appendix-e/' | relative_url }}">付録E：用語集と更新確認ノート</a>
 ## Source Notes
 
-- [NIST-AIRMF](../appendices/appendix-b/#nist-airmf)、[NIST-GENAI](../appendices/appendix-b/#nist-genai): risk governance、測定、管理の運用原則
-- [OWASP-LLM-2025](../appendices/appendix-b/#owasp-llm-2025)、[OWASP-AGENTIC-2026](../appendices/appendix-b/#owasp-agentic-2026): 外部入力、tool、権限、自律性のtrust boundary
-- [METI-AI-1-2](../appendices/appendix-b/#meti-ai-1-2)、[PPC-GENAI](../appendices/appendix-b/#ppc-genai): 国内での役割・data取扱いの確認観点
-- 対象version/status、確認日、再確認条件は[付録B](../appendices/appendix-b/)に記録。最終確認: 2026-07-21
+- <a href="{{ '/appendices/appendix-b/' | relative_url }}#nist-airmf">NIST-AIRMF</a>、<a href="{{ '/appendices/appendix-b/' | relative_url }}#nist-genai">NIST-GENAI</a>: risk governance、測定、管理の運用原則
+- <a href="{{ '/appendices/appendix-b/' | relative_url }}#owasp-llm-2025">OWASP-LLM-2025</a>、<a href="{{ '/appendices/appendix-b/' | relative_url }}#owasp-agentic-2026">OWASP-AGENTIC-2026</a>: 外部入力、tool、権限、自律性のtrust boundary
+- <a href="{{ '/appendices/appendix-b/' | relative_url }}#meti-ai-1-2">METI-AI-1-2</a>、<a href="{{ '/appendices/appendix-b/' | relative_url }}#ppc-genai">PPC-GENAI</a>: 国内での役割・data取扱いの確認観点
+- 対象version/status、確認日、再確認条件は<a href="{{ '/appendices/appendix-b/' | relative_url }}">付録B</a>に記録。最終確認: 2026-07-21

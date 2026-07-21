@@ -115,6 +115,32 @@ const cases = [
         '付録C：成果物テンプレート集'
       );
     }
+  },
+  {
+    name: 'a source-valid appendix link resolves to a missing published route',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/appendices/appendix-a.md'),
+        "'/appendices/appendix-c/' | relative_url",
+        "'/appendices/appendix-a/appendix-c/' | relative_url"
+      );
+    }
+  },
+  {
+    name: 'a site.baseurl link resolves to a missing published route',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/appendices/appendix-c.md'),
+        '{{ site.baseurl }}/chapters/chapter-05/',
+        '{{ site.baseurl }}/appendices/appendix-c/chapters/chapter-05/'
+      );
+    }
+  },
+  {
+    name: 'a stable root navigation anchor disappears',
+    mutate(root) {
+      replaceOnce(path.join(root, 'docs/index.md'), '{: #related-books }', '{: #related-reading }');
+    }
   }
 ];
 

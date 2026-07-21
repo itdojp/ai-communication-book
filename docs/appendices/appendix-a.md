@@ -8,9 +8,9 @@ layout: book
 
 本付録は、AIエージェントへの依頼を会話で終わらせず、検証可能な成果物へつなげるテンプレート集です。組織のsecurity policy、data classification、承認手順に合わせて調整してください。
 
-- canonicalな運用原則: [AIエージェント協働の実務SOP](../introduction/agent-protocol/)
-- 成果物の完成形: [付録C](appendix-c/)
-- 会話から成果物への流れ: [付録D](appendix-d/)
+- canonicalな運用原則: <a href="{{ '/introduction/agent-protocol/' | relative_url }}">AIエージェント協働の実務SOP</a>
+- 成果物の完成形: <a href="{{ '/appendices/appendix-c/' | relative_url }}">付録C</a>
+- 会話から成果物への流れ: <a href="{{ '/appendices/appendix-d/' | relative_url }}">付録D</a>
 
 ## A.1 Job Spec（依頼票）
 

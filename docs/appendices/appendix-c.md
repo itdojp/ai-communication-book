@@ -12,10 +12,10 @@ AIエージェントの出力を実務で活用する際は、「会話ログ」
 
 | 成果物 | 主な用途 | 本文の入口 |
 | --- | --- | --- |
-| ADR | 代替案、判断、撤回条件を残す | [第5章](../chapters/chapter-05/) |
-| PR | 変更、検証、risk、rollbackをreviewする | [第5章](../chapters/chapter-05/) |
-| Runbook | 許可された手順、停止、復旧を運用する | [第8章](../chapters/chapter-08/) |
-| Postmortem | 事実、寄与要因、再発防止を学習へ戻す | [第8章](../chapters/chapter-08/) |
+| ADR | 代替案、判断、撤回条件を残す | <a href="{{ site.baseurl }}/chapters/chapter-05/">第5章</a> |
+| PR | 変更、検証、risk、rollbackをreviewする | <a href="{{ site.baseurl }}/chapters/chapter-05/">第5章</a> |
+| Runbook | 許可された手順、停止、復旧を運用する | <a href="{{ site.baseurl }}/chapters/chapter-08/">第8章</a> |
+| Postmortem | 事実、寄与要因、再発防止を学習へ戻す | <a href="{{ site.baseurl }}/chapters/chapter-08/">第8章</a> |
 
 AIがdraftを作成しても、事実確認、採否、承認、実行責任は指定したownerに残ります。
 

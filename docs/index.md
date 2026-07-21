@@ -29,6 +29,7 @@ permalink: /
 - 変化しやすい仕様や法制度を、版・確認日・再確認条件付きで扱う
 
 ## 最初に読むページ
+{: #quick-start }
 
 1. [はじめに](introduction/)で、自分の読者routeと到達点を選ぶ
 2. [AIエージェント協働の実務SOP](introduction/agent-protocol/)で、全章共通の承認・停止・検証契約を確認する
@@ -144,6 +145,7 @@ model名、料金、UI、API、法制度は、固定表より確認方法を重�
 特定のAI製品やprogramming languageの利用経験は必須ではありません。
 
 ## Source・更新policy
+{: #glossary-update-notes }
 
 - 変化しやすい事実は一次情報を優先する
 - source type、対象version/status、確認日、支える主張、再確認条件を記録する
@@ -152,6 +154,12 @@ model名、料金、UI、API、法制度は、固定表より確認方法を重�
 
 **Source Registry基準確認日**: 2026-07-21  
 **本版**: v2.0.0（Issue #131に基づく2026年版全面改稿）
+
+## 関連書籍
+{: #related-books }
+
+- [AI時代に差がつく論理的思考と表現力](https://itdojp.github.io/LogicalThinking-AI-Era-Guide/) - 依頼や評価基準を論理的に組み立て、表現する力を補強する。
+- [エンジニアのための実践コミュニケーション設計](https://itdojp.github.io/IT-engineer-communication-book/) - AIとの協働を、チーム内外の合意形成と文書化へ接続する。
 
 ## 利用上の注意
 

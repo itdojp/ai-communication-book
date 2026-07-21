@@ -44,6 +44,12 @@ const FORBIDDEN_PATTERNS = [
   [/思考プロセスの外部化/u, 'hidden reasoningではなく検証可能な中間成果物を要求する']
 ];
 
+const ROOT_NAVIGATION_ANCHORS = new Map([
+  ['quick-start', '最初に読むページ'],
+  ['glossary-update-notes', 'Source・更新policy'],
+  ['related-books', '関連書籍']
+]);
+
 function parseArgs(argv) {
   let root = DEFAULT_ROOT;
   for (let index = 0; index < argv.length; index += 1) {
@@ -81,6 +87,38 @@ function markdownHeadings(content) {
   }
 
   return headings;
+}
+
+function markdownLinks(content) {
+  const links = [];
+  let fenceCharacter = null;
+  let fenceLength = 0;
+
+  for (const line of content.split(/\r?\n/u)) {
+    const fence = line.match(/^\s{0,3}(`{3,}|~{3,})/u)?.[1];
+    if (fence) {
+      if (fenceCharacter === null) {
+        fenceCharacter = fence[0];
+        fenceLength = fence.length;
+      } else if (fence[0] === fenceCharacter && fence.length >= fenceLength) {
+        fenceCharacter = null;
+        fenceLength = 0;
+      }
+      continue;
+    }
+    if (fenceCharacter !== null) continue;
+    for (const match of line.matchAll(/!?\[[^\]]*\]\(([^)\s]+)(?:\s+["'][^)]*["'])?\)/gu)) {
+      links.push(match[1].replace(/^<|>$/gu, ''));
+    }
+    for (const match of line.matchAll(/href="\{\{\s*'([^']+)'\s*\|\s*relative_url\s*\}\}(#[^"]*)?"/gu)) {
+      links.push(`${match[1]}${match[2] ?? ''}`);
+    }
+    for (const match of line.matchAll(/href="\{\{\s*site\.baseurl\s*\}\}([^"#]*)(#[^"]*)?"/gu)) {
+      links.push(`${match[1]}${match[2] ?? ''}`);
+    }
+  }
+
+  return links;
 }
 
 function read(root, relativePath, failures) {
@@ -240,11 +278,86 @@ function checkCanonicalTitles(root, failures) {
   }
 }
 
+function checkRootNavigationAnchors(root, failures) {
+  const indexPath = 'docs/index.md';
+  const sidebarPath = 'docs/_includes/sidebar-nav.html';
+  const index = read(root, indexPath, failures);
+  const sidebar = read(root, sidebarPath, failures);
+
+  for (const [id, heading] of ROOT_NAVIGATION_ANCHORS) {
+    const anchorPattern = new RegExp(`^## ${escapeRegExp(heading)}\\r?\\n\\{:\\s*#${escapeRegExp(id)}\\s*\\}$`, 'mu');
+    if (!anchorPattern.test(index)) {
+      failures.push(`${indexPath}: heading ${JSON.stringify(heading)} must define stable anchor #${id}`);
+    }
+    const sidebarTarget = `{{ '/' | relative_url }}#${id}`;
+    if (!sidebar.includes(sidebarTarget)) {
+      failures.push(`${sidebarPath}: missing root navigation target ${JSON.stringify(sidebarTarget)}`);
+    }
+  }
+}
+
+function walkMarkdownFiles(directory) {
+  const files = [];
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const absolutePath = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...walkMarkdownFiles(absolutePath));
+    else if (entry.isFile() && entry.name.endsWith('.md')) files.push(absolutePath);
+  }
+  return files;
+}
+
+function publishedRoute(relativePath) {
+  const pathFromDocs = relativePath.replace(/^docs\//u, '');
+  if (pathFromDocs === 'index.md') return '/';
+  if (pathFromDocs.endsWith('/index.md')) return `/${pathFromDocs.slice(0, -'index.md'.length)}`;
+  return `/${pathFromDocs.slice(0, -'.md'.length)}/`;
+}
+
+function routeTargetExists(root, pathname, baseurl) {
+  let decoded;
+  try {
+    decoded = decodeURIComponent(pathname);
+  } catch {
+    return false;
+  }
+  if (baseurl && (decoded === baseurl || decoded.startsWith(`${baseurl}/`))) {
+    decoded = decoded.slice(baseurl.length) || '/';
+  }
+  const relative = decoded.replace(/^\/+|\/+$/gu, '');
+  const candidates = relative.length === 0
+    ? ['docs/index.md']
+    : [`docs/${relative}/index.md`, `docs/${relative}.md`, `docs/${relative}`];
+  return candidates.some((candidate) => {
+    const absolutePath = path.join(root, candidate);
+    return fs.existsSync(absolutePath) && fs.statSync(absolutePath).isFile();
+  });
+}
+
+function checkPublishedRouteLinks(root, failures) {
+  const docsRoot = path.join(root, 'docs');
+  const config = read(root, 'docs/_config.yml', failures);
+  const baseurl = config.match(/^baseurl:\s*["']?([^"'\s]+)["']?\s*$/mu)?.[1]?.replace(/\/$/u, '') ?? '';
+  for (const absolutePath of walkMarkdownFiles(docsRoot)) {
+    const relativePath = path.relative(root, absolutePath).split(path.sep).join('/');
+    const sourceRoute = publishedRoute(relativePath);
+    const content = fs.readFileSync(absolutePath, 'utf8');
+    for (const target of markdownLinks(content)) {
+      if (target.startsWith('#') || /^[a-z][a-z0-9+.-]*:/iu.test(target) || target.startsWith('//')) continue;
+      const resolved = new URL(target, new URL(sourceRoute, 'https://book.invalid')).pathname;
+      if (!routeTargetExists(root, resolved, baseurl)) {
+        failures.push(`${relativePath}: ${JSON.stringify(target)} resolves to missing published route ${resolved}`);
+      }
+    }
+  }
+}
+
 export function checkEditorialContract(root = DEFAULT_ROOT) {
   const failures = [];
   const chapterContents = new Map();
 
   checkCanonicalTitles(root, failures);
+  checkRootNavigationAnchors(root, failures);
+  checkPublishedRouteLinks(root, failures);
 
   for (const [index, chapter] of CHAPTERS.entries()) {
     const content = read(root, chapter, failures);
