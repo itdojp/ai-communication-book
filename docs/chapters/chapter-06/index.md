@@ -1,1201 +1,487 @@
 ---
-title: "第6章：先進技術活用"
+title: "第6章：知識連携とツール連携"
 chapter: chapter06
 layout: book
 order: 8
 ---
 
-# 第6章：先進技術活用
+# 第6章：知識連携とツール連携
 
-## はじめに
+業務systemでは、すべての情報をpromptへ埋め込むことも、すべてをmodelに記憶させることもできません。必要な知識を検索し、外部作用をtoolへ委譲し、結果を検証するarchitectureが必要です。本章ではcontext、retrieval、tool useを一つの設計問題として扱います。
 
-基礎的なプロンプト技術を習得した後の次のステップは、AIの能力を大幅に拡張する先進技術の活用である。本章では、RAG（Retrieval-Augmented Generation）や Function Calling、ファインチューニング、マルチエージェントシステムなどを扱う。AIの限界を突破し、より高度で実用的なソリューションを構築するための技術を解説する。
+## この章の使い方
 
-これらの技術により、静的な知識に依存した従来のAI活用から、動的で拡張可能なインテリジェントシステムへと進化させることができる。
+### 誰向け
 
-> RAG や Function Calling はツール利用を伴うため、実務では「自律度」「承認ゲート」「停止条件」を明確にした運用が前提となる。共通の基準は [AIエージェント協働の標準手順（SOP）](../../introduction/agent-protocol/) を参照してほしい。
+- 社内knowledge検索やRAGを設計するエンジニア
+- AIと業務APIを接続するsolution architect
+- MCP server/client、tool schema、権限をreviewするsecurity担当
+- fine-tuningやmulti-agentを採用する前に代替案を比較したいowner
 
-> **この章で学ぶこと**
-> - RAG・Function Calling・ファインチューニング・マルチエージェントといった代表的な先進技術の役割と違いを整理し、自分のユースケースにどれが適しているかを検討できるようになること。
-> - 既存システムやデータソースと AI を連携させる際の基本的なアーキテクチャ構成と、品質・セキュリティ上の注意点を理解すること。
-> - 「まずはどこから試すべきか」「どこまで内製し、どこから外部サービスを活用するか」といった導入判断の観点を持てるようになること。
+### この章でできるようになること
 
----
+- 情報をcontext、retrieval、toolのどこで扱うか判断できる
+- RAGを分割、検索、再rank、引用、access control、更新、evalまで設計できる
+- tool description、structured output、schema、permissionを契約化できる
+- logging、retry、timeout、partial failureを運用要件にできる
+- fine-tuningをしない判断とsingle-agent / multi-agentの境界を説明できる
 
-## 6.1 RAG（Retrieval-Augmented Generation）の実装と活用
+### 最短ルート
 
-### RAGの基本アーキテクチャ設計
+1. 「6.1 Context / retrieval / toolの選択」を使う
+2. RAGなら「6.2」、外部作用なら「6.3」へ進む
+3. 「6.5 Failure Contract」を必ず作る
+4. [第8章](../chapter-08/)のcontrol matrixへ接続する
 
-RAGは、AIの知識の限界を外部情報との連携により克服する技術である。従来のAIが学習時の静的知識に依存していたのに対し、RAGは最新情報や専門知識を動的に取得して回答生成に活用する。
+### 深掘りルート
 
-**RAGシステムの構成要素**
+6.1から6.8まで読み、Retrieval Spec、Tool Contract、Permission Matrix、Failure Contractを作成します。task evalの作り方は[第3章](../chapter-03/)、requestの構造は[第4章](../chapter-04/)を参照してください。
+
+## 6.1 Context / retrieval / toolの選択
+
+### 3つの役割
+
+| 方法 | 適する情報・処理 | 主なrisk |
+| --- | --- | --- |
+| Contextへ直接入れる | 短く安定したpolicy、task固有input、少数の確定source | 過剰入力、版混在、機密送信 |
+| Retrievalで取得する | 大量文書、頻繁に更新、質問ごとに必要範囲が変わるknowledge | 誤検索、古いindex、ACL漏れ、引用不整合 |
+| Toolで取得・実行する | 現在値、計算、database、外部API、状態変更 | 権限過大、入力不正、partial write、外部依存 |
+
+### Decision questions
+
+1. **鮮度**: 回答時点の最新値が必要か
+2. **量**: 全文を毎回渡せるか
+3. **選択性**: 質問ごとに必要範囲が変わるか
+4. **作用**: 読むだけか、外部状態を変えるか
+5. **権限**: userごとに見える情報が違うか
+6. **検証**: sourceや実行結果を追跡できるか
+7. **失敗**: timeoutや欠落時に安全に止められるか
+
+### 例
+
+- coding standardの短い必須rule: 固定context
+- 数千件の社内Runbook: retrieval
+- 現在の在庫確認: read-only tool
+- 発注登録: write tool + explicit approval
+- 法令の適用判断: 一次source retrieval + 専門家review。modelだけで最終判断しない
+
+## 6.2 RAGをsystemとして設計する
+
+RAGは「vector検索結果をpromptへ入れる」だけではありません。sourceのingestionから回答の引用・評価までを含みます。
+
+### Retrieval Spec
 
 ```text
-【情報検索コンポーネント（Retriever）】
-役割：質問に関連する情報を外部データソースから取得
-
-技術要素：
-- ベクトル検索エンジン（Elasticsearch、Pinecone、Weaviate等）
-- 埋め込みモデル（Sentence-BERT、OpenAI Embeddings等）
-- 類似度計算アルゴリズム（コサイン類似度、ユークリッド距離）
-
-実装例：
-質問：「法人税率の変更点について教えてください」
-
-> 注: 税率や施行時期のような変動情報は、回答前に一次情報で確認する。
-
-検索プロセス：
-1. 質問の埋め込みベクトル生成
-2. 法的文書データベースでの類似度検索
-3. 関連度上位10文書の取得
-4. 信頼性スコアによる文書の重み付け
-
-【生成コンポーネント（Generator）】
-役割：検索された情報を統合して回答を生成
-
-統合方法：
-- 検索結果をコンテキストとして言語モデルに入力
-- 複数情報源の矛盾処理と統合
-- 出典明示と信頼性評価の併記
-
-実装例：
-プロンプト構造：
-「以下の法的文書を参考に、法人税率の変更点について説明してください（数値は要確認）：
-
-【参考文書1】
-出典：国税庁の税制改正概要（信頼性：高）
-内容：法人税率の見直し（具体的な数値は要確認）...
-
-【参考文書2】  
-出典：税理士法人の解説記事（信頼性：中）
-内容：中小企業向け軽減税率の扱い（具体的な数値は要確認）...
-
-回答要件：
-- 各文書の内容を統合した包括的説明
-- 矛盾する情報がある場合は明示
-- 出典を明記し、信頼性レベルを併記」
-
-【品質制御コンポーネント】
-役割：検索品質と生成品質の向上
-
-機能：
-- 検索精度の監視と改善
-- 生成内容の事実確認
-- ハルシネーション検出と防止
-
-実装例：
-品質チェック項目：
-□ 検索された文書の関連性スコア > 0.7
-□ 複数の独立した情報源による確認
-□ 生成内容と参考文書の整合性確認
-□ 時間的妥当性（最新情報の優先）
-□ 権威性（公式情報源の重視）
+Use case:
+Authorized users:
+Source systems:
+Source owner:
+Document version / effective date:
+Chunking policy:
+Metadata:
+Index update SLA:
+Query transformation:
+Candidate retrieval:
+Reranking:
+Citation contract:
+Access control:
+Evaluation dataset:
+Failure / no-answer behavior:
 ```
 
-### 企業固有知識ベースの構築
+### Source ingestion
 
-組織の内部知識を活用したRAGシステムの構築手法。
+各documentに次のmetadataを付けます。
 
-**知識ベース設計の原則**
+- source ID、owner、system of record
+- title、document type、version、effective date
+- confidentiality、tenant、group等のACL
+- validity start/end、superseded by
+- ingestion time、index version
+- section、page、line等の引用位置
 
-```text
-【情報の階層化と分類】
-レベル1：公開情報
-- 一般に公開されている企業情報
-- 製品・サービスの基本情報
-- 公式発表資料、IR情報
+metadataがなければ、古い版や権限外documentを検索後に排除できません。
 
-レベル2：内部共有情報
-- 社内ガイドライン、手順書
-- プロジェクト資料、会議録
-- 技術文書、設計資料
+### 分割（chunking）
 
-レベル3：機密情報
-- 戦略計画、未発表情報
-- 顧客情報、契約情報
-- 技術的ノウハウ、営業秘密
+分割単位は固定文字数だけで決めず、意味と引用可能性を考えます。
 
-アクセス制御：
-- ユーザーの権限レベルに応じた情報提供
-- 動的マスキング機能
-- 監査ログの記録
+| Document | 分割候補 | 注意 |
+| --- | --- | --- |
+| policy | 条項・subsection | 定義・例外・施行日を切り離さない |
+| Runbook | 前提・step・rollback | commandと期待結果を同じunitにする |
+| API spec | endpoint・schema・error | versionとauth requirementを含める |
+| ticket | issue・comment・decision | 未確定commentと決定済み事項を区別する |
 
-実装例：
-検索クエリ：「新製品Xの開発スケジュール」
-ユーザー権限：一般社員
+### 検索
 
-処理フロー：
-1. ユーザー権限の確認
-2. レベル1・2情報のみを検索対象に設定
-3. 機密部分をマスキングした結果を生成
-4. アクセスログの記録
+keyword、embedding、filterを用途に応じて組み合わせます。
 
-回答例：
-「新製品Xの開発は現在第2フェーズです。
-一般的なスケジュールは[機密情報のため表示不可]。
-詳細は開発チームまでお問い合わせください。」
+- exact ID、code、error message: keywordを重視
+- 言い換え、自然言語質問: semantic retrievalを併用
+- tenant、confidentiality、version、effective date: 検索前filter
+- top-k: 固定値を一般化せず、evalで決める
 
-【文書の前処理と最適化】
-構造化処理：
-- PDF、Word文書からのテキスト抽出
-- 章・節・段落構造の保持
-- 表・図表の内容説明追加
+### 再rank
 
-内容充実化：
-- メタデータの付与（作成日、更新日、部署、カテゴリ）
-- 関連キーワードの自動抽出
-- 要約文の自動生成
+first-stage retrievalの候補を、queryとの関連性、source authority、鮮度、ACL、document statusで並べ替えます。関連性だけで、古い版や非正本を上位にしないようにします。
 
-品質管理：
-- 重複文書の統合
-- 古い情報の更新・削除
-- 情報の信頼性評価
+### Citation contract
 
-実装例：
-文書処理パイプライン：
-1. 原文書の取り込み
-   - OCR処理（スキャン文書）
-   - レイアウト解析（構造化）
+回答の各重要claimからsource位置へ追跡できるようにします。
 
-2. 内容分析と拡張
-   - キーワード抽出（TF-IDF、BERT）
-   - 要約生成（抽出型・生成型）
-   - カテゴリ分類（機械学習モデル）
-
-3. メタデータ生成
-   - 技術レベル（初級・中級・上級）
-   - 対象読者（開発者・営業・経営層）
-   - 更新頻度（静的・動的）
-
-4. ベクトル化・インデックス化
-   - 埋め込みベクトル生成
-   - 検索インデックス構築
-   - 類似文書のクラスタリング
-```
-
-### 検索精度向上のための最適化
-
-RAGシステムの性能を決定する検索品質の向上手法。
-
-**多段階検索戦略**
-
-```text
-【第1段階：粗い検索（Coarse Retrieval）】
-目的：候補文書の大幅絞り込み
-
-手法：
-- キーワードベース検索（BM25）
-- 埋め込みベクトル検索（Dense Retrieval）
-- ハイブリッド検索（Sparse + Dense）
-
-パラメータ：
-- 検索対象：全文書（数万〜数百万件）
-- 取得件数：上位100〜500件
-- 処理時間：数百ms以内
-
-実装例：
-検索クエリ：「顧客管理システムの API 連携方法」
-
-粗い検索結果：
-- キーワード検索：「API」「顧客管理」「連携」で300件
-- ベクトル検索：意味的類似度で200件
-- 統合・重複除去：400件を取得
-
-【第2段階：精密検索（Fine-grained Retrieval）】
-目的：関連性の高い文書の精密選別
-
-手法：
-- リランキングモデル（Cross-encoder）
-- 質問タイプ別重み調整
-- 文脈考慮型スコアリング
-
-パラメータ：
-- 検索対象：第1段階の結果（数百件）
-- 取得件数：最終5〜20件
-- 処理時間：数秒以内
-
-実装例：
-精密検索プロセス：
-1. 質問タイプの判定
-   - 事実確認型 → 正確性重視
-   - 手順説明型 → 完全性重視
-   - 事例紹介型 → 具体性重視
-
-2. リランキング実行
-   - 各文書の詳細関連度計算
-   - 質問タイプに応じた重み調整
-   - 文書間の補完性評価
-
-3. 最終選択
-   - 上位10件を選出
-   - 情報の重複度チェック
-   - 多様性とバランスの確保
-
-【第3段階：文脈最適化（Context Optimization）】
-目的：生成AIへの最適な情報提供
-
-手法：
-- 文書の要約と重要部分抽出
-- 情報の論理的順序付け
-- コンテキスト長制約への適合
-
-実装例：
-最適化処理：
-1. 重要部分の抽出
-   - 質問に最も関連する段落特定
-   - 冗長な説明の削除
-   - 核心情報の優先配置
-
-2. 構造化と要約
-   - 長文の要約生成
-   - 箇条書きでの要点整理
-   - 図表の文章による説明
-
-3. コンテキスト構成
-   - 情報の論理的配列
-   - 重要度に応じた分量調整
-   - メタ情報（出典、信頼性）の付与
-```
-
-**意味的検索の高度化**
-
-```text
-【マルチベクトル検索】
-アプローチ：複数の埋め込み空間での並行検索
-
-実装戦略：
-- 一般ドメイン埋め込み：汎用的な言語理解
-- 専門ドメイン埋め込み：業界・技術特化
-- 質問タイプ別埋め込み：What/How/Why別最適化
-
-統合方法：
-質問：「機械学習モデルの精度向上方法」
-
-並行検索：
-1. 一般埋め込み → 機械学習全般の文書
-2. 技術埋め込み → 具体的手法の文書  
-3. How-to埋め込み → 手順説明の文書
-
-スコア統合：
-最終スコア = 0.3×一般 + 0.4×技術 + 0.3×How-to
-
-【動的重み調整】
-検索コンテキストに応じた重み付けの最適化
-
-調整要因：
-- ユーザーの専門性レベル
-- 質問の緊急度・重要度
-- 過去の検索履歴・嗜好
-
-実装例：
-ユーザープロファイル：上級技術者
-
-重み調整：
-- 技術詳細度：高重み（0.6）
-- 概要説明：低重み（0.2）
-- 実装例：高重み（0.7）
-- 理論説明：中重み（0.4）
-
-検索結果への影響：
-- 詳細な技術文書が上位に
-- 入門的な説明は下位に
-- 実践的な内容を優先表示
-
-【フィードバック学習】
-検索結果の利用状況からの改善
-
-学習データ：
-- クリック率（どの文書が参照されたか）
-- 滞在時間（どの程度詳しく読まれたか）
-- 後続行動（追加検索、問題解決率）
-
-改善プロセス：
-週次改善サイクル：
-1. 利用ログの分析
-   - 低評価検索クエリの特定
-   - 未利用文書の原因分析
-
-2. アルゴリズム調整
-   - 重み付けパラメータの更新
-   - 新しい検索手法の試験導入
-
-3. 効果測定
-   - 検索満足度の変化
-   - 問題解決率の改善
-
-4. フィードバック反映
-   - 成功パターンの横展開
-   - 失敗要因の対策実装
-```
-
----
-
-## 6.2 Function Callingによる機能拡張
-
-### 外部システム連携の設計
-
-Function CallingによりAIが外部システムやAPIを自律的に操作できるようになり、静的な知識処理から動的な情報操作へと能力が拡張される。
-
-**Function Calling アーキテクチャ**
-
-```text
-【関数定義と登録】
-基本構造：
-- 関数名：明確で分かりやすい名称
-- パラメータ：型指定と制約条件
-- 戻り値：期待される結果の形式
-- 説明：AIが適切に選択できる詳細な説明
-
-実装例：
+```json
 {
-  "name": "get_sales_data",
-  "description": "指定期間の売上データを取得します。月次・四半期・年次の集計が可能です。",
-  "parameters": {
-    "type": "object",
-    "properties": {
-      "start_date": {
-        "type": "string",
-        "format": "date",
-        "description": "取得開始日（YYYY-MM-DD形式）"
-      },
-      "end_date": {
-        "type": "string", 
-        "format": "date",
-        "description": "取得終了日（YYYY-MM-DD形式）"
-      },
-      "aggregation": {
-        "type": "string",
-        "enum": ["daily", "monthly", "quarterly"],
-        "description": "集計単位"
-      },
-      "department": {
-        "type": "string",
-        "description": "部門名（省略時は全部門）"
-      }
-    },
-    "required": ["start_date", "end_date"]
-  },
-  "returns": {
-    "type": "object", 
-    "description": "売上データと統計情報"
-  }
+  "answer": "string",
+  "claims": [
+    {
+      "claim": "string",
+      "source_id": "POL-2026-04",
+      "location": "section 3.2",
+      "verified": true
+    }
+  ],
+  "conflicts": [],
+  "unanswered": []
 }
-
-【関数選択の最適化】
-AIが適切な関数を選択するための支援機能
-
-選択支援手法：
-- 意図推定：ユーザーの質問から必要な機能を推測
-- 文脈考慮：前の操作履歴を踏まえた関数選択
-- 依存関係：複数関数の実行順序の最適化
-
-実装例：
-ユーザー質問：「昨年のQ4と今年のQ1の売上を比較してください」
-
-AIの関数選択プロセス：
-1. 意図分析
-   - 「売上データの取得」が必要
-   - 「2つの期間の比較」が目的
-
-2. 必要な関数特定
-   - get_sales_data（2回実行）
-   - compare_data（比較分析）
-
-3. パラメータ設定
-   - 第1回：start_date="2023-10-01", end_date="2023-12-31", aggregation="quarterly"
-   - 第2回：start_date="2024-01-01", end_date="2024-03-31", aggregation="quarterly"
-
-4. 実行順序決定
-   - データ取得 → データ検証 → 比較分析 → 結果生成
 ```
 
-### セキュリティとアクセス制御
+citationの存在だけで正しさを判定しません。claimがsourceの意味と一致するか、sourceが対象versionかを検査します。
 
-Function Callingの強力な機能を安全に活用するためのセキュリティ設計。
+### アクセス制御（access control）
 
-**権限ベース制御システム**
+ACLはretrieval後のprompt instructionだけで守らせません。
+
+- caller identityを認証する
+- source systemまたはindexでauthorized filterを適用する
+- document・chunkのmetadataへACLを保持する
+- cache keyにtenant・permission contextを含める
+- responseとlogで情報が混ざらないことをtestする
+- 権限変更をindex・cacheへ反映する
+
+### 更新性
+
+次の時間を測ります。
+
+- source更新からingestionまで
+- ingestionからindex反映まで
+- indexからcache失効まで
+- superseded documentが検索対象外になるまで
+
+「最新」と表示する場合は、この更新契約と回答時のsource versionを示します。
+
+## 6.3 RAG Eval
+
+### 評価層
+
+| Layer | 指標例 | Failure例 |
+| --- | --- | --- |
+| Ingestion | 完全性、metadata、ACL、版 | page欠落、誤分類 |
+| Retrieval | recall、precision、rank、slice | 正本を取得しない |
+| Citation | claim coverage、location、entailment | citationはあるが主張を支えない |
+| Answer | correctness、completeness、no-answer | 根拠外の補完 |
+| Workflow | latency、cost、approval、audit | 権限外sourceがtraceに残る |
+
+数値targetは一般書の例から転用せず、利用場面とfailure impactから決めます。
+
+### Dataset slice
+
+- 典型質問
+- exact ID・error・code
+- 複数sourceを統合する質問
+- 版が競合する質問
+- access禁止sourceを含む質問
+- sourceに答えがない質問
+- prompt injectionを含むdocument
+- 更新直後・削除直後の質問
+
+### No-answer
+
+sourceに根拠がない場合は、もっともらしい補完より「回答不能」と確認手順を返します。
 
 ```text
-【階層的権限モデル】
-レベル1：読み取り専用
-- データ参照機能のみ
-- システム状態の確認
-- レポート生成
-
-レベル2：データ操作
-- データの追加・更新
-- 設定変更（可逆的）
-- 承認フローへの投稿
-
-レベル3：システム操作
-- プロセスの開始・停止
-- ユーザー管理
-- システム設定変更
-
-レベル4：管理者権限
-- 全機能へのアクセス
-- セキュリティ設定変更
-- 監査ログの管理
-
-実装例：
-{
-  "user_id": "john.doe",
-  "role": "sales_manager", 
-  "permissions": {
-    "sales_data": ["read", "write"],
-    "customer_data": ["read"],
-    "financial_data": ["read"],
-    "system_config": []
-  },
-  "restrictions": {
-    "time_range": "business_hours",
-    "ip_whitelist": ["192.168.1.0/24"],
-    "max_operations_per_hour": 100
-  }
-}
-
-【操作ログと監査】
-すべての Function Calling 操作の記録と分析
-
-ログ項目：
-- 実行時間・ユーザー・関数名
-- 入力パラメータ・実行結果
-- 実行時間・エラー情報
-- ビジネス影響度評価
-
-監査機能：
-週次監査レポート：
-1. 操作統計
-   - 関数別実行回数
-   - ユーザー別活動量
-   - エラー発生率
-
-2. セキュリティ評価
-   - 異常なアクセスパターン
-   - 権限外操作の試行
-   - 大量データアクセス
-
-3. パフォーマンス分析
-   - 実行時間の変化
-   - リソース使用量
-   - ボトルネック箇所
-
-4. 改善提案
-   - 権限設定の最適化
-   - 新機能の追加提案
-   - セキュリティ強化策
+結論: 現在のauthorized sourceでは確認できない。
+検索範囲:
+確認できた関連情報:
+不足:
+次の確認先:
 ```
 
-### エラーハンドリングと回復機能
+## 6.4 Tool Contract
 
-Function Calling システムの堅牢性を確保する仕組み。
+modelはtoolを提案・選択できますが、toolの実行責任はapplication側にあります。
 
-**多層エラーハンドリング**
+### Tool description
+
+良いdescriptionは次を含みます。
+
+- 何をするtoolか
+- 何をしないtoolか
+- read / write / destructiveの区分
+- 必要なpermissionとapproval
+- inputの意味、単位、timezone、ID namespace
+- outputとerrorの形式
+- idempotencyとside effect
+
+### Tool Contract template
 
 ```text
-【レベル1：関数レベルエラー】
-対象：個別関数の実行エラー
-
-エラー種別：
-- パラメータエラー：不正な入力値
-- 権限エラー：アクセス権限不足
-- タイムアウトエラー：実行時間超過
-- システムエラー：外部システム障害
-
-処理例：
-関数：get_customer_data
-エラー：顧客ID不正
-
-エラーハンドリング：
-1. エラー種別の特定
-   - パラメータ検証エラー
-   - 顧客ID形式不正
-
-2. 自動修正試行
-   - ID形式の自動補正
-   - 類似IDの候補提示
-
-3. ユーザーへの確認
-   - 「顧客ID 'ABC123' が見つかりません」
-   - 「類似ID：ABC124, ABC125 を検索しますか？」
-
-4. 代替手段の提案
-   - 顧客名での検索
-   - 電話番号での検索
-
-【レベル2：ワークフローレベルエラー】
-対象：複数関数の連携実行エラー
-
-回復戦略：
-- 部分実行結果の保存
-- 失敗点からの再実行
-- 代替フローへの切り替え
-
-実装例：
-ワークフロー：月次売上レポート生成
-失敗：外部データソース接続エラー
-
-回復プロセス：
-1. 実行済み処理の保存
-   - 内部データの集計完了
-   - グラフ生成用データ準備完了
-
-2. エラー影響範囲の特定
-   - 外部データ（競合分析）のみ取得不可
-   - 他の処理は正常完了
-
-3. 代替手段の実行
-   - 前月データでの推定値算出
-   - 手動入力用テンプレート生成
-
-4. 品質評価と注意事項
-   - 「一部推定値を含む」旨をレポートに明記
-   - データ信頼性の評価結果を併記
-
-【レベル3：システムレベルエラー】
-対象：全体システムの障害
-
-災害対策：
-- 冗長化による可用性確保
-- データバックアップ・復旧
-- 段階的サービス復旧
-
-緊急時プロトコル：
-システム障害発生時：
-1. 障害レベルの判定
-   - レベル1：部分機能停止
-   - レベル2：主要機能停止  
-   - レベル3：全機能停止
-
-2. 影響度評価
-   - 影響ユーザー数
-   - 業務への影響度
-   - データ損失リスク
-
-3. 復旧戦略の選択
-   - 即座復旧（レベル1）
-   - 段階復旧（レベル2）
-   - 全面復旧（レベル3）
-
-4. ステークホルダー通知
-   - ユーザーへの障害通知
-   - 経営層への影響報告
-   - 復旧見込み時間の連絡
+Tool ID / version:
+Purpose:
+Not for:
+Trust level:
+Read / write / destructive:
+Required identity / permission:
+Input schema:
+Semantic validation:
+Output schema:
+Side effects:
+Idempotency key:
+Approval rule:
+Timeout:
+Retry:
+Rate limit:
+Logging:
+Redaction:
+Rollback / compensation:
+Owner:
 ```
 
----
+### Schema design
 
-## 6.3 ファインチューニングの戦略的活用
+schemaは狭くします。
 
-### 投資対効果の詳細分析
+- free-form stringよりenum、typed ID、bounded numberを使う
+- date/timeはformatとtimezoneを指定する
+- monetary amountはcurrencyとminor unitを分ける
+- target resourceをambiguous nameではなくstable IDで指定する
+- optionalとrequiredを業務ruleに合わせる
+- `additionalProperties`の扱いを決める
 
-ファインチューニングは高いコストを伴うため、投資判断には慎重な分析が必要である。
+### Semantic validation
 
-**コスト構造の詳細分析**
+schemaに適合しても、次を確認します。
+
+- callerが対象resourceへ権限を持つか
+- order quantityやamountがpolicy内か
+- resource stateが操作可能か
+- duplicate / replayでないか
+- instructionの目的とtool actionが一致するか
+- human approvalが対象actionとparameterを確認したか
+
+### structured output
+
+structured outputは、model出力を後続systemが安全にparseするための一部です。次を分けます。
+
+1. JSON/schema validation
+2. business rule validation
+3. authorization
+4. effect execution
+5. result verification
+
+modelが返した`approved: true`をapprovalとして扱いません。
+
+## 6.5 Permission・approval・trust boundary
+
+### Permission Matrix
+
+| Tool | Read | Write | Approval | Data class | Owner |
+| --- | --- | --- | --- | --- | --- |
+| search_policy | allowed | n/a | 不要 | internal | knowledge owner |
+| draft_ticket | allowed | draftのみ | 作成前review | internal | support lead |
+| update_order | lookup | allowed | parameter表示後に必須 | confidential | operations owner |
+| delete_record | metadataのみ | 原則禁止 | emergency procedure | restricted | data owner |
+
+### Least privilege
+
+- taskごとの短命credential
+- resource・operation・environmentを限定
+- productionとstagingを分離
+- read toolとwrite toolを分離
+- high-risk parameterへ追加approval
+- tool responseに不要なsecretを含めない
+
+### Human approval UI / record
+
+approverへ次を表示します。
+
+- 実行するtoolとversion
+- target resource
+- parameter
+- expected effect
+- sourceとなったuser request
+- risk、rollback、期限
+
+「実行してよいですか」だけでは、内容を確認したapprovalになりません。
+
+## 6.6 Failure Contract
+
+### timeout
+
+- connect、read、overallを必要に応じて分ける
+- timeout後にserver-side actionが継続する可能性を考える
+- write toolはstatus確認なしに再実行しない
+- userへpartial / unknown stateを伝える
+
+### retry
+
+retry可能なのは、temporary failureで、idempotencyまたは重複防止が保証される場合です。
+
+- exponential backoffとjitter
+- 最大回数・総時間
+- retry対象errorのallowlist
+- rate limit headerやprovider guidance
+- retry後も失敗したときのescalation
+
+### partial failure
+
+複数stepの途中で失敗した場合に備えます。
 
 ```text
-【開発フェーズコスト】
-データ準備：
-- データ収集：内部データの整理、外部データの購入
-- データクリーニング：品質向上、フォーマット統一
-- アノテーション：専門家による教師データ作成
-- 前処理：トークン化、正規化、分割
-
-推定コスト：
-データ規模：10,000件の技術文書
-- データ収集：既存内部データのため0円
-- クリーニング：エンジニア20時間×5,000円 = 10万円
-- アノテーション：専門家100時間×10,000円 = 100万円
-- 前処理：エンジニア40時間×5,000円 = 20万円
-データ準備総計：130万円
-
-モデル学習：
-- 計算リソース：GPU時間・クラウド利用料
-- 実験・調整：ハイパーパラメータチューニング
-- 検証・評価：テストデータでの性能確認
-
-推定コスト：
-学習環境：A100 GPU × 8台
-- 学習時間：48時間
-- 時間単価：400円/GPU時間
-- 実験回数：15回（調整含む）
-計算コスト：48×8×400×15 = 230万円
-
-【運用フェーズコスト】
-インフラ：
-- モデルホスティング：推論サーバーの運用
-- API提供：レスポンス時間・スループット保証
-- 監視・保守：性能監視、障害対応
-
-継続改善：
-- 再学習：新データでの定期的更新
-- 性能調整：精度向上のための継続的改善
-- バージョン管理：複数モデルの並行運用
-
-年間運用コスト例：
-インフラコスト：
-- GPU推論サーバー：月50万円×12ヶ月 = 600万円
-- ストレージ・ネットワーク：月10万円×12ヶ月 = 120万円
-
-保守コスト：
-- エンジニア工数：0.5人月×12ヶ月×80万円 = 480万円
-- 再学習：四半期1回×50万円×4回 = 200万円
-年間運用総計：1,400万円
+Completed steps:
+Unknown state:
+Unapplied steps:
+Compensation:
+Manual verification:
+Resume token / condition:
 ```
 
-**効果の定量化手法**
-
-```text
-【直接効果の測定】
-性能向上：
-- 精度改善：汎用モデル vs 専用モデル
-- 処理速度：レスポンス時間の短縮
-- エラー削減：誤答・不適切回答の減少
-
-測定例：
-タスク：技術文書の自動生成
-汎用モデル（GPT-4）：
-- 品質スコア：3.2/5.0
-- 修正要求率：45%
-- 1文書あたり処理時間：10分
-
-専用モデル（ファインチューニング後）：
-- 品質スコア：4.1/5.0
-- 修正要求率：15%
-- 1文書あたり処理時間：6分
-
-改善効果：
-- 品質：28%向上
-- 修正工数：67%削減
-- 処理効率：40%向上
-
-業務効率化：
-- 作業時間短縮：自動化による工数削減
-- 品質向上：エラー削減による再作業減少
-- スキルアップ：高度な作業への集中可能
-
-年間効果計算：
-対象業務：技術文書作成（年間1,000件）
-改善前：
-- 1件あたり作業時間：4時間
-- 修正・レビュー時間：2時間
-- 年間総工数：6,000時間
-
-改善後：
-- 自動生成：0.5時間
-- 確認・調整：1時間
-- 年間総工数：1,500時間
-
-削減効果：
-- 工数削減：4,500時間
-- 金額換算：4,500時間×5,000円 = 2,250万円
-投資回収期間：（初期360万円+年間1,400万円）÷2,250万円 = 0.78年
-
-【間接効果の評価】
-競争力向上：
-- 市場投入速度の向上
-- 品質差別化による競争優位
-- 新サービス・製品開発の促進
-
-組織能力向上：
-- 専門知識の蓄積・共有
-- 属人化解消による安定性向上
-- 高付加価値業務への人材配置
-
-評価手法：
-間接効果の定量化：
-1. 市場投入速度向上
-   - 開発期間：6ヶ月 → 4ヶ月（33%短縮）
-   - 機会損失回避：早期市場参入による売上確保
-   - 推定効果：年間500万円
-
-2. 品質向上による顧客満足度
-   - 顧客満足度：3.5 → 4.2（20%向上）
-   - 解約率低下：8% → 5%（37%改善）
-   - 推定効果：年間300万円
-
-3. 人材の高付加価値活用
-   - 創造的業務時間：20% → 40%（倍増）
-   - イノベーション創出確率向上
-   - 推定効果：年間200万円
-
-間接効果合計：年間1,000万円
-```
-
-### データ要件と品質管理
-
-ファインチューニングの成功は、学習データの質と量に大きく依存する。
-
-**データ要件の設計**
-
-```text
-【量的要件】
-最小要件：
-- 分類タスク：1,000〜5,000件/クラス
-- 生成タスク：5,000〜20,000件
-- 対話タスク：10,000〜50,000件の対話ペア
-
-推奨要件：
-- 分類タスク：5,000〜10,000件/クラス
-- 生成タスク：20,000〜100,000件
-- 対話タスク：50,000〜200,000件の対話ペア
-
-データ量と性能の関係：
-技術文書生成タスクの場合：
-- 1,000件：基本的な形式は学習、内容品質不安定
-- 5,000件：形式・内容ともに改善、まれに不適切出力
-- 20,000件：安定した品質、専門用語の適切使用
-- 50,000件：高品質・一貫性、微細な表現まで学習
-- 100,000件：専門家レベル、創造的な表現も可能
-
-収穫逓減：50,000件を超えると改善効果は限定的
-推奨範囲：20,000〜50,000件（コスト効率最適）
-
-【質的要件】
-多様性：
-- 様々なパターンの網羅
-- 例外的ケースの包含
-- バランスの取れたデータ分布
-
-代表性：
-- 実際の使用場面を反映
-- 偏りの少ない典型的事例
-- 将来の用途も考慮
-
-一貫性：
-- 統一された品質基準
-- 専門家による統一的判断
-- アノテーション規則の厳格適用
-
-品質評価基準：
-データ品質チェックリスト：
-□ 完全性：必要な要素がすべて含まれている
-□ 正確性：事実関係・技術内容に誤りがない
-□ 一貫性：同様の状況で同様の判断・表現
-□ 適切性：タスクに適した内容・形式
-□ 最新性：古い情報・手法でない
-
-品質スコア：
-- 5点：完璧、そのまま使用可能
-- 4点：良好、軽微な修正で使用可能
-- 3点：普通、一定の修正が必要
-- 2点：劣る、大幅な修正が必要
-- 1点：不適切、使用不可
-
-採用基準：スコア4点以上、全体の80%以上
-```
-
-**継続的データ改善プロセス**
-
-```text
-【データ収集の自動化】
-運用データの活用：
-- ユーザーの実際の利用パターン
-- 高評価された出力結果
-- 専門家による修正・改善例
-
-収集システム：
-自動データ収集パイプライン：
-1. 利用ログの分析
-   - 高品質と評価された入出力ペア
-   - ユーザーの修正・改善内容
-   - 専門家のレビューコメント
-
-2. 品質フィルタリング
-   - 自動品質評価（4点以上を選別）
-   - 重複除去（類似度99%以上）
-   - プライバシー情報の除去
-
-3. アノテーション支援
-   - AI による自動アノテーション
-   - 専門家による確認・修正
-   - 品質基準への適合性確認
-
-4. データセット更新
-   - 新データの統合
-   - バランス調整
-   - 版管理
-
-【性能監視と改善サイクル】
-監視指標：
-- 精度・再現率・F1スコア
-- ユーザー満足度・修正率
-- 処理時間・リソース使用量
-
-改善トリガー：
-自動改善トリガー：
-- 精度低下：前月比5%以上の性能低下
-- 満足度低下：ユーザー評価3.5/5.0以下
-- 新規パターン：未学習の入力パターン増加
-
-改善プロセス：
-1. 問題分析
-   - 性能低下の原因特定
-   - データ分布の変化分析
-   - 新規要求の傾向把握
-
-2. データ拡張
-   - 不足パターンの追加収集
-   - 既存データの拡張・変形
-   - 専門家による新規作成
-
-3. 再学習実行
-   - ハイパーパラメータ再調整
-   - 段階的学習による性能向上
-   - A/Bテストによる効果確認
-
-4. 本番環境反映
-   - 段階的ロールアウト
-   - 性能監視強化
-   - 必要に応じたロールバック
-```
-
----
-
-## 6.4 マルチエージェント協調システム
-
-### 専門特化エージェントの設計
-
-複雑なタスクを効率的に処理するため、異なる専門性を持つAIエージェントが協調するシステム。
-
-**エージェント役割分担の設計原則**
-
-```text
-【専門性に基づく分割】
-情報収集エージェント：
-- 役割：多様な情報源からのデータ収集・整理
-- 専門性：検索技術、データ抽出、信頼性評価
-- 得意タスク：市場調査、競合分析、技術動向調査
-
-分析エージェント：
-- 役割：収集されたデータの深層分析・洞察抽出
-- 専門性：統計分析、機械学習、パターン認識
-- 得意タスク：トレンド分析、予測、因果関係分析
-
-企画エージェント：
-- 役割：分析結果を基にした戦略・計画の立案
-- 専門性：戦略思考、創造性、ビジネスモデル設計
-- 得意タスク：事業計画、マーケティング戦略、製品企画
-
-実装エージェント：
-- 役割：企画の具体的実行計画・手順の設計
-- 専門性：プロジェクト管理、技術実装、リスク管理
-- 得意タスク：実行計画、技術設計、品質保証
-
-品質保証エージェント：
-- 役割：各段階の成果物の品質確認・改善提案
-- 専門性：品質評価、リスク評価、妥当性検証
-- 得意タスク：レビュー、検証、改善提案
-
-協調例：
-タスク：新サービスの市場参入戦略立案
-
-エージェント協調フロー：
-1. 情報収集エージェント
-   - 市場規模・競合状況・規制環境の調査
-   - 技術動向・顧客ニーズの分析
-   - 信頼性評価付きの情報レポート作成
-
-2. 分析エージェント  
-   - 市場機会の定量分析
-   - 競合優位性の評価
-   - リスク要因の特定・評価
-
-3. 企画エージェント
-   - 参入戦略の複数案立案
-   - ビジネスモデルの設計
-   - 差別化要素の明確化
-
-4. 実装エージェント
-   - 実行計画の詳細設計
-   - 必要リソース・期間の算定
-   - マイルストーン・KPIの設定
-
-5. 品質保証エージェント
-   - 各段階成果物の妥当性確認
-   - 論理的整合性のチェック
-   - リスク対策の十分性評価
-
-統合成果物：実行可能な市場参入戦略書
-```
-
-### エージェント間コミュニケーション
-
-効果的な協調のためのエージェント間情報交換メカニズム。
-
-**構造化コミュニケーションプロトコル**
-
-```text
-【メッセージ構造の標準化】
-基本メッセージ形式：
-{
-  "sender": "analysis_agent",
-  "receiver": "planning_agent", 
-  "message_type": "analysis_result",
-  "timestamp": "2024-04-15T10:30:00Z",
-  "content": {
-    "summary": "市場分析の要約",
-    "detailed_findings": [
-      {
-        "category": "market_size",
-        "value": "250億円",
-        "confidence": 0.85,
-        "source": "業界レポート3件の統合分析"
-      }
-    ],
-    "recommendations": [
-      "高成長セグメントへの注力を推奨"
-    ],
-    "next_actions": [
-      "競合他社の詳細分析が必要"
-    ]
-  },
-  "metadata": {
-    "priority": "high",
-    "expiry": "2024-04-16T10:30:00Z",
-    "dependencies": ["market_research_001"]
-  }
-}
-
-【状態同期メカニズム】
-共有状態管理：
-- プロジェクト全体の進行状況
-- 各エージェントのタスク状況
-- 成果物の完成状況・品質評価
-
-同期プロセス：
-定期同期（30分間隔）：
-1. 状態確認
-   - 各エージェントの処理状況
-   - 完了タスク・進行中タスク
-   - 発生している問題・遅延
-
-2. 依存関係チェック
-   - 待機中タスクの条件確認
-   - ボトルネック要因の特定
-   - 優先度調整の必要性
-
-3. リソース調整
-   - 計算リソースの最適配分
-   - タスクの並行・直列実行判断
-   - 負荷バランシング
-
-4. 異常検知・対応
-   - エラー・例外の早期発見
-   - 自動復旧・手動介入判断
-   - エスカレーション手順
-
-【コンテキスト共有】
-知識ベースの統合：
-- 各エージェントの専門知識
-- プロジェクト固有の情報
-- 学習された成功・失敗パターン
-
-共有方式：
-階層的コンテキスト共有：
-レベル1：基本情報
-- プロジェクト目標・制約条件
-- ステークホルダー情報
-- 基本的な業界知識
-
-レベル2：専門情報  
-- 各エージェントの専門知識
-- ドメイン固有のベストプラクティス
-- 技術的制約・可能性
-
-レベル3：動的情報
-- リアルタイムの進捗状況
-- 最新の分析結果・洞察
-- 発生した問題・対処法
-
-アクセス制御：
-- エージェントの専門性に応じた情報アクセス
-- セキュリティレベルによる制限
-- 必要最小限原則の適用
-```
-
-### 協調失敗の検出と対処
-
-マルチエージェントシステムの堅牢性を確保する仕組み。
-
-**失敗パターンの分類と検出**
-
-```text
-【意見対立・矛盾】
-発生パターン：
-- 異なる分析結果・結論
-- 優先順位の不一致
-- 実現可能性の判断差
-
-検出手法：
-矛盾検出アルゴリズム：
-1. 論理的整合性チェック
-   - 前提条件の矛盾
-   - 結論の論理的一貫性
-   - 数値データの整合性
-
-2. セマンティック矛盾検出
-   - 意味的に相反する主張
-   - 異なる定義・解釈
-   - 文脈による意味の齟齬
-
-3. 優先度競合検出
-   - リソース配分の重複要求
-   - 相互排他的な選択肢
-   - スケジュール競合
-
-対処プロセス：
-1. 矛盾の詳細分析
-   - 矛盾の原因特定
-   - 影響範囲の評価
-   - 解決優先度の設定
-
-2. 調停メカニズム
-   - 上位エージェントによる判断
-   - 外部専門家への照会
-   - ユーザーへの判断委託
-
-3. 合意形成
-   - 妥協点の探索
-   - 段階的実行による検証
-   - 複数案の並行検討
-
-【処理の無限ループ】
-発生原因：
-- 相互依存関係の循環
-- 条件判定の曖昧性
-- フィードバック制御の不安定
-
-検出・防止手法：
-ループ検出システム：
-1. 実行履歴の監視
-   - 同一処理の繰り返し検出
-   - 実行回数のカウント
-   - パターンマッチング
-
-2. 実行時間監視
-   - 予想処理時間の設定
-   - タイムアウト機能
-   - 段階的警告システム
-
-3. 依存関係分析
-   - 循環依存の事前検出
-   - 依存グラフの解析
-   - 実行順序の最適化
-
-予防策：
-- タスク実行回数の上限設定
-- 明確な終了条件の定義
-- サーキットブレーカーパターン
-- 人間による介入ポイント設定
-
-【リソース競合・デッドロック】
-競合要因：
-- 計算リソースの同時要求
-- データアクセスの排他制御
-- 外部APIの利用制限
-
-対処システム：
-リソース管理システム：
-1. 予約ベース制御
-   - 事前リソース予約
-   - 優先度に基づく配分
-   - 時間枠管理
-
-2. デッドロック検出
-   - 待機グラフの分析
-   - 循環待機の検出
-   - 自動解除メカニズム
-
-3. 負荷分散
-   - 動的負荷調整
-   - 処理の並行化
-   - キューイングシステム
-
-回復戦略：
-- タスクの再スケジューリング
-- 代替リソースの活用
-- 処理優先度の動的調整
-- 部分的処理結果の保存・再利用
-
-【品質劣化・エラー伝播】
-品質管理：
-- 各段階での品質チェック
-- エラーの早期発見・隔離
-- 品質劣化の波及防止
-
-実装例：
-品質保証フレームワーク：
-1. 段階的品質ゲート
-   - 各エージェント出力の品質評価
-   - 最低品質基準の設定
-   - 基準未達時の処理停止
-
-2. エラー隔離機能
-   - 問題のあるエージェントの隔離
-   - 代替エージェントの起動
-   - 影響範囲の最小化
-
-3. 自動復旧システム
-   - エラー要因の自動分析
-   - 設定・パラメータの自動調整
-   - 学習データの更新
-
-4. 段階的フェイルセーフ
-   - 部分機能での継続運用
-   - 手動処理への切り替え
-   - 最小限機能での暫定対応
-```
-
----
-
-## まとめ
-
-本章では、AI活用の可能性を大幅に拡張する先進技術として、以下の要素を詳解した。
-
-**RAG（Retrieval-Augmented Generation）**
-- 基本アーキテクチャ：検索・生成・品質制御の3コンポーネント
-- 企業知識ベース構築：階層的情報管理とアクセス制御
-- 検索精度向上：多段階検索と意味的検索の高度化
-
-**Function Callingによる機能拡張**
-- 外部システム連携：関数定義と選択最適化
-- セキュリティ設計：権限ベース制御と操作監査
-- エラーハンドリング：多層回復機能による堅牢性確保
-
-**ファインチューニングの戦略的活用**
-- 投資対効果分析：詳細なコスト構造と効果の定量化
-- データ要件設計：量的・質的要件と継続的改善
-- 性能監視システム：自動改善トリガーと再学習サイクル
-
-**マルチエージェント協調システム**
-- 専門特化設計：役割分担による効率的なタスク処理
-- コミュニケーション：構造化プロトコルと状態同期
-- 失敗対処：矛盾検出・ループ防止・品質保証
-
-これらの先進技術により、従来のAI活用の限界を突破し、より複雑で高度な業務自動化と意思決定支援が可能になる。重要なのは、技術の複雑性に溺れることなく、ビジネス価値の創出に集中することである。
-
-次章では、これらの技術を実際の業務プロセスに統合し、組織的な価値創出を実現するための手法について解説する。
-
-次に読む： [第7章：業務プロセス統合設計](../chapter-07/) / [目次（トップ）](../../)
-
----
-
-## この章のまとめとチェックリスト
-
-### この章のまとめ
-
-- RAG、Function Calling、ファインチューニング、マルチエージェント協調など、AI活用の幅を大きく広げる先進技術の概要を整理した。
-- それぞれの技術が「どのような課題に向いているか」「どの程度の投資と運用コストが必要か」という観点から比較できるようにした。
-- 技術的な可能性に目を奪われるだけでなく、ビジネス価値や運用体制とセットで導入を検討する重要性を示した。
-
-### この章を読み終えたら確認したいこと
-
-- [ ] 自分の組織やプロジェクトにとって、RAG / Function Calling / ファインチューニング / マルチエージェントのどれが優先度が高そうかを整理できるか。
-- [ ] それぞれの技術について、「小さく始めるならどのようなユースケースか」を 1 つずつ挙げられるか。
-- [ ] 新技術導入時に、ビジネス価値・運用負荷・リスクの観点から導入可否を評価するフレームワークをイメージできているか。
-
-### 関連する付録・テンプレート
-
-- 技術選定や投資判断の整理には、[付録A：プロンプトテンプレート集](../../appendices/appendix-a/) を応用し、評価観点を構造化した質問テンプレートを作るとよい。
-- 関連技術の詳細や比較検討には、[付録B：参考文献](../../appendices/appendix-b/) に挙げられた RAG・マルチエージェント・ファインチューニング関連の文献が参考になる。
+### logging
+
+最低限、次をcorrelation IDで追跡します。
+
+- caller / agent / workflow version
+- tool ID / version
+- parameterのmask済みsummary
+- approval record
+- start/end/status/error category
+- effect verification
+- retry / timeout / compensation
+
+prompt全文、secret、個人情報を無条件にloggingしません。保持・access・削除は[第8章](../chapter-08/)で定義します。
+
+## 6.7 MCPを使うときの設計
+
+MCPはclientとserverがcapabilityを共有するprotocolです。interoperabilityを助けますが、接続先の信頼性、authorization、data governanceを自動保証しません。
+
+### MCP接続review
+
+- serverのowner、distribution、version、update経路
+- transport、authentication、authorization
+- 提供するtools/resources/prompts
+- tool descriptionとinput schema
+- local / remote trust boundary
+- access可能なfilesystem、network、data
+- logging、consent、approval
+- server停止・version drift時の挙動
+
+### Capability allowlist
+
+client側で、使用するserver・tool・resourceをtaskごとに限定します。serverが新しいtoolを追加しても、自動的にproduction権限を付与しません。
+
+### Tool resultを再評価する
+
+MCP tool resultも外部contentです。result内の命令文を上位instructionとして扱わず、schema、source、authorization、business ruleを確認します。
+
+## 6.8 Fine-tuning / multi-agentの境界
+
+### Fine-tuningより先に確認する
+
+1. requestとoutput contractは明確か
+2. 必要なknowledgeをcontext/retrievalで供給できるか
+3. toolで決定的に処理すべき部分ではないか
+4. eval datasetとgraderがあるか
+5. model/prompt変更で解けない一貫したbehavior要件か
+6. training dataの権利・privacy・代表性を確認したか
+7. 更新・rollback・monitoringの運用を持てるか
+
+最新knowledgeの注入、権限管理、事実確認をfine-tuningだけで解決しません。
+
+### Single-agentを優先する条件
+
+- 一つのcontextとownerで完結する
+- tool数と権限が限定される
+- stepごとのdeterministic checkを置ける
+- latencyとcostを抑えたい
+- agent間のconflict解決が不要
+
+### Multi-agentを検討する条件
+
+- 明確に異なるownership・permission・contextがある
+- 独立した成果物を並行作成できる
+- verifierを実行者から分離する価値がある
+- handoff schemaとconflict resolutionが定義できる
+- trace、cost、failureの増加をevalできる
+
+agent数を増やすことは品質保証ではありません。role overlap、feedback loop、共有memory、credential propagationが新たなriskになります。
+
+## 実践例：社内knowledge問い合わせ
+
+### Requirement
+
+従業員が旅費規程を質問し、根拠条項を確認できる。個別の法務・人事判断は担当者へescalateする。
+
+### Design
+
+- context: 回答policy、出力contract、禁止事項
+- retrieval: 有効な規程・FAQ。旧版は検索対象外だがaudit用に保持
+- filter: userの所属・権限・effective date
+- rerank: 正本、条項一致、鮮度
+- output: 結論、根拠条項、適用条件、要確認点
+- tool: 人事ticketのdraft作成。送信は人間承認
+
+### Negative cases
+
+- 未公開の人事資料を要求する
+- 旧版規程を「最新」とする
+- document内に外部送信を促すinstructionがある
+- 根拠条項がないのに断定する
+- 他社員の個人情報を含む回答を生成する
+
+### Acceptance
+
+- authorized sourceだけを取得する
+- 重要claimが条項へ追跡できる
+- 答えがないときはno-answerになる
+- ticket送信前にtargetと本文を表示し承認を得る
+- logに質問全文や個人情報を不要に残さない
+
+## 章末まとめ
+
+- context、retrieval、toolは鮮度、量、作用、権限、検証で使い分ける
+- RAGはingestion、chunking、search、rerank、citation、ACL、更新、evalを含むsystemである
+- tool callはschema適合後もsemantic validation、authorization、approvalが必要である
+- timeout、retry、partial failure、loggingを実行前に契約化する
+- MCP準拠は接続先の安全性を保証しない
+- fine-tuningとmulti-agentは、request・retrieval・tool・evalを整えた後に採否を判断する
+
+## 実務チェックリスト
+
+- [ ] context / retrieval / toolの選択理由がある
+- [ ] source owner、version、effective date、ACLをmetadataへ持つ
+- [ ] chunkとcitationが元sourceへ追跡できる
+- [ ] 権限禁止・no-answer・版競合をevalする
+- [ ] tool description、input/output schema、side effectが明確である
+- [ ] schema validation、business rule、authorization、approvalを分離した
+- [ ] timeout、retry、idempotency、partial failure、rollbackを定義した
+- [ ] loggingのmask、保持、access、削除方針へ接続した
+- [ ] MCP server/toolをallowlistし、version driftを監視する
+- [ ] fine-tuning / multi-agentを採用しない選択肢を比較した
+
+## 次に読む章・参照付録
+
+- 組織へ導入する: [第7章](../chapter-07/)
+- quality・security・audit controlを設計する: [第8章](../chapter-08/)
+- Tool ContractとEval Specを使う: [付録A](../../appendices/appendix-a/)
+- 最新specを再確認する: [付録B](../../appendices/appendix-b/)、[付録E](../../appendices/appendix-e/)
+
+## Source Notes
+
+- [OAI-TOOLS](../../appendices/appendix-b/#oai-tools): tool useとfunction calling
+- [OAI-STRUCTURED](../../appendices/appendix-b/#oai-structured): structured output
+- [ANT-TOOLS](../../appendices/appendix-b/#ant-tools): tool descriptionとschema
+- [GGL-STRUCTURED](../../appendices/appendix-b/#ggl-structured)、[GGL-FUNCTION](../../appendices/appendix-b/#ggl-function)、[GGL-TOOLS](../../appendices/appendix-b/#ggl-tools): structured outputとtool use
+- [MCP-SPEC](../../appendices/appendix-b/#mcp-spec)、[MCP-TOOLS](../../appendices/appendix-b/#mcp-tools): MCP revision 2025-11-25
+- [RESEARCH-RAG](../../appendices/appendix-b/#research-rag): RAGの原著
+- [OWASP-LLM-2025](../../appendices/appendix-b/#owasp-llm-2025)、[OWASP-AGENTIC-MITIGATIONS](../../appendices/appendix-b/#owasp-agentic-mitigations): injectionとagentic control
+- 対象version/status、確認日、再確認条件は付録Bに記録。最終確認: 2026-07-21
