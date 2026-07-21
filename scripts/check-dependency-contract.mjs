@@ -31,6 +31,14 @@ const EXPECTED_OVERRIDE_CONSUMERS = {
   'js-yaml': ['node_modules/markdownlint-cli', 'node_modules/xmlbuilder2']
 };
 
+function removeDirectoryIfEmpty(directory) {
+  try {
+    fs.rmdirSync(directory);
+  } catch (error) {
+    if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error?.code)) throw error;
+  }
+}
+
 function readJson(root, relativePath, failures) {
   try {
     return JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -131,6 +139,8 @@ async function checkRuntimeCompatibility(root, failures) {
     failures.push(`markdown-link-check compatibility: ${error instanceof Error ? error.message : String(error)}`);
   } finally {
     fs.rmSync(tempDirectory, { recursive: true, force: true });
+    removeDirectoryIfEmpty(tempParent);
+    removeDirectoryIfEmpty(path.dirname(tempParent));
   }
 }
 

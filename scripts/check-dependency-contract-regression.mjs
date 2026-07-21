@@ -9,6 +9,19 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEMP_PARENT = path.join(ROOT, '.codex-local', 'tmp');
 fs.mkdirSync(TEMP_PARENT, { recursive: true });
 
+function removeDirectoryIfEmpty(directory) {
+  try {
+    fs.rmdirSync(directory);
+  } catch (error) {
+    if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error?.code)) throw error;
+  }
+}
+
+process.once('exit', () => {
+  removeDirectoryIfEmpty(TEMP_PARENT);
+  removeDirectoryIfEmpty(path.dirname(TEMP_PARENT));
+});
+
 const packageJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 const packageLock = JSON.parse(fs.readFileSync(path.join(ROOT, 'package-lock.json'), 'utf8'));
 
