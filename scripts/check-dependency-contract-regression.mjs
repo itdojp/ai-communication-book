@@ -43,6 +43,15 @@ const cases = [
       pkg.engines.node = '>=22.12.0';
       lock.packages[''].engines.node = '>=22.12.0';
     }
+  },
+  {
+    name: 'a global override silently spreads to a new consumer',
+    mutate(_pkg, lock) {
+      lock.packages['node_modules/example-consumer'] = {
+        version: '1.0.0',
+        dependencies: { 'js-yaml': '^4.0.0' }
+      };
+    }
   }
 ];
 

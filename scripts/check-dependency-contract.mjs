@@ -25,6 +25,12 @@ const EXPECTED_LOCK_VERSIONS = {
   'node_modules/markdownlint-cli': '0.49.1'
 };
 
+const EXPECTED_OVERRIDE_CONSUMERS = {
+  'encoding-sniffer': ['node_modules/cheerio'],
+  'brace-expansion': ['node_modules/minimatch'],
+  'js-yaml': ['node_modules/markdownlint-cli', 'node_modules/xmlbuilder2']
+};
+
 function readJson(root, relativePath, failures) {
   try {
     return JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -59,6 +65,18 @@ export function checkDependencyMetadata(root = DEFAULT_ROOT) {
   for (const [packagePath, version] of Object.entries(EXPECTED_LOCK_VERSIONS)) {
     if (packages[packagePath]?.version !== version) {
       failures.push(`package-lock.json: ${packagePath} must resolve to ${version}`);
+    }
+  }
+
+  for (const [dependency, expectedConsumers] of Object.entries(EXPECTED_OVERRIDE_CONSUMERS)) {
+    const actualConsumers = Object.entries(packages)
+      .filter(([, metadata]) => Object.hasOwn(metadata.dependencies ?? {}, dependency))
+      .map(([packagePath]) => packagePath)
+      .sort();
+    if (JSON.stringify(actualConsumers) !== JSON.stringify(expectedConsumers)) {
+      failures.push(
+        `package-lock.json: ${dependency} override consumers must remain ${expectedConsumers.join(', ')}; got ${actualConsumers.join(', ')}`
+      );
     }
   }
 
