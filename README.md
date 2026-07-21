@@ -1,31 +1,43 @@
 # AIエージェント・コミュニケーション実践ガイド
 
-AI時代のコミュニケーション技術として、効果的なプロンプト設計とエージェント活用の実践的手法を体系化した技術書です。
+AIエージェントを「うまく会話する相手」ではなく、検証可能な成果物を作る業務systemとして設計するための実務書です。
 
-- 公開ページ（GitHub Pages）: [ai-communication-book](https://itdojp.github.io/ai-communication-book/)
-- 目次（リポジトリ内）: `docs/index.md`
+- 公開ページ: [GitHub Pages](https://itdojp.github.io/ai-communication-book/)
+- 書籍トップ: [`docs/index.md`](docs/index.md)
 - シリーズ: [it-engineer-knowledge-architecture](https://github.com/itdojp/it-engineer-knowledge-architecture)
 
-## この本でできるようになること（抜粋）
+## 扱う内容
 
-- 目的・制約・評価基準を明確にしたうえで AI エージェントに指示を出し、再現性の高いアウトプットを得られるようになる。
-- 構造化プロンプト、コンテキスト制御、フィードバックループなどの考え方を用いて、対話の品質を継続的に改善できるようになる。
-- 業務プロセスを分解し、「どのタスクを AI に任せ、どこを人間が担うべきか」を意識して設計できるようになる。
-- 品質保証やリスク管理の観点から、AI 活用の限界や注意点を説明し、ガバナンスやルール作りの議論に参加できるようになる。
+- 目的、入力境界、出力契約、受け入れ条件を揃えたrequest contract
+- 実taskのevalによるmodel・tool・architecture選定
+- Prompt / Context Engineeringと複雑taskのworkflow設計
+- RAG、tool use、MCP、structured output、権限・失敗契約
+- 組織導入、品質保証、security、privacy、監査、incident対応
+- 変化しやすい仕様・法制度のsource registryと再確認手順
 
-## Phase 6 エージェント対話レビューゲート
+## 読み始める
 
-本書を更新する際は、全面リライト Issue #131 の作業と衝突しない範囲で、次の観点を差分ごとに確認します。
+1. [はじめに](docs/introduction/index.md)
+2. [AIエージェント協働の標準手順（SOP）](docs/introduction/agent-protocol.md)
+3. すぐ試す場合は[第1章](docs/chapters/chapter-01/index.md)、評価・選定から始める場合は[第3章](docs/chapters/chapter-03/index.md)
 
-- AI agent / LLM / prompt / context / tool / eval / review の用語を、本文・付録・関連書籍で矛盾なく使う。
-- 依頼例は、目的、入力境界、出力契約、受け入れ条件、検証手順、責任者に接続する。
-- 「うまい聞き方」だけでなく、検証、承認、停止条件、監査ログ、ロールバックを含むワークフローとして説明する。
-- モデル名、料金、UI、API細部など変化しやすい情報は、固定値ではなく確認観点として扱う。
+## 品質契約
 
-## フィードバック（誤り指摘・改善提案）
+- 本文8章は、読者、到達点、最短route、深掘りroute、章末checklist、次の導線、Source Notesを持ちます。
+- 変化しやすい主張は、一次情報、対象version/status、確認日、再確認条件へ接続します。
+- AIの内部推論開示ではなく、観点、仮説、中間成果物、根拠、未確認点、検証結果をreview対象にします。
+- `npm test` とBook QAでmetadata、editorial contract、security audit、Markdown、linkを検査します。
 
-誤字脱字、技術的な誤り、改善提案は Issues / PR で受け付けます。手順は `CONTRIBUTING.md` を参照してください。
+## 開発
 
-## ライセンス
+```bash
+npm ci
+npm test
+npm run build
+```
 
-本書は Creative Commons BY-NC-SA 4.0 で提供されています。詳細は `LICENSE.md` を参照してください。
+詳細は [`CONTRIBUTING.md`](CONTRIBUTING.md) を参照してください。
+
+## License
+
+[CC BY-NC-SA 4.0](LICENSE.md)

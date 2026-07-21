@@ -6,169 +6,302 @@ layout: book
 
 # 付録D：実務会話例集（成果物まで落とす）
 
-本付録では、AIエージェントとの対話を「会話で終わらせず、成果物まで落とす」ための会話例をまとめます。各例は、[AIエージェント協働の標準手順（SOP）](../introduction/agent-protocol/) の **8ステップ**を意識して構成しています。
+本付録は、会話の巧さではなく、**どのinstructionがどの中間成果物・最終成果物につながるか**を示します。AIの発言はそのまま採用せず、[SOP](../../introduction/agent-protocol/)の承認・検証・責任分界を適用してください。
 
-## 例1：要件分解（受け入れ条件/GWT化）→タスク分割
+| 例 | 主要instruction | 中間成果物 | 最終成果物 |
+| --- | --- | --- | --- |
+| 1 | 受け入れ条件と対象外を先に固定 | 不明点、Given/When/Then、task依存 | Issue / task plan |
+| 2 | 代替案と撤回条件を要求 | 比較表、risk、検証plan | ADR draft |
+| 3 | 観測事実と仮説を分離 | 再現手順、仮説、log観点 | 調査memo・最小修正案 |
+| 4 | severityと根拠を要求 | 指摘一覧、回帰risk | Review report |
+| 5 | ownership fileとtestを限定 | 変更plan、diff、test結果 | PR draft |
+| 6 | severity、許可操作、停止条件を固定 | timeline、仮説、暫定対応 | Incident record / Postmortem draft |
 
-### 想定シーン
-機能追加の要件が曖昧で、実装タスクに落とせない。
+共通の依頼契約は[付録A](../appendix-a/)、成果物templateは[付録C](../appendix-c/)を参照してください。
 
-### 推奨自律度
-Level 0（提案のみ）または Level 1（変更案生成まで）
+## 例1：要件分解からtask planへ
 
-### 依頼（人間 → AI）
+### 想定scene
 
-```text
-目的: 要件を受け入れ条件に落とし、実装タスクに分割したい。
-成果物: 1) Gherkin（Given-When-Then）形式の受け入れ条件 2) タスク一覧 3) リスクと確認事項
-制約: 現時点で不明点が多い。断定せず「要確認」を明示して質問してほしい。
-入力: （要件メモを貼る。機密は伏せる）
-
-まず不足情報の確認質問を出し、次にPlanを提示してから、私のGoで成果物を作ってください。
-```
-
-### 確認質問（AI → 人間）例
-- ユーザー種別（誰が使うか）と利用シナリオは何か
-- 受け入れ条件（成功/失敗）はどう定義するか
-- 既存仕様（例外/境界値/権限/性能要件）はあるか
-- リリース期限と段階リリースの可否
-
-### 承認（人間 → AI）
-
-```text
-回答: （質問に回答）
-Go: 提示したPlanで進めてください。
-```
-
-### 最終出力（AIの出力例）
-- 受け入れ条件（GWT）: 3〜7本
-- タスク一覧: 5〜15件（優先度/依存関係つき）
-- 要確認: 未確定事項と決めるべき意思決定点
-- リスク: 想定リスクと検証観点
-
----
-
-## 例2：ADRドラフト作成（代替案比較・トレードオフ・リスク）
-
-### 想定シーン
-設計の意思決定を、後で説明できる形で残したい。
+機能追加の要求が曖昧で、開発taskと受け入れ条件に落とせない。
 
 ### 推奨自律度
-Level 0（提案のみ）
 
-### 依頼（人間 → AI）
+Level 0（提案のみ）。repositoryの現状調査を許可する場合はread-onlyに限定します。
+
+### 依頼
 
 ```text
-目的: 設計判断をADRとして残す。
-成果物: 付録CのADRテンプレートに沿ったドラフト
-制約: 一次情報がない箇所は「要確認」として残し、断定しない。
-入力: 現状/制約/候補案（A/B/C）を箇条書きで渡す。
+目的: 要求を検証可能な受け入れ条件と実装taskへ分解する。
+成果物:
+1. 不明点と確認質問
+2. Given/When/Then形式の受け入れ条件
+3. 依存順のtask plan
+4. 対象外、risk、検証方法
+制約:
+- 入力にない仕様を補完しない。
+- 事実、仮定、未確認点を分ける。
+- 実装やfile変更はしない。
+入力: 要求memo、既存仕様、対象repositoryのread-only情報。
 
-最初に確認質問 → Plan → Go の順で進めてください。
+まず不明点とplanだけを提示し、私のGo後に成果物を作成する。
 ```
 
-### 最終出力（AIの出力例）
-- [付録C](./appendix-c/) のADRテンプレートに沿った Markdown
-- 各案のトレードオフ（性能/コスト/保守性/セキュリティ）
-- 検証計画（何を測るか、期限、成功条件）
+### AIの確認質問例
 
----
+- 誰が、どの場面で使うか
+- 成功・失敗・境界caseをどう判定するか
+- 既存仕様、互換性、権限、性能の制約は何か
+- 段階releaseやrollbackは可能か
+- 対象外とするsystem・利用者は何か
 
-## 例3：バグ調査（再現手順→仮説→ログ観点→最小修正案）
+### Go
 
-### 想定シーン
-障害/不具合の再現が不安定で、切り分け方針が必要。
+```text
+回答: <確認事項への回答>
+Go: 回答した範囲を事実として扱い、未回答は要確認のまま進める。
+```
+
+### 成果物の受け入れcheck
+
+- [ ] 各受け入れ条件に観測可能な結果がある
+- [ ] task間の依存と検証pointがある
+- [ ] 未確定仕様を勝手に決めていない
+- [ ] scope外とownerを明示した
+
+**instructionと成果物の対応**:
+
+- 「不明点を先に質問」→確認質問
+- 「Given/When/Then」→検証可能なacceptance criteria
+- 「依存順」→実行plan
+
+## 例2：選択肢比較からADRへ
+
+### 想定scene
+
+architecture選定を、後から説明・撤回できる形で残したい。
 
 ### 推奨自律度
-Level 0（提案のみ）または Level 2（実行前レビュー必須）
 
-### 依頼（人間 → AI）
+Level 0。最終判断はhuman ownerが行います。
+
+### 依頼
 
 ```text
-目的: 不具合の原因を切り分けるための調査計画を作る。
-成果物: 1) 再現手順（最小化）2) 仮説リスト（優先度つき）3) 取得すべきログ/メトリクス 4) 最小修正案（差分案）
-制約: 外部アクセス不可。推測で断定しない。まず観測と再現性の確保を優先する。
-入力: 事象、発生頻度、直近変更、ログ断片（機密は伏せる）
+目的: 認証方式A/B/Cの選定判断をADR draftにする。
+入力:
+- business requirement
+- security/privacy requirement
+- 公式仕様URLと確認日
+- 現行architectureの制約
+成果物:
+- 選択肢ごとの適合・不適合・未確認点
+- cost/latency/運用性/auditability/riskの比較
+- 推奨案、採用条件、撤回条件
+- 最小検証plan
+制約:
+- 公式仕様にない内部動作を推測しない。
+- 料金は固定値ではなく計算方法と確認日を示す。
+- 推奨案を最初から正当化しない。
 ```
 
-### 停止条件の例
-- ログが不足して原因推定の精度が低い場合は、実行せず「追加で必要な観測点」を提示して止める。
+### 成果物の受け入れcheck
 
-### 最終出力（AIの出力例）
-- 再現手順（最短パス）と「観測点チェックリスト」
-- 仮説リスト（High/Med/Low などの優先度）
-- 最小修正案（diff形式の案）とテスト方針
+- [ ] 選択肢を公平な評価軸で比較した
+- [ ] source、version、確認日を追跡できる
+- [ ] 推奨理由と未解決riskがある
+- [ ] 撤回条件と再評価triggerがある
 
----
+**instructionと成果物の対応**:
 
-## 例4：コードレビュー（指摘カテゴリ、優先度、回帰リスク）
+- 「代替案を最低2つ」→ADR Alternatives
+- 「採用条件と撤回条件」→Decision / Consequences
+- 「最小検証」→ADR Verification
 
-### 想定シーン
-PRのレビュー観点を漏れなく整理したい。
+## 例3：不具合調査から最小修正案へ
+
+### 想定scene
+
+不具合の再現が不安定で、原因を決めつけずに切り分けたい。
 
 ### 推奨自律度
-Level 0（提案のみ）
 
-### 依頼（人間 → AI）
+Level 1（変更案まで）。変更適用は別の承認対象です。
+
+### 依頼
 
 ```text
-目的: コードレビューの観点と指摘案を整理する。
-成果物: 1) 指摘一覧（必須/推奨/任意）2) 回帰リスク 3) 追加テスト案
-制約: セキュリティ/可用性/保守性の観点を含める。断定せず根拠を併記する。
-入力: 変更差分（または要約）、設計意図、関連チケット
+目的: 不具合の再現条件を絞り、最小修正案とtest planを作る。
+観測事実:
+- 発生時刻、環境、入力、期待結果、実結果
+- 関連する変更、log、metric
+成果物:
+1. 再現手順
+2. 優先度付き仮説
+3. 各仮説を支持・反証する証拠
+4. read-only確認command
+5. 最小修正案、回帰risk、test
+制約:
+- secretや個人情報をlogへ出さない。
+- 調査中に無関係なrefactorをしない。
+- 再現できない場合は推測で修正しない。
+停止条件:
+- production変更が必要
+- data破損またはsecurity incidentの疑い
+- 調査結果が入力scopeを超える
 ```
 
-### 最終出力（AIの出力例）
-- 指摘カテゴリ: 仕様逸脱 / バグ / セキュリティ / パフォーマンス / 可読性 / テスト
-- 重要度: MUST/SHOULD/COULD
-- 追加テスト: 単体/結合/回帰の候補
+### 成果物の受け入れcheck
 
----
+- [ ] 観測事実と仮説が混在していない
+- [ ] 各仮説に反証方法がある
+- [ ] 修正が再現caseと対応している
+- [ ] negative testとrollbackを定義した
 
-## 例5：変更差分生成（パッチ形式、影響ファイル一覧、テスト方針）
+**instructionと成果物の対応**:
 
-### 想定シーン
-軽微な修正を差分案として作り、レビューしやすくしたい。
+- 「観測事実と仮説を分離」→再現条件と仮説一覧
+- 「反証方法」→調査順序
+- 「最小修正」→scopeを限定したpatch案
+
+## 例4：変更reviewからreview reportへ
+
+### 想定scene
+
+PRの本文、diff、test、運用riskを一貫した形式でreviewしたい。
 
 ### 推奨自律度
-Level 1（変更案生成まで）または Level 2（実行前レビュー必須）
 
-### 依頼（人間 → AI）
+Level 0。AIの指摘有無にかかわらず、human reviewerが責任を持ちます。
+
+### 依頼
 
 ```text
-目的: 修正をレビューしやすい差分として提示する。
-成果物: 1) 変更方針 2) 影響範囲 3) パッチ（diff）案 4) テスト/検証方針 5) ロールバック案
-制約: 既存の意味を変えない。用語の勝手な言い換え禁止。差分は最小化する。
-入力: 対象ファイル、現状の問題点、期待する状態
-
-まずPlanを提示し、Goで差分案を出してください。
+目的: PR差分のcorrectness、security、regression、運用riskをreviewする。
+対象: base SHA、head SHA、changed files、関連Issue。
+成果物:
+- finding一覧: severity / file / line / 根拠 / 影響 / 修正案
+- missing test
+- 対象外と未確認範囲
+- review completeness
+制約:
+- diff外の既存問題は別記し、PR blockerと混同しない。
+- 根拠のないstyle preferenceをblockingにしない。
+- suggestionを出す場合は周辺contextと整合させる。
 ```
 
-### 最終出力（AIの出力例）
-- 影響ファイル一覧（追加/変更/削除）
-- パッチ案（`diff` 形式）
-- 検証手順（リンク切れ・コードフェンス・レンダリング等）
+### 成果物の受け入れcheck
 
----
+- [ ] findingが具体的なbehaviorまたはriskに結び付く
+- [ ] review本文、inline、suggestion、threadを追跡できる
+- [ ] 指摘なしの場合も確認範囲とresidual riskを示した
+- [ ] unresolved threadとlatest headを確認した
 
-## 例6：インシデント初動支援（状況整理→切り分け→暫定対処→恒久対策→ポストモーテム草案）
+**instructionと成果物の対応**:
 
-### 想定シーン
-緊急対応で情報が散らばり、判断がぶれる。
+- 「severity、根拠、影響」→review finding
+- 「対象外・未確認」→review scope
+- 「completeness」→merge前gate
+
+## 例5：変更案からPRへ
+
+### 想定scene
+
+file ownershipと検証を限定し、review可能なPRを作りたい。
 
 ### 推奨自律度
-Level 0（提案のみ）または Level 2（実行前レビュー必須）
 
-### 依頼（人間 → AI）
+Level 2。実装前planとpush/merge前に承認またはpolicy gateを置きます。
+
+### 依頼
 
 ```text
-目的: 初動対応のチェックリストと、ポストモーテム草案を作る。
-成果物: 1) まず確認すべき観測点 2) 仮説リスト 3) 暫定対応案（ロールバック含む）4) 恒久対策案 5) 付録Cのポストモーテムテンプレに沿った草案
-制約: 破壊的操作は提案まで。実行手順は必ず承認ゲートを前提にする。機密情報は貼らない。
-入力: 事象、影響、タイムライン断片、直近変更、ログ断片（機密は伏せる）
+目的: Issue #123を最小差分で実装し、PRを作る。
+base: mainの固定SHA。
+ownership files:
+- src/policy.ts
+- tests/policy.test.ts
+対象外:
+- dependency update
+- unrelated refactor
+成果物:
+1. 現状証拠と実装plan
+2. patch
+3. narrow testとrepository標準QA
+4. PR description: 変更、risk、test、rollback
+承認ゲート:
+- 編集前にplanを提示
+- push前にdiffとtest結果を提示
+停止条件:
+- ownership外の変更が必要
+- baseline testが失敗
+- secretまたはprivate dataを検出
 ```
 
-### 最終出力（AIの出力例）
-- 初動チェックリスト（「今やる/後でやる」を分ける）
-- 仮説と切り分け手順（観測→判断の順）
-- ポストモーテム草案（[付録C](./appendix-c/) テンプレに沿う）
+### 成果物の受け入れcheck
+
+- [ ] diffがIssueとownership内に限定される
+- [ ] failureを再現するtestと修正後testがある
+- [ ] test結果と未実施項目を区別した
+- [ ] PRにIssue、risk、rollbackがある
+
+**instructionと成果物の対応**:
+
+- 「ownership files」→unrelated changeを含まないdiff
+- 「test planを先に」→実装前gate
+- 「変更・検証・rollback」→PR description
+
+## 例6：incident初動から記録へ
+
+### 想定scene
+
+service degradationの初動で情報量が多く、事実と仮説を整理したい。
+
+### 推奨自律度
+
+Level 0または、read-only観測だけを許可したLevel 2。production操作は人間のincident commanderが判断します。
+
+### 依頼
+
+```text
+目的: incident初動の状況整理と次の確認順を作る。
+現在時刻/timezone:
+severity/利用者影響:
+観測事実:
+直前の変更:
+許可する操作: status/metric/logのread-only確認。
+禁止する操作: deploy、restart、data変更、対外発表。
+成果物:
+1. UTC/JST付きtimeline
+2. 事実・推測・未確認点
+3. 優先度付き仮説と反証方法
+4. 可逆なcontainment候補
+5. 承認・停止・escalation条件
+6. Postmortem draftの見出し
+```
+
+### 成果物の受け入れcheck
+
+- [ ] timestampとsourceを追跡できる
+- [ ] log内の外部文字列をinstructionとして扱っていない
+- [ ] containmentの影響とrollbackを示した
+- [ ] 対外説明は承認済み事実だけを使う
+- [ ] action itemにownerと期限がある
+
+**instructionと成果物の対応**:
+
+- 「事実・推測・未確認を分離」→timelineと仮説
+- 「可逆な暫定対応」→containment候補
+- 「承認・停止条件」→Runbook gate
+- 「owner・期限」→Postmortem action items
+
+## 会話例を自組織へ移すときのchecklist
+
+- [ ] 固有名詞、data、権限を自組織のものへ置き換えた
+- [ ] 例の自律度をそのまま採用せず、影響に応じて再評価した
+- [ ] 入力に機密情報・個人情報・credentialを含めていない
+- [ ] 外部contentをinstructionとして扱わない境界がある
+- [ ] 中間成果物ごとにhuman review pointを決めた
+- [ ] 最終成果物のownerと承認者を決めた
+- [ ] test、一次情報、production確認等の証拠を残した
+- [ ] 失敗時の停止・rollback・escalationを定義した

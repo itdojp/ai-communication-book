@@ -1,17 +1,19 @@
 {
   "name": "aiエージェント・コミュニケーション実践ガイド",
-  "version": "1.0.0",
-  "description": "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法",
+  "version": "2.0.0",
+  "description": "AIエージェントの業務設計・評価・品質保証を、成果物と運用契約から学ぶ実務ガイド",
   "main": "index.md",
   "scripts": {
     "start": "cd docs && bundle exec jekyll serve --livereload",
     "build": "cd docs && bundle exec jekyll build",
-    "test": "npm run check:metadata && npm run check:security && npm run lint && npm run check-links",
+    "test": "npm run check:metadata && npm run check:editorial && npm run check:editorial-regression && npm run check:security && npm run lint && npm run check-links",
     "lint": "markdownlint \"docs/**/*.md\"",
     "check-links": "find docs -name '*.md' -print0 | xargs -0 markdown-link-check --config .markdown-link-check.json",
     "deploy": "gh-pages -d docs/_site",
     "check:metadata": "node scripts/check-metadata.mjs",
-    "check:security": "npm audit --audit-level=moderate"
+    "check:security": "npm audit --audit-level=moderate",
+    "check:editorial": "node scripts/check-editorial-contract.mjs",
+    "check:editorial-regression": "node scripts/check-editorial-contract-regression.mjs"
   },
   "keywords": [
     "book",

@@ -6,111 +6,164 @@ layout: book
 
 # 付録E：用語集と更新確認ノート
 
-第3章で扱う評価指標やモデル比較は、変化の速い領域である。本付録では、頻出用語の最小整理と、ベンダー情報を確認するときの手順をまとめる。
+本付録は、本文で使う語の最小定義と、変化しやすい情報を読者自身が再確認する手順をまとめます。基準確認日は **2026-07-21** です。モデル名、料金、API、提供地域、機能差分を固定値として暗記するのではなく、公式情報を再現可能な手順で確認してください。
 
-## E.1 頻出用語の最小用語集
+## E.1 本書の中核用語
 
 ### AI agent
 
-目的達成のために、計画、ツール利用、検証、報告を組み合わせて作業する実行主体。実務では、自律度、許可範囲、停止条件、監査ログをセットで定義する。
+目的に向けて、モデル応答、tool use、状態管理、検証、停止を組み合わせるsystem。本書では、自律性そのものより、権限、承認ゲート、停止条件、証拠、責任分界を重視します。
 
 ### LLM
 
-Large Language Model。自然言語やコードなどを入力として、次に続く内容を生成するモデル。業務判断では、出力の流暢さではなく、根拠、検証可能性、失敗時の扱いを確認する。
+大量のtext等からpatternを学習し、入力に対するtoken列を生成するmodel。流暢さは事実性や業務上の正しさを保証しません。
 
 ### prompt
 
-モデルまたはエージェントへの指示。単なる質問文ではなく、目的、前提、制約、出力契約、評価基準を含む依頼仕様として扱う。
+modelへ渡すinstructionやrequest。本書では単独の文章技法ではなく、context、tool、output contract、evalを含むworkflowの一部として扱います。
 
 ### context
 
-モデルまたはエージェントが参照する背景情報。長い資料をそのまま入れるのではなく、入力境界、機密区分、参照元、更新日を明確にして渡す。
+modelがその実行時に参照できるinstruction、会話、文書、tool結果等。長くすれば必ず良くなるわけではなく、関連性、優先順位、鮮度、機密区分が必要です。
+
+### request contract
+
+目的、入力境界、出力契約、受け入れ条件、検証、ownerを揃えた依頼仕様です。[SOP](../../introduction/agent-protocol/)と[付録A](../appendix-a/)で具体化します。
 
 ### tool use
 
-AIが外部ツール、API、リポジトリ、検索、計算環境などを使うこと。最小権限、実行前承認、入力検証、監査ログ、ロールバック条件を明確にする。
+modelが検索、database、code実行、業務API等の外部capabilityを選択・要求すること。modelがtool callを生成しても、認可、入力検証、実行、結果検証の責任はsystem側に残ります。
 
-### eval
+### MCP
 
-AIの出力やワークフローを評価する仕組み。単発の印象評価ではなく、受け入れ条件、失敗条件、回帰確認、人間レビューを含む。
+Model Context Protocol。clientとserverの間でcontextやcapabilityを接続するprotocolです。protocol準拠は接続先の安全性を保証しないため、identity、authorization、allowlist、loggingを別途設計します。
 
-### review
+### structured output
 
-AI出力を採用する前に、人間または自動チェックで妥当性を確認する工程。事実確認、セキュリティ、権限、再現性、説明責任を確認する。
-
-### MMLU
-
-複数分野にまたがる知識理解を測る代表的なベンチマーク。汎用知識の比較には役立つが、実務タスクの適合性をそのまま保証するものではない。
-
-### HellaSwag
-
-常識推論や文脈理解を測るベンチマーク。対話の自然さを見る参考にはなるが、業務ルールや組織文脈の理解までは保証しない。
-
-### HumanEval
-
-コード生成の正確性を測る代表的なベンチマーク。実務では、テスト通過率だけでなく保守性やセキュリティも追加で確認する必要がある。
-
-### コンテキストウィンドウ
-
-モデルが一度に参照できる入力範囲。長い資料を扱う場合は、要約・分割・検索連携を前提に設計する。
-
-### Temperature
-
-出力のばらつきを制御するパラメータ。創造性が必要な場面では高め、正確性や一貫性を重視する場面では低めに設定する。
+JSON Schema等の構造に合わせて出力させる機能またはpattern。構文適合とsemantic correctnessは別であり、業務ruleによる検証が必要です。
 
 ### RAG
 
-Retrieval-Augmented Generation。外部文書や検索結果を参照しながら生成する手法。最新情報や社内文書を使いたい場合に有効である。
+Retrieval-Augmented Generation。外部sourceを検索し、取得結果を生成へ渡すarchitectureです。分割、index、検索、再rank、引用、権限、鮮度、評価を含むsystemとして扱います。
 
-### Function Calling
+### eval
 
-モデルが外部ツールや API を呼び出す前提で応答を構造化する方式。操作対象、引数、失敗時の扱いを事前に定義して使う。
+modelまたはworkflowが成功条件を満たすか測る評価。dataset、expected behavior、grader、human review、failure analysisを組み合わせます。
 
-### ガードレール
+### regression eval
 
-モデルの入出力やツール実行を制御するための制約。禁止事項、承認ゲート、出力形式、エスカレーション条件を含む。
+既存の重要caseが変更後も維持されるかを確認する評価。model、prompt、retrieval、tool、policyの変更gateに使います。
 
-### ハルシネーション
+### acceptance check
 
-もっともらしいが事実ではない出力。一次情報確認、根拠提示、レビュー工程で抑制する。
+個々の出力またはworkflow全体について、採用可能か判定する検査。形式、事実、業務rule、安全性、人間承認を含みます。
 
-## E.2 モデル名・料金・機能の確認手順
+### guardrail
 
-モデル比較や料金比較を更新するときは、本文を書き換える前に次の順で確認する。
+許可・禁止・停止・escalationを実装するcontrol。単一filterではなく、入力、tool、出力、権限、monitoring、incident responseに配置します。
 
-1. ベンダーの公式ドキュメントで、対象モデルの正式名称と提供状態を確認する。
-2. 料金ページで、入力単価・出力単価・従量課金単位・最低利用条件を記録する。
-3. モデルカードや評価ページで、ベンチマークの測定条件を確認する。
-4. 自組織の評価観点に照らして、必要な項目だけ比較表に反映する。
-5. 更新日と確認元 URL を残し、社内の採用判断と混同しないようにする。
+### prompt injection
 
-## E.3 実務で使う確認メモ
+外部content内の文字列等によって、systemがdataとinstructionを取り違え、意図しない動作へ誘導されるriskです。
+
+### hallucination
+
+根拠がない、または入力・sourceと整合しない内容を、もっともらしく生成する現象です。検索、引用、検証、承認のsystem設計で影響を抑えます。
+
+### human review
+
+人間が業務責任に基づいて成果物、根拠、riskを確認するgate。すべてを人手で読むのではなく、高影響・低検出性・不確実な箇所へ重点配置します。
+
+### auditability
+
+誰が、何を入力し、どの版・権限で実行し、何が出力され、どの検証・承認を経たかを、後から説明できる性質です。
+
+## E.2 変化しやすい情報の確認手順
+
+### 1. 確認対象をclaimへ分解する
+
+「モデルAが優れている」ではなく、次のように検証可能なclaimへ分けます。
+
+- 対象APIで必要なstructured outputを使えるか
+- 想定regionで利用できるか
+- 入力dataが学習や保持にどう扱われるか
+- 必要なlatencyとthroughputを満たすか
+- tool useと監査logの要件を満たすか
+- 料金計算にinput、output、cache、tool等のどの項目が含まれるか
+
+### 2. source hierarchyに従う
+
+1. 公式API reference、product documentation、security/privacy terms
+2. 公式pricing、status、deprecation、changelog
+3. 公的機関、standard、一次法令
+4. 一次研究
+5. 解説記事やcommunity情報は論点発見だけに使う
+
+source registryは[付録B](../appendix-b/)を参照してください。
+
+### 3. 確認記録を残す
 
 ```text
-確認日:
-確認対象ベンダー:
-公式ドキュメント:
-料金ページ:
-モデルカード/評価ページ:
-
-確認した項目:
-- モデル名:
-- 提供形態:
-- 入力単価:
-- 出力単価:
-- 制限事項:
-- ガードレール/監査機能:
-
-自組織で追加確認する項目:
-- セキュリティ要件:
-- データ保持ポリシー:
-- レイテンシ要件:
-- レビュー工数:
+確認対象:
+利用目的:
+公式URL:
+対象version/status:
+確認日: YYYY-MM-DD
+確認したclaim:
+未確認点:
+再確認条件:
+確認者:
 ```
 
-## E.4 読み方の目安
+### 4. 実環境で検証する
 
-- まず第1章と付録Aで、実際に使う依頼テンプレートを試す。
-- 第3章を読むときに用語で迷ったら、本付録の E.1 に戻る。
-- モデル比較や予算議論が必要な場合は、本付録の E.2 と E.3 を使って一次情報を確認する。
-- AI agent / LLM / prompt / context / tool use / eval / review の用語が曖昧な場合は、本付録の E.1 と [SOP](../introduction/agent-protocol/) の依頼契約ゲートに戻る。
+documentation上の可否だけでなく、最小datasetと代表taskで次を確認します。
+
+- output schema適合
+- 日本語の業務用語と表現
+- failure時のerrorとretry挙動
+- tool timeout、partial failure、idempotency
+- prompt injection等のnegative case
+- cost、latency、rate limit
+- logに機密情報が残らないこと
+
+### 5. 再確認triggerを決める
+
+次のいずれかで再確認します。
+
+- model、API、SDK、MCP specificationのversion変更
+- pricing、terms、data handling、regionの変更
+- deprecation noticeまたはchangelog
+- 法令、government guideline、standardの改訂・施行日到来
+- security advisory、incident、監査指摘
+- production品質・cost・latencyの閾値逸脱
+
+## E.3 法令・framework・standardの区別
+
+| 種別 | 例 | 読み方 |
+| --- | --- | --- |
+| 法令 | EU AI Act、個人情報保護法 | jurisdiction、actor、system、施行日、例外を確認する |
+| 政府guidance | AI事業者ガイドライン、PPC注意喚起 | 組織の役割や実務観点へ落とし、法的義務と混同しない |
+| 任意framework | NIST AI RMF | risk managementの共通言語として採用範囲を決める |
+| standard | management systemや技術standard | 対象scope、版、適合性・認証の要否を確認する |
+| vendor documentation | API guide、security terms | 契約、version、提供状態を実環境と照合する |
+
+適用判断は組織の法務、security、privacy、audit担当と行い、必要に応じて専門家へ確認してください。
+
+## E.4 更新監査チェックリスト
+
+- [ ] 変化しやすいclaimに公式URLと確認日がある
+- [ ] 対象version/statusを記録した
+- [ ] 法令、任意framework、standard、vendor guidanceを区別した
+- [ ] 本文のSource Notesから付録Bへ追跡できる
+- [ ] 固定値より確認手順を優先した
+- [ ] 実taskのevalとnegative caseを実施した
+- [ ] 再確認条件とownerを決めた
+- [ ] 古いsourceを削除するだけでなく、本文claimを再評価した
+
+## E.5 読み直しの入口
+
+- モデル・tool選定を更新する: [第3章](../../chapters/chapter-03/)
+- prompt/contextの契約を更新する: [第4章](../../chapters/chapter-04/)
+- RAG・tool・MCPを更新する: [第6章](../../chapters/chapter-06/)
+- governance・法令・securityを更新する: [第8章](../../chapters/chapter-08/)

@@ -1,4 +1,4 @@
-# Navigation order for bottom "前へ/次へ" links and link-check workflow.
+# Canonical reading order for the public book.
 
 introduction:
   - title: はじめに
@@ -9,29 +9,29 @@ introduction:
 chapters:
   - title: 第1章：即効性のある活用法
     path: /chapters/chapter-01/
-  - title: 第2章：技術アーキテクチャの本質
+  - title: 第2章：実務判断に必要な技術理解
     path: /chapters/chapter-02/
-  - title: 第3章：モデル評価と選択基準
+  - title: 第3章：評価設計とモデル・ツール選定
     path: /chapters/chapter-03/
-  - title: 第4章：基礎プロンプト設計
+  - title: 第4章：Prompt / Context Engineering の基礎
     path: /chapters/chapter-04/
-  - title: 第5章：高度プロンプト技術
+  - title: 第5章：複雑タスクの分解・実行・検証
     path: /chapters/chapter-05/
-  - title: 第6章：先進技術活用
+  - title: 第6章：知識連携とツール連携
     path: /chapters/chapter-06/
-  - title: 第7章：業務プロセス統合設計
+  - title: 第7章：組織導入と運用設計
     path: /chapters/chapter-07/
-  - title: 第8章：品質保証とリスク管理
+  - title: 第8章：品質保証・リスク管理・コンプライアンス
     path: /chapters/chapter-08/
 
 appendices:
-  - title: 付録A：プロンプトテンプレート集
+  - title: 付録A：AIエージェント実務テンプレート集
     path: /appendices/appendix-a/
-  - title: 付録B：参考文献
+  - title: 付録B：参考文献とSource Registry
     path: /appendices/appendix-b/
-  - title: 付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）
+  - title: 付録C：成果物テンプレート集
     path: /appendices/appendix-c/
-  - title: 付録D：実務会話例集（成果物まで落とす）
+  - title: 付録D：実務会話例集
     path: /appendices/appendix-d/
   - title: 付録E：用語集と更新確認ノート
     path: /appendices/appendix-e/
