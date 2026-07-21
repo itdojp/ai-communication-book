@@ -6,7 +6,7 @@ layout: book
 
 # 付録D：実務会話例集（成果物まで落とす）
 
-本付録は、会話の巧さではなく、**どのinstructionがどの中間成果物・最終成果物につながるか**を示します。AIの発言はそのまま採用せず、[SOP](../../introduction/agent-protocol/)の承認・検証・責任分界を適用してください。
+本付録は、会話の巧さではなく、**どのinstructionがどの中間成果物・最終成果物につながるか**を示します。AIの発言はそのまま採用せず、[SOP](../introduction/agent-protocol/)の承認・検証・責任分界を適用してください。
 
 | 例 | 主要instruction | 中間成果物 | 最終成果物 |
 | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ layout: book
 | 5 | ownership fileとtestを限定 | 変更plan、diff、test結果 | PR draft |
 | 6 | severity、許可操作、停止条件を固定 | timeline、仮説、暫定対応 | Incident record / Postmortem draft |
 
-共通の依頼契約は[付録A](../appendix-a/)、成果物templateは[付録C](../appendix-c/)を参照してください。
+共通の依頼契約は[付録A](appendix-a/)、成果物templateは[付録C](appendix-c/)を参照してください。
 
 ## 例1：要件分解からtask planへ
 

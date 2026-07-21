@@ -12,6 +12,17 @@ const CHAPTERS = Array.from({ length: 8 }, (_, index) =>
   `docs/chapters/chapter-${String(index + 1).padStart(2, '0')}/index.md`
 );
 
+const CHAPTER_TITLES = [
+  '第1章：即効性のある活用法',
+  '第2章：実務判断に必要な技術理解',
+  '第3章：評価設計とモデル・ツール選定',
+  '第4章：Prompt / Context Engineering の基礎',
+  '第5章：複雑タスクの分解・実行・検証',
+  '第6章：知識連携とツール連携',
+  '第7章：組織導入と運用設計',
+  '第8章：品質保証・リスク管理・コンプライアンス'
+];
+
 const REQUIRED_CHAPTER_SECTIONS = [
   '## この章の使い方',
   '### 誰向け',
@@ -58,10 +69,18 @@ function requireText(content, relativePath, needle, failures) {
   if (!content.includes(needle)) failures.push(`${relativePath}: missing ${JSON.stringify(needle)}`);
 }
 
-function checkChapter(content, relativePath, failures) {
+function checkChapter(content, relativePath, title, failures) {
   for (const section of REQUIRED_CHAPTER_SECTIONS) requireText(content, relativePath, section, failures);
   if (!/^---\r?\n[\s\S]*?\r?\n---\r?\n/u.test(content)) failures.push(`${relativePath}: front matter is missing`);
   if (!/^layout:\s*["']?book["']?\s*$/mu.test(content)) failures.push(`${relativePath}: layout must be book`);
+  if (!new RegExp(`^title:\\s*["']?${escapeRegExp(title)}["']?\\s*$`, 'mu').test(content)) {
+    failures.push(`${relativePath}: front matter title must be ${JSON.stringify(title)}`);
+  }
+  if (!content.includes(`# ${title}`)) failures.push(`${relativePath}: H1 must be ${JSON.stringify(title)}`);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 }
 
 function checkPercentClaims(content, relativePath, failures) {
@@ -76,14 +95,45 @@ function checkPercentClaims(content, relativePath, failures) {
   }
 }
 
+function checkSourceRegistry(content, relativePath, failures) {
+  const headings = [...content.matchAll(/^### ([A-Z][A-Z0-9-]+)\s*$/gmu)];
+  if (headings.length === 0) {
+    failures.push(`${relativePath}: source registry entries are missing`);
+    return;
+  }
+
+  const seen = new Set();
+  const requiredFields = [
+    '- **source type**:',
+    '- **資料**:',
+    '- **対象version/status**:',
+    '- **確認日**: 2026-07-21',
+    '- **支える章・主張**:',
+    '- **再確認条件**:'
+  ];
+
+  for (const [index, heading] of headings.entries()) {
+    const sourceId = heading[1];
+    if (seen.has(sourceId)) failures.push(`${relativePath}: duplicate source ID ${sourceId}`);
+    seen.add(sourceId);
+
+    const start = heading.index + heading[0].length;
+    const end = headings[index + 1]?.index ?? content.length;
+    const entry = content.slice(start, end);
+    for (const field of requiredFields) {
+      if (!entry.includes(field)) failures.push(`${relativePath}: ${sourceId} missing ${JSON.stringify(field)}`);
+    }
+  }
+}
+
 export function checkEditorialContract(root = DEFAULT_ROOT) {
   const failures = [];
   const chapterContents = new Map();
 
-  for (const chapter of CHAPTERS) {
+  for (const [index, chapter] of CHAPTERS.entries()) {
     const content = read(root, chapter, failures);
     chapterContents.set(chapter, content);
-    checkChapter(content, chapter, failures);
+    checkChapter(content, chapter, CHAPTER_TITLES[index], failures);
     for (const [pattern, reason] of FORBIDDEN_PATTERNS) {
       if (pattern.test(content)) failures.push(`${chapter}: ${reason}`);
     }
@@ -122,6 +172,7 @@ export function checkEditorialContract(root = DEFAULT_ROOT) {
   for (const term of ['source hierarchy', '2026-07-21', '確認日', '対象version/status', '支える章・主張', '再確認条件']) {
     requireText(appendixB, appendixBPath, term, failures);
   }
+  checkSourceRegistry(appendixB, appendixBPath, failures);
 
   const appendixEPath = 'docs/appendices/appendix-e.md';
   const appendixE = read(root, appendixEPath, failures);

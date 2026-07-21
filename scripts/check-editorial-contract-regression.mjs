@@ -16,11 +16,23 @@ function replaceOnce(file, before, after) {
   fs.writeFileSync(file, content.replace(before, after));
 }
 
+function replaceAll(file, before, after) {
+  const content = fs.readFileSync(file, 'utf8');
+  if (!content.includes(before)) throw new Error(`regression fixture marker is missing: ${before}`);
+  fs.writeFileSync(file, content.replaceAll(before, after));
+}
+
 const cases = [
   {
     name: 'missing chapter contract section',
     mutate(root) {
       replaceOnce(path.join(root, 'docs/chapters/chapter-03/index.md'), '## Source Notes', '## Sources');
+    }
+  },
+  {
+    name: 'chapter title drifts from the canonical navigation title',
+    mutate(root) {
+      replaceOnce(path.join(root, 'docs/chapters/chapter-01/index.md'), '第1章：即効性のある活用法', '第1章：別の章題');
     }
   },
   {
@@ -38,7 +50,13 @@ const cases = [
   {
     name: 'source verification date disappears',
     mutate(root) {
-      replaceOnce(path.join(root, 'docs/appendices/appendix-b.md'), '2026-07-21', 'DATE-REMOVED');
+      replaceAll(path.join(root, 'docs/appendices/appendix-b.md'), '2026-07-21', 'DATE-REMOVED');
+    }
+  },
+  {
+    name: 'one source registry entry loses its recheck condition',
+    mutate(root) {
+      replaceOnce(path.join(root, 'docs/appendices/appendix-b.md'), '- **再確認条件**:', '- **更新メモ**:');
     }
   }
 ];

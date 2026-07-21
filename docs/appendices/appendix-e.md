@@ -28,7 +28,7 @@ modelがその実行時に参照できるinstruction、会話、文書、tool結
 
 ### request contract
 
-目的、入力境界、出力契約、受け入れ条件、検証、ownerを揃えた依頼仕様です。[SOP](../../introduction/agent-protocol/)と[付録A](../appendix-a/)で具体化します。
+目的、入力境界、出力契約、受け入れ条件、検証、ownerを揃えた依頼仕様です。[SOP](../introduction/agent-protocol/)と[付録A](appendix-a/)で具体化します。
 
 ### tool use
 
@@ -99,7 +99,7 @@ modelまたはworkflowが成功条件を満たすか測る評価。dataset、exp
 4. 一次研究
 5. 解説記事やcommunity情報は論点発見だけに使う
 
-source registryは[付録B](../appendix-b/)を参照してください。
+source registryは[付録B](appendix-b/)を参照してください。
 
 ### 3. 確認記録を残す
 
@@ -163,7 +163,7 @@ documentation上の可否だけでなく、最小datasetと代表taskで次を�
 
 ## E.5 読み直しの入口
 
-- モデル・tool選定を更新する: [第3章](../../chapters/chapter-03/)
-- prompt/contextの契約を更新する: [第4章](../../chapters/chapter-04/)
-- RAG・tool・MCPを更新する: [第6章](../../chapters/chapter-06/)
-- governance・法令・securityを更新する: [第8章](../../chapters/chapter-08/)
+- モデル・tool選定を更新する: [第3章](../chapters/chapter-03/)
+- prompt/contextの契約を更新する: [第4章](../chapters/chapter-04/)
+- RAG・tool・MCPを更新する: [第6章](../chapters/chapter-06/)
+- governance・法令・securityを更新する: [第8章](../chapters/chapter-08/)
