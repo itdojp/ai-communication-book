@@ -101,6 +101,16 @@ const cases = [
     }
   },
   {
+    name: 'a Source Notes section after a code fence references an unknown source ID',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/chapters/chapter-04/index.md'),
+        '../../appendices/appendix-b/#oai-structured',
+        '../../appendices/appendix-b/#does-not-exist'
+      );
+    }
+  },
+  {
     name: 'owner role mapping disappears',
     mutate(root) {
       replaceOnce(

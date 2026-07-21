@@ -89,6 +89,34 @@ function markdownHeadings(content) {
   return headings;
 }
 
+function markdownHeadingOffset(content, heading) {
+  let fenceCharacter = null;
+  let fenceLength = 0;
+  let offset = 0;
+  const lines = content.split(/\r?\n/u);
+
+  for (const [index, line] of lines.entries()) {
+    const lineOffset = offset;
+    const fence = line.match(/^\s{0,3}(`{3,}|~{3,})/u)?.[1];
+    if (fence) {
+      if (fenceCharacter === null) {
+        fenceCharacter = fence[0];
+        fenceLength = fence.length;
+      } else if (fence[0] === fenceCharacter && fence.length >= fenceLength) {
+        fenceCharacter = null;
+        fenceLength = 0;
+      }
+    } else if (fenceCharacter === null && line.trim() === heading) {
+      return lineOffset;
+    }
+
+    offset += line.length;
+    if (index < lines.length - 1) offset += content.startsWith('\r\n', offset) ? 2 : 1;
+  }
+
+  return -1;
+}
+
 function markdownLinks(content) {
   const links = [];
   let fenceCharacter = null;
@@ -213,7 +241,7 @@ function checkSourceNoteCoverage(root, registryEntries, failures) {
 
   for (const [label, relativePath] of sourceFiles) {
     const content = read(root, relativePath, failures);
-    const sourceNotesIndex = content.indexOf('## Source Notes');
+    const sourceNotesIndex = markdownHeadingOffset(content, '## Source Notes');
     if (sourceNotesIndex < 0) continue;
     const sourceNotes = content.slice(sourceNotesIndex);
     const sourceIds = new Set(
