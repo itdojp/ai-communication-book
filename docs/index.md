@@ -1,9 +1,9 @@
 ---
 layout: book
 title: "AIエージェント・コミュニケーション実践ガイド"
-description: "AI時代のコミュニケーション技術 - 効果的なプロンプト設計とエージェント活用の実践的手法"
+description: "AIエージェントの業務設計・評価・品質保証を、成果物と運用契約から学ぶ実務ガイド"
 author: "株式会社アイティードゥ"
-version: "1.0.0"
+version: "2.0.0"
 order: 1
 permalink: /
 ---
@@ -15,191 +15,158 @@ permalink: /
 
 ---
 
-## 概要
+## 本書の目的
 
-現代のビジネス環境において、AIエージェントとの効果的なコミュニケーションは競争優位性を左右する重要なスキルとなっています。本書は、プロンプトエンジニアリング、コンテキスト制御、フィードバックループなど、実践的なAIコミュニケーション手法を体系的に解説します。
+本書は、AIへの「うまい聞き方」を集めたprompt集ではありません。目的、入力境界、出力契約、評価、承認、監査を組み合わせ、AIエージェントを**業務で検証可能な成果物へつなぐ方法**を扱います。
 
-## 本書の特徴
+読了後は、次のことができる状態を目指します。
 
-- **実装重視のアプローチ**：理論30%、実践50%、応用20%のバランス
-- **即座に活用可能**：コピー&ペーストで使えるテンプレート集
-- **体系的な学習**：基礎から高度な活用法まで段階的に習得
-- **ビジネス実践型**：企業での実際の活用シーンを重視
+- AIに任せるtaskと、人間が責任を持つ判断を分ける
+- 実taskのevalでmodel、tool、architectureを比較する
+- prompt、context、schema、中間成果物をrequest contractとして設計する
+- RAG、tool use、MCPを権限・失敗・監査まで含めて設計する
+- 個人の試行を、組織の標準・品質保証・incident対応へ接続する
+- 変化しやすい仕様や法制度を、版・確認日・再確認条件付きで扱う
 
-## 前提知識
-- PC/ブラウザの基本操作と、生成AIツールを利用できる環境（アカウント、利用規約の遵守）
-- 目的・制約・評価基準を文章で整理できること（要件の言語化）
-- （推奨）HTTP/API 等の基礎知識（RAG/Function Calling などの章で理解が進みやすい）
-
-## 所要時間
-- 通読: 約1.5〜2時間（本文量ベース概算。コードブロック除外、400〜600文字/分換算）
-- 演習（テンプレート適用/反復改善）を実施する場合は、対象業務と試行回数により変動します。
-
-## 目次
-
-### はじめに
-- [はじめに](introduction/) - 本書の目的と構成
-- [AIエージェント協働の標準手順（SOP）](introduction/agent-protocol/) - 自律度と承認ゲートを含む共通プロトコル
-
-### Part I: 即効性のある活用法
-
-**第1章: [即効性のある活用法](chapters/chapter-01/)**  
-基本パターンとプロンプト入門
-- 5つの基本テンプレート
-- CLEAR 手法と失敗パターン
-- 成果測定と継続改善の入口
-
-### Part II: 技術理解とモデル選定
-
-**第2章: [技術アーキテクチャの本質](chapters/chapter-02/)**  
-生成AIの仕組みと制約の理解
-- トランスフォーマーの基礎
-- トークン化とコンテキスト制約
-- 確率的生成とスケーリング法則
-
-**第3章: [モデル評価と選択基準](chapters/chapter-03/)**  
-ベンチマークと実務要件による選定
-- 標準ベンチマークの読み解き
-- タスク特性に応じた評価
-- コスト・性能・品質のトレードオフ
-
-### Part III: プロンプト設計
-
-**第4章: [基礎プロンプト設計](chapters/chapter-04/)**  
-再利用可能なプロンプトの設計原則
-- 論理的指示構造と優先度づけ
-- 役割ベースプロンプティング
-- テンプレート化と運用
-
-**第5章: [高度プロンプト技術](chapters/chapter-05/)**  
-複雑な推論と創造的課題への対応
-- 多段階推論の誘導
-- メタ認知的プロンプト
-- 動的プロンプト生成
-
-### Part IV: 先進技術と組織展開
-
-**第6章: [先進技術活用](chapters/chapter-06/)**  
-AIの能力を拡張するシステム設計
-- RAG / Function Calling
-- ファインチューニングの使い所
-- マルチエージェントの設計
-
-**第7章: [業務プロセス統合設計](chapters/chapter-07/)**  
-組織的価値創出のための導入設計
-- 適用領域の選定とROI
-- ワークフローとガバナンス
-- 段階的導入と改善
-
-### Part V: 品質保証とリスク管理
-
-**第8章: [品質保証とリスク管理](chapters/chapter-08/)**  
-AI活用における品質管理とリスク対策
-- 多層検証とフィードバック
-- ハルシネーション・情報漏洩対策
-- コンプライアンス対応
-
-### 付録
-- [付録A：プロンプトテンプレート集](appendices/appendix-a/)
-- [付録B：参考文献](appendices/appendix-b/)
-- [付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）](appendices/appendix-c/)
-- [付録D：実務会話例集（成果物まで落とす）](appendices/appendix-d/)
-- [付録E：用語集と更新確認ノート](appendices/appendix-e/)
-
-## 想定読者
-
-- ビジネスパーソン（AI活用に興味がある方）
-- エンジニア・開発者
-- プロダクトマネージャー
-- コンサルタント・アナリスト
-- 研究者・学生
-
-## 学習成果
-
-- 日常業務やプロジェクトにおいて、目的・制約・評価基準を明確にしたうえで AI エージェントに指示を出し、再現性の高いアウトプットを得られるようになる。
-- 構造化プロンプト、コンテキスト制御、フィードバックループなどの考え方を用いて、対話の品質を継続的に改善できるようになる。
-- 自身や組織の業務プロセスを分解し、「どのタスクを AI に任せ、どこを人間が担うべきか」を意識して設計できるようになる。
-- 品質保証やリスク管理の観点から、AI 活用の限界や注意点を説明し、ガバナンスやルール作りの議論に参加できるようになる。
-
-## Phase 6 エージェント対話レビューゲート
-
-Phase 6 レビューでは、全面リライト Issue #131 の前提を尊重しつつ、現行版を実務で安全に使うための最小ゲートを追加しました。
-
-- **用語整合**: AI agent / LLM / prompt / context / tool / eval / review を、本文・付録・関連書籍で矛盾なく使う。
-- **依頼契約**: 目的、入力境界、出力契約、受け入れ条件、検証手順、責任者を依頼テンプレートに含める。
-- **ワークフロー化**: 単発プロンプトではなく、計画、承認、実行、検証、記録、ロールバックの流れとして説明する。
-- **陳腐化耐性**: モデル名、料金、UI、API細部は固定値として断定せず、確認観点と更新手順に寄せる。
-
-このゲートは、[AIエージェント協働の標準手順（SOP）](introduction/agent-protocol/) と [付録A：プロンプトテンプレート集](appendices/appendix-a/) と [付録E：用語集と更新確認ノート](appendices/appendix-e/) に接続して使います。
-
-## 読み方ガイド
-
-- まずは第1章で即効性のある活用パターンを体験し、続いて第2〜4章で技術的背景とプロンプト設計の基礎を押さえると、以降の内容が理解しやすい。
-- 技術リーダー層の読者は、第1〜4章で基礎を固めたうえで、第6〜8章を通じてチーム活用・品質保証・リスク管理の観点を重点的に学ぶとよい。
-- ビジネス職や IT 経営層の読者は、第1章と第4・6・8章を中心に読み、必要に応じて第2・3章の技術的な詳細を参照する読み方がおすすめである。
-- 個人での実務活用から始めたい読者は、第1章のテンプレートや手順を試したあと、必要に応じて第4〜5章でプロンプトをテンプレート化／高度化する考え方を補完するとよい。組織展開の視点を持ちたい場合は、第7章で業務プロセス統合の考え方を参照してほしい。
-
-## 30分クイックスタート
+## 最初に読むページ
 {: #quick-start }
 
-- まず [はじめに](introduction/) で本書全体の位置づけを確認する。
-- 次に [AIエージェント協働の標準手順（SOP）](introduction/agent-protocol/) を読み、承認ゲートと責任分界を把握する。
-- 次に [第1章：即効性のある活用法](chapters/chapter-01/) を読み、すぐに使えるプロンプトパターンを1つ試す。
-- 続けて [第3章：モデル評価と選択基準](chapters/chapter-03/) で、比較の観点だけ先に確認する。
-- そのまま [付録A：プロンプトテンプレート集](appendices/appendix-a/) と [付録D：実務会話例集](appendices/appendix-d/) から、自分の業務に近いテンプレートを選んで転用する。
-- 評価指標や用語で迷った場合は [付録E：用語集と更新確認ノート](appendices/appendix-e/) を参照し、モデル比較や料金確認は公式情報で再確認する。
+1. [はじめに](introduction/)で、自分の読者routeと到達点を選ぶ
+2. [AIエージェント協働の実務SOP](introduction/agent-protocol/)で、全章共通の承認・停止・検証契約を確認する
+3. まず試す場合は[第1章](chapters/chapter-01/)、system設計から始める場合は[第3章](chapters/chapter-03/)へ進む
 
-## 安全に使うための注意
+## 読者別route
 
-- 社内文書、顧客情報、契約情報、認証情報などの機密データは、利用規約・組織ルールを確認せずに外部AIサービスへ投入しない。
-- 第3章以降で扱うモデル比較、料金、提供機能、API仕様は変化しやすい。意思決定に使う場合は、付録Eで整理した確認観点に沿って一次情報を確認する。
-- 本書のテンプレートは実務で再利用しやすい形にしているが、そのまま本番運用へ流用することは前提にしていない。承認フロー、監査要件、評価指標に合わせて調整すること。
+| 読者 | 最短route | 得られる成果物 |
+| --- | --- | --- |
+| ビジネス職 | 第1章 → 第4章 → 付録A | 安全な依頼票、再利用template |
+| プロジェクトマネージャー | SOP → 第3章 → 第5章 → 第7章 | Eval Spec、task plan、導入roadmap |
+| エンジニア | 第2章 → 第4章 → 第5章 → 第6章 → 第8章 | Request Contract、tool/RAG設計、Runbook |
+| マネージャー | はじめに → 第3章 → 第7章 → 第8章 | 選定判断、責任分界、governance checklist |
+| QA・security・audit | SOP → 第3章 → 第8章 → 付録C | Acceptance gate、監査log契約、Postmortem |
 
-## 用語・更新確認ノート
+## 8章の構成
+
+### [第1章：即効性のある活用法](chapters/chapter-01/)
+
+役割別の30分quick startから始め、最小依頼、Before/After、失敗時の再依頼、KPI測定契約までを扱います。
+
+**成果物**: 最小request、self review、Measurement Contract
+
+### [第2章：実務判断に必要な技術理解](chapters/chapter-02/)
+
+token、context、不確実性、sampling、tool use、限界を、業務判断へ必要な範囲で説明します。未公表の内部仕様や創発閾値を選定根拠にしません。
+
+**成果物**: Constraint Map、任せる/任せない境界
+
+### [第3章：評価設計とモデル・ツール選定](chapters/chapter-03/)
+
+benchmarkの順位ではなく、実taskのsuccess/failure、offline eval、regression、workflow acceptance、human reviewで比較します。
+
+**成果物**: Eval Spec、比較表、PoC plan、再選定trigger
+
+### [第4章：Prompt / Context Engineering の基礎](chapters/chapter-04/)
+
+目的、入力、制約、reference、example、schema、出力契約、versioningを、一つのrequest contractにします。
+
+**成果物**: Request Contract、Context Package、versioned template
+
+### [第5章：複雑タスクの分解・実行・検証](chapters/chapter-05/)
+
+複雑な仕事をplan、中間成果物、承認、completeness、recoveryへ分解し、ADR、PR、Runbook等へ落とします。
+
+**成果物**: Execution Plan、中間成果物一覧、Failure Recovery Plan
+
+### [第6章：知識連携とツール連携](chapters/chapter-06/)
+
+context、retrieval、toolの選択、RAG、citation、MCP、structured output、permission、retry、timeout、loggingを扱います。
+
+**成果物**: Retrieval/Tool Design、schema、permission matrix
+
+### [第7章：組織導入と運用設計](chapters/chapter-07/)
+
+ユースケース選定、責任分界、教育、変更管理を「試す→定着→標準化→監査可能化」の順で設計します。
+
+**成果物**: Use Case Portfolio、RACI、導入roadmap、KPI contract
+
+### [第8章：品質保証・リスク管理・コンプライアンス](chapters/chapter-08/)
+
+品質gate、monitoring、prompt injection、data leakage、excessive autonomy、監査log、incident、国内外の確認観点を運用体系にします。
+
+**成果物**: Control Matrix、Audit Log Contract、Incident Runbook
+
+## 付録
+
+- [付録A：AIエージェント実務テンプレート集](appendices/appendix-a/): Job Spec、Context Package、Patch、Incident、Eval、Measurement
+- [付録B：参考文献とSource Registry](appendices/appendix-b/): 一次情報、版、確認日、支える主張、再確認条件
+- [付録C：成果物テンプレート集](appendices/appendix-c/): ADR、PR、Runbook、Postmortem
+- [付録D：実務会話例集](appendices/appendix-d/): instructionから中間成果物・最終成果物への対応
+- [付録E：用語集と更新確認ノート](appendices/appendix-e/): 変化しやすい情報の確認手順
+
+## 本書の4層model
+
+| 層 | 問い | 主要章 |
+| --- | --- | --- |
+| Task | 何を任せ、何を成果物とするか | 第1・5章 |
+| Interaction | どのcontext・instruction・schemaを渡すか | 第2・4章 |
+| System | どのmodel・retrieval・tool・controlを組み合わせるか | 第3・6章 |
+| Operations | 誰が承認し、どう測定・監査・改善するか | 第7・8章 |
+
+上位層だけを整えても、下位層の失敗は防げません。たとえば良いpromptがあっても、tool権限が過大であれば安全ではありません。逆にcontrolを増やしても、taskの成功条件が曖昧なら品質を判定できません。
+
+## 共通原則
+
+### 成果物を先に決める
+
+AIに何を言わせるかではなく、誰が何に使い、どの条件で採用する成果物かを先に決めます。
+
+### 観測事実と推論を分ける
+
+出力には、根拠、仮定、未確認点、検証手順を残します。内部推論の開示ではなく、review可能な作業成果物を要求します。
+
+### 権限はtaskより狭く始める
+
+read-only、限定scope、事前承認から始め、evalと運用証拠に応じて拡張します。
+
+### 変化する情報を固定しない
+
+model名、料金、UI、API、法制度は、固定表より確認方法を重視します。事実主張は[Source Registry](appendices/appendix-b/)へ接続します。
+
+### 失敗を運用へ戻す
+
+不正確な出力、tool failure、review漏れ、incidentを、dataset、template、control、Runbookの更新へ戻します。
+
+## 前提知識
+
+- 文書、表、checklistを読んで業務要件を整理できること
+- 組織のsecurity/privacy policyを確認できること
+- 第6章の実装詳細を読む場合は、HTTP/API、JSON Schema、認証・認可の基礎があると理解しやすい
+
+特定のAI製品やprogramming languageの利用経験は必須ではありません。
+
+## Source・更新policy
 {: #glossary-update-notes }
 
-- MMLU / HumanEval / RAG / Function Calling / ハルシネーションなど、章をまたいで使う重要語は [付録E：用語集と更新確認ノート](appendices/appendix-e/) に集約している。
-- 第3章に登場するモデル比較や料金の考え方は変化しやすいため、付録Eの確認手順に従って一次情報を確認してほしい。
+- 変化しやすい事実は一次情報を優先する
+- source type、対象version/status、確認日、支える主張、再確認条件を記録する
+- 法令、政府guidance、任意framework、standard、vendor documentationを同じ義務強度で扱わない
+- 最新確認方法は[付録E](appendices/appendix-e/)を使う
+
+**Source Registry基準確認日**: 2026-07-21  
+**本版**: v2.0.0（Issue #131に基づく2026年版全面改稿）
 
 ## 関連書籍
 {: #related-books }
 
-- [AI時代に差がつく論理的思考と表現力](https://itdojp.github.io/LogicalThinking-AI-Era-Guide/) - 指示文を論理的に組み立て、評価基準を明文化する力を補強したい場合に適している。
-- [エンジニアのための実践コミュニケーション設計](https://itdojp.github.io/IT-engineer-communication-book/) - AIとの対話をチーム内外の合意形成や文書化に接続したい場合に参照してほしい。
+- [AI時代に差がつく論理的思考と表現力](https://itdojp.github.io/LogicalThinking-AI-Era-Guide/) - 依頼や評価基準を論理的に組み立て、表現する力を補強する。
+- [エンジニアのための実践コミュニケーション設計](https://itdojp.github.io/IT-engineer-communication-book/) - AIとの協働を、チーム内外の合意形成と文書化へ接続する。
 
-## 利用と更新情報
+## 利用上の注意
 
-- 公開ページ: [https://itdojp.github.io/ai-communication-book/](https://itdojp.github.io/ai-communication-book/)
-- リポジトリ: [https://github.com/itdojp/ai-communication-book](https://github.com/itdojp/ai-communication-book)
-- モデル名、料金、API仕様、各社UIは変化しやすい。差分確認はリポジトリのコミット履歴、PR、付録Eの更新確認ノートを起点に行う。
-- 実務導入前には、対象業務の機密区分、保存期間、監査要件、AI利用ポリシーを確認する。
+本書は一般的な教育・実務設計の資料です。法務、security、privacy、労務、医療等の専門判断を代替しません。実際のdata、system、jurisdiction、契約に応じて、組織の責任者と専門家へ確認してください。
 
-## 著者について
+## ライセンスとfeedback
 
-**株式会社アイティードゥ**  
-AI技術の実践的活用とビジネス変革を支援する企業です。
-
----
-
-[はじめにお読みください](introduction/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-
-
-
-## ライセンス
-
-本書は **Creative Commons BY-NC-SA 4.0** ライセンスで公開しています。  
-教育・研究・個人学習での利用は自由ですが、商用利用は別途契約（事前許諾）が必要です。
-
-[詳細なライセンス条件](https://github.com/itdojp/it-engineer-knowledge-architecture/blob/main/LICENSE.md)
-
-**お問い合わせ**  
-株式会社アイティードゥ（ITDO Inc.）  
-Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
-
----
-
-**著者:** ITDO Inc.  
-**バージョン:** 1.0.0  
-**最終更新:** 2026-03-25（local rewrite）
-
-{% include page-navigation.html %}
+- License: CC BY-NC-SA 4.0
+- Repository: [itdojp/ai-communication-book](https://github.com/itdojp/ai-communication-book)
+- 誤り・改善提案: [GitHub Issues](https://github.com/itdojp/ai-communication-book/issues)

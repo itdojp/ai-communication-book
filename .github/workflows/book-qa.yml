@@ -49,6 +49,9 @@ jobs:
       - name: Repository metadata consistency check
         run: node scripts/check-metadata.mjs
 
+      - name: Book-specific editorial contract
+        run: npm run check:editorial && npm run check:editorial-regression
+
       - name: Install dependencies (book-formatter)
         working-directory: book-formatter
         run: npm ci

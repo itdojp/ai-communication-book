@@ -4,7 +4,10 @@
       "pattern": "^(?!https?:\\/\\/|mailto:)"
     },
     {
-      "pattern": "^https:\\/\\/platform\\.openai\\.com\\/docs\\/?$"
+      "pattern": "^https:\\/\\/www\\.meti\\.go\\.jp\\/shingikai\\/mono_info_service\\/ai_shakai_jisso\\/20260331_report\\.html$"
+    },
+    {
+      "pattern": "^https:\\/\\/eur-lex\\.europa\\.eu\\/eli\\/reg\\/2024\\/1689\\/oj\\/eng$"
     }
   ],
   "timeout": "20s",
