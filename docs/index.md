@@ -31,7 +31,7 @@ permalink: /
 ## 最初に読むページ
 
 1. [はじめに](introduction/)で、自分の読者routeと到達点を選ぶ
-2. [AIエージェント協働の標準手順（SOP）](introduction/agent-protocol/)で、全章共通の承認・停止・検証契約を確認する
+2. [AIエージェント協働の実務SOP](introduction/agent-protocol/)で、全章共通の承認・停止・検証契約を確認する
 3. まず試す場合は[第1章](chapters/chapter-01/)、system設計から始める場合は[第3章](chapters/chapter-03/)へ進む
 
 ## 読者別route

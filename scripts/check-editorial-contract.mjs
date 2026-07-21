@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = path.resolve(SCRIPT_DIR, '..');
+const SOP_TITLE = 'AIエージェント協働の実務SOP';
 
 const CHAPTERS = Array.from({ length: 8 }, (_, index) =>
   `docs/chapters/chapter-${String(index + 1).padStart(2, '0')}/index.md`
@@ -47,13 +48,39 @@ function parseArgs(argv) {
   let root = DEFAULT_ROOT;
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === '--root') {
-      root = path.resolve(argv[index + 1] ?? '');
+      if (index + 1 >= argv.length || argv[index + 1].startsWith('--')) {
+        throw new Error('--root requires a path');
+      }
+      root = path.resolve(argv[index + 1]);
       index += 1;
     } else {
       throw new Error(`unknown argument: ${argv[index]}`);
     }
   }
   return { root };
+}
+
+function markdownHeadings(content) {
+  const headings = new Set();
+  let fenceCharacter = null;
+  let fenceLength = 0;
+
+  for (const line of content.split(/\r?\n/u)) {
+    const fence = line.match(/^\s{0,3}(`{3,}|~{3,})/u)?.[1];
+    if (fence) {
+      if (fenceCharacter === null) {
+        fenceCharacter = fence[0];
+        fenceLength = fence.length;
+      } else if (fence[0] === fenceCharacter && fence.length >= fenceLength) {
+        fenceCharacter = null;
+        fenceLength = 0;
+      }
+      continue;
+    }
+    if (fenceCharacter === null && /^#{1,6}\s+\S/u.test(line)) headings.add(line.trim());
+  }
+
+  return headings;
 }
 
 function read(root, relativePath, failures) {
@@ -69,14 +96,23 @@ function requireText(content, relativePath, needle, failures) {
   if (!content.includes(needle)) failures.push(`${relativePath}: missing ${JSON.stringify(needle)}`);
 }
 
-function checkChapter(content, relativePath, title, failures) {
-  for (const section of REQUIRED_CHAPTER_SECTIONS) requireText(content, relativePath, section, failures);
-  if (!/^---\r?\n[\s\S]*?\r?\n---\r?\n/u.test(content)) failures.push(`${relativePath}: front matter is missing`);
-  if (!/^layout:\s*["']?book["']?\s*$/mu.test(content)) failures.push(`${relativePath}: layout must be book`);
+function checkDocumentTitle(content, relativePath, title, failures) {
   if (!new RegExp(`^title:\\s*["']?${escapeRegExp(title)}["']?\\s*$`, 'mu').test(content)) {
     failures.push(`${relativePath}: front matter title must be ${JSON.stringify(title)}`);
   }
-  if (!content.includes(`# ${title}`)) failures.push(`${relativePath}: H1 must be ${JSON.stringify(title)}`);
+  if (!markdownHeadings(content).has(`# ${title}`)) {
+    failures.push(`${relativePath}: H1 must be ${JSON.stringify(title)}`);
+  }
+}
+
+function checkChapter(content, relativePath, title, failures) {
+  const headings = markdownHeadings(content);
+  for (const section of REQUIRED_CHAPTER_SECTIONS) {
+    if (!headings.has(section)) failures.push(`${relativePath}: missing heading ${JSON.stringify(section)}`);
+  }
+  if (!/^---\r?\n[\s\S]*?\r?\n---\r?\n/u.test(content)) failures.push(`${relativePath}: front matter is missing`);
+  if (!/^layout:\s*["']?book["']?\s*$/mu.test(content)) failures.push(`${relativePath}: layout must be book`);
+  checkDocumentTitle(content, relativePath, title, failures);
 }
 
 function escapeRegExp(value) {
@@ -160,9 +196,55 @@ function checkSourceNoteCoverage(root, registryEntries, failures) {
   }
 }
 
+function parseNavigationTitles(content) {
+  const titles = new Map();
+  const pattern = /^\s*- title:\s*(.+?)\s*\r?\n\s+path:\s*(\/\S+)\s*$/gmu;
+  for (const match of content.matchAll(pattern)) titles.set(match[2], match[1].replace(/^["']|["']$/gu, ''));
+  return titles;
+}
+
+function checkCanonicalTitles(root, failures) {
+  const navigationPath = 'docs/_data/navigation.yml';
+  const navigationTitles = parseNavigationTitles(read(root, navigationPath, failures));
+  const expectedNavigation = new Map([
+    ['/introduction/agent-protocol/', SOP_TITLE],
+    ...CHAPTER_TITLES.map((title, index) => [`/chapters/chapter-${String(index + 1).padStart(2, '0')}/`, title])
+  ]);
+
+  let book = {};
+  try {
+    book = JSON.parse(read(root, 'book-config.json', failures));
+  } catch (error) {
+    failures.push(`book-config.json: ${error instanceof Error ? error.message : String(error)}`);
+  }
+
+  const configuredChapters = new Map((book.structure?.chapters ?? []).map((item) => [item.id, item.title]));
+  for (const [index, title] of CHAPTER_TITLES.entries()) {
+    const id = `chapter${String(index + 1).padStart(2, '0')}`;
+    if (configuredChapters.get(id) !== title) {
+      failures.push(`book-config.json: ${id} title must be ${JSON.stringify(title)}`);
+    }
+  }
+
+  for (const appendix of book.structure?.appendices ?? []) {
+    const relativePath = `docs/appendices/${appendix.id}.md`;
+    const navigationPathname = `/appendices/${appendix.id}/`;
+    checkDocumentTitle(read(root, relativePath, failures), relativePath, appendix.title, failures);
+    expectedNavigation.set(navigationPathname, appendix.title);
+  }
+
+  for (const [pathname, title] of expectedNavigation) {
+    if (navigationTitles.get(pathname) !== title) {
+      failures.push(`${navigationPath}: ${pathname} title must be ${JSON.stringify(title)}`);
+    }
+  }
+}
+
 export function checkEditorialContract(root = DEFAULT_ROOT) {
   const failures = [];
   const chapterContents = new Map();
+
+  checkCanonicalTitles(root, failures);
 
   for (const [index, chapter] of CHAPTERS.entries()) {
     const content = read(root, chapter, failures);
@@ -220,6 +302,7 @@ export function checkEditorialContract(root = DEFAULT_ROOT) {
 
   const protocolPath = 'docs/introduction/agent-protocol.md';
   const protocol = read(root, protocolPath, failures);
+  checkDocumentTitle(protocol, protocolPath, SOP_TITLE, failures);
   for (const term of ['承認ゲート', '停止条件', '検証', '証拠', '責任分界', 'RACIのAccountable', 'source owner', 'tool owner', 'metric owner']) {
     requireText(protocol, protocolPath, term, failures);
   }

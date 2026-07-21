@@ -18,7 +18,7 @@ AIエージェントを「うまく会話する相手」ではなく、検証可
 ## 読み始める
 
 1. [はじめに](docs/introduction/index.md)
-2. [AIエージェント協働の標準手順（SOP）](docs/introduction/agent-protocol.md)
+2. [AIエージェント協働の実務SOP](docs/introduction/agent-protocol.md)
 3. すぐ試す場合は[第1章](docs/chapters/chapter-01/index.md)、評価・選定から始める場合は[第3章](docs/chapters/chapter-03/index.md)
 
 ## 品質契約

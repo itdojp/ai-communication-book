@@ -3,7 +3,7 @@
 introduction:
   - title: はじめに
     path: /introduction/
-  - title: AIエージェント協働の標準手順（SOP）
+  - title: AIエージェント協働の実務SOP
     path: /introduction/agent-protocol/
 
 chapters:
@@ -29,9 +29,9 @@ appendices:
     path: /appendices/appendix-a/
   - title: 付録B：参考文献とSource Registry
     path: /appendices/appendix-b/
-  - title: 付録C：成果物テンプレート集
+  - title: 付録C：成果物テンプレート集（ADR/PR/Runbook/ポストモーテム）
     path: /appendices/appendix-c/
-  - title: 付録D：実務会話例集
+  - title: 付録D：実務会話例集（成果物まで落とす）
     path: /appendices/appendix-d/
   - title: 付録E：用語集と更新確認ノート
     path: /appendices/appendix-e/
