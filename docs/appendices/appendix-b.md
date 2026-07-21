@@ -43,7 +43,7 @@ layout: book
 - **資料**: [Structured model outputs](https://developers.openai.com/api/docs/guides/structured-outputs)
 - **対象version/status**: OpenAI APIの現行guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第2・4・6章。schema制約は構文適合を支援するが、意味的正しさの検証を置き換えない。
+- **支える章・主張**: 第2章、第3章、第4章、第6章。schema制約は構文適合を支援するが、意味的正しさの検証を置き換えない。
 - **再確認条件**: Structured Outputsのschema対応範囲、API、deprecationが変更されたとき。
 
 ### OAI-TOOLS
@@ -52,7 +52,7 @@ layout: book
 - **資料**: [Using tools](https://developers.openai.com/api/docs/guides/tools)、[Function calling](https://developers.openai.com/api/docs/guides/function-calling)
 - **対象version/status**: OpenAI APIの現行tools / function calling guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6・8章。tool callを外部作用として検証・認可し、結果を信頼済み命令として扱わない。
+- **支える章・主張**: 第2章、第3章、第6章、第8章。tool callを外部作用として検証・認可し、結果を信頼済み命令として扱わない。
 - **再確認条件**: tool種別、permission model、Responses API、function calling契約の変更時。
 
 ### OAI-EVALS
@@ -61,7 +61,7 @@ layout: book
 - **資料**: [Working with evals](https://developers.openai.com/api/docs/guides/evals)、[Evaluate agent workflows](https://developers.openai.com/api/docs/guides/agents-sdk/evals)
 - **対象version/status**: 現行eval関連guide。個別サービスのlifecycleは公式deprecation情報を別途確認する。
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第3・8章。task-specific dataset、grader、trace、継続的な回帰評価を組み合わせる。
+- **支える章・主張**: 第1章、第3章、第5章、第8章。task-specific dataset、grader、trace、継続的な回帰評価を組み合わせる。
 - **再確認条件**: Evals APIやAgents SDKのlifecycle、grader、trace仕様が変わったとき。
 
 ### ANT-CONTEXT
@@ -70,7 +70,7 @@ layout: book
 - **資料**: [Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows)
 - **対象version/status**: Claude Platformの現行guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第2・4章。長い入力は無条件に品質を上げず、選別、構造化、圧縮、再取得が必要になる。
+- **支える章・主張**: 第2章、第3章、第4章。長い入力は無条件に品質を上げず、選別、構造化、圧縮、再取得が必要になる。
 - **再確認条件**: context window、compaction、token countingの契約変更時。
 
 ### ANT-TOOLS
@@ -79,7 +79,7 @@ layout: book
 - **資料**: [Tool use overview](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview)、[Implement tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/implement-tool-use)
 - **対象version/status**: Claude Platformの現行tool use guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第4・6章。tool名、説明、入力schema、error結果の設計が選択精度と運用性に影響する。
+- **支える章・主張**: 第2章、第3章、第4章、第6章。tool名、説明、入力schema、error結果の設計が選択精度と運用性に影響する。
 - **再確認条件**: tool schema、client/server tools、permission仕様の変更時。
 
 ### ANT-EVALS
@@ -88,7 +88,7 @@ layout: book
 - **資料**: [Define success criteria and build evaluations](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests)
 - **対象version/status**: Claude Platformの現行test and evaluate guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第3章。成功条件を先に定義し、task-specific test、automated grader、人間評価を用途に応じて組み合わせる。
+- **支える章・主張**: 第1章、第3章、第5章。成功条件を先に定義し、task-specific test、automated grader、人間評価を用途に応じて組み合わせる。
 - **再確認条件**: evaluation toolingや推奨手順の更新時。
 
 ### GGL-STRUCTURED
@@ -97,7 +97,7 @@ layout: book
 - **資料**: [Structured outputs](https://ai.google.dev/gemini-api/docs/structured-output)
 - **対象version/status**: Gemini APIの現行guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第4・6章。JSON Schemaによる出力契約と、業務上のsemantic validationを分離する。
+- **支える章・主張**: 第2章、第3章、第4章、第6章。JSON Schemaによる出力契約と、業務上のsemantic validationを分離する。
 - **再確認条件**: schema subset、SDK、API lifecycleの変更時。
 
 ### GGL-FUNCTION
@@ -106,7 +106,7 @@ layout: book
 - **資料**: [Function calling](https://ai.google.dev/gemini-api/docs/function-calling)
 - **対象version/status**: Gemini APIの現行guide
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6章。function declaration、argument validation、実行責任の分離。
+- **支える章・主張**: 第2章、第3章、第6章。function declaration、argument validation、実行責任の分離。
 - **再確認条件**: function calling mode、SDK、API lifecycleの変更時。
 
 ### GGL-TOOLS
@@ -115,7 +115,7 @@ layout: book
 - **資料**: [Using tools with Gemini API](https://ai.google.dev/gemini-api/docs/tools)
 - **対象version/status**: Gemini APIの現行tools overview
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6・8章。外部検索・code execution等は異なるtrust boundaryと評価契約を必要とする。
+- **支える章・主張**: 第2章、第3章、第6章、第8章。外部検索・code execution等は異なるtrust boundaryと評価契約を必要とする。
 - **再確認条件**: tool catalog、data handling、safety contractの変更時。
 
 ## Context・外部知識・相互運用
@@ -126,7 +126,7 @@ layout: book
 - **資料**: [Model Context Protocol Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)
 - **対象version/status**: protocol revision 2025-11-25
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6章。MCPはcontextやcapabilityを接続するprotocolであり、接続先の安全性や認可を自動保証しない。
+- **支える章・主張**: 第2章、第3章、第6章。MCPはcontextやcapabilityを接続するprotocolであり、接続先の安全性や認可を自動保証しない。
 - **再確認条件**: 新revision、transport、authorization、security guidanceの変更時。
 
 ### MCP-TOOLS
@@ -135,7 +135,7 @@ layout: book
 - **資料**: [MCP server tools](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)
 - **対象version/status**: protocol revision 2025-11-25、server/tools
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6・8章。tool discovery、input schema、result、human-in-the-loopの境界。
+- **支える章・主張**: 第2章、第3章、第6章、第7章、第8章。tool discovery、input schema、result、human-in-the-loopの境界。
 - **再確認条件**: tools capability、schema、error、security considerationの変更時。
 
 ## Risk management・security・governance
@@ -146,7 +146,7 @@ layout: book
 - **資料**: [Artificial Intelligence Risk Management Framework (AI RMF 1.0)](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10)
 - **対象version/status**: NIST AI 100-1、AI RMF 1.0、任意framework
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第7・8章。Govern、Map、Measure、Manageを組織のrisk managementへ接続する。
+- **支える章・主張**: 導入、SOP、第1章、第2章、第3章、第5章、第7章、第8章。Govern、Map、Measure、Manageを組織のrisk managementへ接続する。
 - **再確認条件**: AI RMF本体、Playbook、関連profileの改訂時。
 
 ### NIST-GENAI
@@ -155,7 +155,7 @@ layout: book
 - **資料**: [Generative AI Profile](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence)
 - **対象version/status**: NIST AI 600-1、2024-07-26公開
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第8章。生成AI固有riskを、測定、monitoring、incident、third-party riskへ接続する。
+- **支える章・主張**: 導入、SOP、第2章、第3章、第7章、第8章。生成AI固有riskを、測定、monitoring、incident、third-party riskへ接続する。
 - **再確認条件**: profileの改訂、NIST GenAI programの新文書公開時。
 
 ### OWASP-LLM-2025
@@ -164,7 +164,7 @@ layout: book
 - **資料**: [OWASP Top 10 for LLM Applications 2025: Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
 - **対象version/status**: OWASP LLM Top 10 2025
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6・8章。prompt injectionは外部contentとinstructionの混同として、権限・検証・隔離で低減する。
+- **支える章・主張**: SOP、第2章、第3章、第6章、第8章。prompt injectionは外部contentとinstructionの混同として、権限・検証・隔離で低減する。
 - **再確認条件**: Top 10の新版、risk ID、mitigation guidanceの変更時。
 
 ### OWASP-AGENTIC-2026
@@ -173,7 +173,7 @@ layout: book
 - **資料**: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
 - **対象version/status**: 2026 edition
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第8章。excessive autonomy、tool misuse、identity・memory・multi-agent境界をsystem riskとして扱う。
+- **支える章・主張**: SOP、第3章、第8章。excessive autonomy、tool misuse、identity・memory・multi-agent境界をsystem riskとして扱う。
 - **再確認条件**: edition、risk taxonomy、crosswalkの更新時。
 
 ### OWASP-AGENTIC-MITIGATIONS
@@ -182,7 +182,7 @@ layout: book
 - **資料**: [Agentic AI - Threats and Mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
 - **対象version/status**: OWASP GenAI Security Projectの現行resource
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第6・8章。least privilege、approval、sandbox、monitoring、recoveryを組み合わせる。
+- **支える章・主張**: 第3章、第6章、第8章。least privilege、approval、sandbox、monitoring、recoveryを組み合わせる。
 - **再確認条件**: resourceまたはagentic security projectの改訂時。
 
 ### METI-AI-1-2
@@ -191,7 +191,7 @@ layout: book
 - **資料**: [AI事業者ガイドライン（第1.2版）](https://www.meti.go.jp/shingikai/mono_info_service/ai_shakai_jisso/20260331_report.html)
 - **対象version/status**: 第1.2版、METI掲載ページ最終更新2026-04-01
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第7・8章。AI開発者・提供者・利用者の役割、risk-based approach、literacy、governance。
+- **支える章・主張**: 導入、SOP、第2章、第3章、第7章、第8章。AI開発者・提供者・利用者の役割、risk-based approach、literacy、governance。
 - **再確認条件**: 第1.3版以降、チェックリスト、活用の手引きの更新時。
 
 ### PPC-GENAI
@@ -200,7 +200,7 @@ layout: book
 - **資料**: [生成AIサービスの利用に関する注意喚起](https://www.ppc.go.jp/news/press/2023/230602kouhou/)
 - **対象version/status**: 2023-06-02公表
 - **確認日**: 2026-07-21
-- **支える章・主張**: SOP、第7・8章。個人データ入力、利用目的、providerによる取扱いを事前確認する。
+- **支える章・主張**: 導入、SOP、第1章、第2章、第3章、第7章、第8章。個人データ入力、利用目的、providerによる取扱いを事前確認する。
 - **再確認条件**: 注意喚起改訂、個人情報保護法・guideline・FAQ更新時。
 
 ### PPC-LEGAL
@@ -209,7 +209,7 @@ layout: book
 - **資料**: [個人情報保護委員会: 法令・ガイドライン等](https://www.ppc.go.jp/personalinfo/legal/)
 - **対象version/status**: 現行法令・guideline index。2026年改正を含む最新状態は適用時に個別確認する。
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第7・8章。個人情報・個人データ・第三者提供・越境移転等の適用性判断は一次法令とguidelineへ戻る。
+- **支える章・主張**: 第7章、第8章。個人情報・個人データ・第三者提供・越境移転等の適用性判断は一次法令とguidelineへ戻る。
 - **再確認条件**: 法改正、施行日、guideline・FAQ改訂時。
 
 ### EU-AIACT
@@ -218,7 +218,7 @@ layout: book
 - **資料**: [Regulation (EU) 2024/1689, Official Journal text](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng)
 - **対象version/status**: Regulation (EU) 2024/1689。2024-08-01発効、規定ごとに段階適用。
 - **確認日**: 2026-07-21
-- **支える章・主張**: 第7・8章。jurisdiction、actor、system classification、applicability、適用日を個別に判断する。
+- **支える章・主張**: 第3章、第7章、第8章。jurisdiction、actor、system classification、applicability、適用日を個別に判断する。
 - **再確認条件**: 適用日の到来、delegated/implementing act、Commission guidance、法改正時。
 
 ## 基礎研究

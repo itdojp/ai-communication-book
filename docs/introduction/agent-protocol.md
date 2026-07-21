@@ -62,7 +62,9 @@ AI依頼は、会話ではなく契約として定義します。
 | Output Contract | どの形式で返すか | 箇条書き、表、ADR、PR案 |
 | Acceptance Check | 何を満たせば採用か | 3案比較、根拠明記、未確認点分離 |
 | Verification | 何で裏取りするか | 一次情報、テスト、レビュー |
-| Owner | 誰が採否を持つか | 実務担当、レビュアー、承認者 |
+| Owner | 誰が成果物の採否と残存riskを引き受けるか | 業務owner、成果物の最終責任者 |
+
+本書で単に `Owner` と書く場合は、Request Contractまたは対象成果物について最終的な採否を持つ人を指し、RACIのAccountableに対応します。`承認者` は特定の承認ゲートで実行・公開・反映を許可する人、`運用owner` は日常運用を維持する人です。同じ人が兼ねても構いませんが、異なる場合は委任範囲とエスカレーション先を記録します。source、tool、metric等の局所的な責任は、`source owner`、`tool owner`、`metric owner` のように対象を付けて表記します。
 
 ### 最小テンプレート
 ```text

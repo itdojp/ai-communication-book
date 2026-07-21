@@ -97,9 +97,10 @@ function checkPercentClaims(content, relativePath, failures) {
 
 function checkSourceRegistry(content, relativePath, failures) {
   const headings = [...content.matchAll(/^### ([A-Z][A-Z0-9-]+)\s*$/gmu)];
+  const entries = new Map();
   if (headings.length === 0) {
     failures.push(`${relativePath}: source registry entries are missing`);
-    return;
+    return entries;
   }
 
   const seen = new Set();
@@ -120,8 +121,41 @@ function checkSourceRegistry(content, relativePath, failures) {
     const start = heading.index + heading[0].length;
     const end = headings[index + 1]?.index ?? content.length;
     const entry = content.slice(start, end);
+    entries.set(sourceId, entry);
     for (const field of requiredFields) {
       if (!entry.includes(field)) failures.push(`${relativePath}: ${sourceId} missing ${JSON.stringify(field)}`);
+    }
+  }
+
+  return entries;
+}
+
+function checkSourceNoteCoverage(root, registryEntries, failures) {
+  const sourceFiles = [
+    ['導入', 'docs/introduction/index.md'],
+    ['SOP', 'docs/introduction/agent-protocol.md'],
+    ...CHAPTERS.map((relativePath, index) => [`第${index + 1}章`, relativePath])
+  ];
+
+  for (const [label, relativePath] of sourceFiles) {
+    const content = read(root, relativePath, failures);
+    const sourceNotesIndex = content.indexOf('## Source Notes');
+    if (sourceNotesIndex < 0) continue;
+    const sourceNotes = content.slice(sourceNotesIndex);
+    const sourceIds = new Set(
+      [...sourceNotes.matchAll(/appendix-b\/#([a-z0-9-]+)/giu)].map((match) => match[1].toUpperCase())
+    );
+
+    for (const sourceId of sourceIds) {
+      const entry = registryEntries.get(sourceId);
+      if (!entry) {
+        failures.push(`${relativePath}: Source Notes references unknown source ID ${sourceId}`);
+        continue;
+      }
+      const supportLine = entry.match(/^- \*\*支える章・主張\*\*: (.+)$/mu)?.[1] ?? '';
+      if (!supportLine.includes(label)) {
+        failures.push(`${relativePath}: ${sourceId} registry support metadata must include ${label}`);
+      }
     }
   }
 }
@@ -167,12 +201,18 @@ export function checkEditorialContract(root = DEFAULT_ROOT) {
     requireText(chapter8, CHAPTERS[7], term, failures);
   }
 
+  const chapter7 = chapterContents.get(CHAPTERS[6]) ?? '';
+  for (const term of ['Request ContractのOwnerとの対応', 'RACIのAccountable', 'metric owner']) {
+    requireText(chapter7, CHAPTERS[6], term, failures);
+  }
+
   const appendixBPath = 'docs/appendices/appendix-b.md';
   const appendixB = read(root, appendixBPath, failures);
   for (const term of ['source hierarchy', '2026-07-21', '確認日', '対象version/status', '支える章・主張', '再確認条件']) {
     requireText(appendixB, appendixBPath, term, failures);
   }
-  checkSourceRegistry(appendixB, appendixBPath, failures);
+  const registryEntries = checkSourceRegistry(appendixB, appendixBPath, failures);
+  checkSourceNoteCoverage(root, registryEntries, failures);
 
   const appendixEPath = 'docs/appendices/appendix-e.md';
   const appendixE = read(root, appendixEPath, failures);
@@ -180,7 +220,9 @@ export function checkEditorialContract(root = DEFAULT_ROOT) {
 
   const protocolPath = 'docs/introduction/agent-protocol.md';
   const protocol = read(root, protocolPath, failures);
-  for (const term of ['承認ゲート', '停止条件', '検証', '証拠', '責任分界']) requireText(protocol, protocolPath, term, failures);
+  for (const term of ['承認ゲート', '停止条件', '検証', '証拠', '責任分界', 'RACIのAccountable', 'source owner', 'tool owner', 'metric owner']) {
+    requireText(protocol, protocolPath, term, failures);
+  }
 
   return failures;
 }

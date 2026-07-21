@@ -207,6 +207,12 @@ RACIには、人間と組織の責任だけを置きます。
 この表の役割名は一例です。
 自組織の既存委員会、CAB、品質保証会議、個人情報保護体制へ合わせて読み替えてください。
 
+### Request ContractのOwnerとの対応
+
+本書で単に `Owner` と書く場合は、Request Contractまたは成果物の最終採否を持つRACIのAccountableを指します。組織導入の例では、通常は`業務owner`がこの役割を担います。`運用owner`は日常運用のResponsibleまたはAccountableを担いますが、明示的な委任がない限り、業務成果の最終採否までは引き受けません。
+
+`承認者`は、本番反映、公開、外部送信等の特定ゲートを通す権限を持つ役割です。業務ownerと同一でも別でも構いません。別の人へ委任する場合は、対象操作、上限、期間、取消条件を承認記録に残します。metric、source、tool等の局所的な責任者には対象名を付け、`metric owner`、`source owner`、`tool owner`と表記します。
+
 ### RACIを作る単位
 
 RACIは「プロジェクト全体」で1枚作るだけでは足りません。
@@ -610,7 +616,7 @@ ROIは、単一式で固定しない方が安全です。
 Metric name:
 Purpose:
 Business question:
-Owner:
+Metric owner:
 Data source:
 Collection period:
 Population:

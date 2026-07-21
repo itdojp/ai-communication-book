@@ -30,6 +30,10 @@ modelがその実行時に参照できるinstruction、会話、文書、tool結
 
 目的、入力境界、出力契約、受け入れ条件、検証、ownerを揃えた依頼仕様です。[SOP](../introduction/agent-protocol/)と[付録A](appendix-a/)で具体化します。
 
+### owner
+
+対象となるRequest Contractまたは成果物の最終採否と残存riskを引き受ける人です。RACIではAccountableに対応します。承認ゲートだけを担当する`承認者`、日常運用を担う`運用owner`、sourceやmetric等の局所的なownerとは区別し、兼務または委任する場合も範囲を記録します。
+
 ### tool use
 
 modelが検索、database、code実行、業務API等の外部capabilityを選択・要求すること。modelがtool callを生成しても、認可、入力検証、実行、結果検証の責任はsystem側に残ります。

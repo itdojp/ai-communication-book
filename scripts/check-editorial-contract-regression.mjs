@@ -58,6 +58,26 @@ const cases = [
     mutate(root) {
       replaceOnce(path.join(root, 'docs/appendices/appendix-b.md'), '- **再確認条件**:', '- **更新メモ**:');
     }
+  },
+  {
+    name: 'source registry support metadata loses a citing chapter',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/appendices/appendix-b.md'),
+        '第1章、第3章、第5章、第8章。task-specific dataset',
+        '第3章、第5章、第8章。task-specific dataset'
+      );
+    }
+  },
+  {
+    name: 'owner role mapping disappears',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/chapters/chapter-07/index.md'),
+        '### Request ContractのOwnerとの対応',
+        '### 担当者の例'
+      );
+    }
   }
 ];
 
