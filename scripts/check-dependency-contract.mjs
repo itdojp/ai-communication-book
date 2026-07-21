@@ -57,8 +57,10 @@ export function checkDependencyMetadata(root = DEFAULT_ROOT) {
   if (pkg.devDependencies?.['markdownlint-cli'] !== '^0.49.1') {
     failures.push('package.json: markdownlint-cli must be pinned to ^0.49.1');
   }
-  if (pkg.engines?.node !== '>=22.22.2') {
-    failures.push('package.json: Node.js engine must cover the transitive ini@7 runtime requirement (>=22.22.2)');
+  if (pkg.engines?.node !== '^22.22.2 || ^24.15.0 || >=26.0.0') {
+    failures.push(
+      'package.json: Node.js engine must match the supported-major union required by transitive ini@7 (^22.22.2 || ^24.15.0 || >=26.0.0)'
+    );
   }
   if (packages['']?.engines?.node !== pkg.engines?.node) {
     failures.push('package-lock.json: root Node.js engine must match package.json');
