@@ -91,6 +91,16 @@ const cases = [
     }
   },
   {
+    name: 'a Liquid Source Notes link references an unknown source ID',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/introduction/agent-protocol.md'),
+        "'/appendices/appendix-b/' | relative_url }}#nist-airmf\"",
+        "'/appendices/appendix-b/' | relative_url }}#nist-airmf-typo\""
+      );
+    }
+  },
+  {
     name: 'owner role mapping disappears',
     mutate(root) {
       replaceOnce(
@@ -140,6 +150,16 @@ const cases = [
     name: 'a stable root navigation anchor disappears',
     mutate(root) {
       replaceOnce(path.join(root, 'docs/index.md'), '{: #related-books }', '{: #related-reading }');
+    }
+  },
+  {
+    name: 'a sidebar root navigation target disappears',
+    mutate(root) {
+      replaceOnce(
+        path.join(root, 'docs/_includes/sidebar-nav.html'),
+        "{{ '/' | relative_url }}#related-books",
+        "{{ '/' | relative_url }}#related-reading"
+      );
     }
   }
 ];

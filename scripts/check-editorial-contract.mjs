@@ -217,7 +217,10 @@ function checkSourceNoteCoverage(root, registryEntries, failures) {
     if (sourceNotesIndex < 0) continue;
     const sourceNotes = content.slice(sourceNotesIndex);
     const sourceIds = new Set(
-      [...sourceNotes.matchAll(/appendix-b\/#([a-z0-9-]+)/giu)].map((match) => match[1].toUpperCase())
+      markdownLinks(sourceNotes)
+        .map((target) => target.match(/(?:^|\/)appendices\/appendix-b\/?#([a-z0-9-]+)$/iu)?.[1])
+        .filter(Boolean)
+        .map((sourceId) => sourceId.toUpperCase())
     );
 
     for (const sourceId of sourceIds) {
