@@ -41,6 +41,11 @@ jobs:
       - name: Local npm security audit
         run: npm run check:security
 
+      - name: Audited dependency override contract
+        run: |
+          npm run check:dependencies
+          npm run check:dependencies-regression
+
       - name: Repository metadata consistency check
         run: node scripts/check-metadata.mjs
 
