@@ -58,7 +58,7 @@ layout: book
 ### OAI-EVALS
 
 - **source type**: ベンダー公式documentation
-- **資料**: [Working with evals](https://developers.openai.com/api/docs/guides/evals)、[Evaluate agent workflows](https://developers.openai.com/api/docs/guides/agents-sdk/evals)
+- **資料**: [Working with evals](https://developers.openai.com/api/docs/guides/evals)
 - **対象version/status**: 現行eval関連guide。個別サービスのlifecycleは公式deprecation情報を別途確認する。
 - **確認日**: 2026-07-21
 - **支える章・主張**: 第1章、第3章、第5章、第8章。task-specific dataset、grader、trace、継続的な回帰評価を組み合わせる。
