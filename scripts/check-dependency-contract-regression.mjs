@@ -41,13 +41,25 @@ const cases = [
   {
     name: 'brace-expansion lock regresses',
     mutate(_pkg, lock) {
-      lock.packages['node_modules/brace-expansion'].version = '5.0.6';
+      lock.packages['node_modules/brace-expansion'].version = '5.0.8';
     }
   },
   {
     name: 'js-yaml lock regresses',
     mutate(_pkg, lock) {
-      lock.packages['node_modules/js-yaml'].version = '4.2.0';
+      lock.packages['node_modules/js-yaml'].version = '5.2.1';
+    }
+  },
+  {
+    name: 'ip-address lock regresses',
+    mutate(_pkg, lock) {
+      lock.packages['node_modules/ip-address'].version = '10.3.0';
+    }
+  },
+  {
+    name: 'undici lock regresses',
+    mutate(_pkg, lock) {
+      lock.packages['node_modules/undici'].version = '7.28.0';
     }
   },
   {
