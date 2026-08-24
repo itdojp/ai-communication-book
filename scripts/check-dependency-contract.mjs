@@ -11,8 +11,10 @@ const DEFAULT_ROOT = path.resolve(SCRIPT_DIR, '..');
 
 const EXPECTED_OVERRIDES = {
   'encoding-sniffer': '1.0.2',
-  'brace-expansion': '5.0.7',
-  'js-yaml': '5.2.1'
+  'brace-expansion': '5.0.9',
+  'ip-address': '10.5.0',
+  'js-yaml': '5.2.2',
+  undici: '7.29.0'
 };
 
 const EXPECTED_LOCK_VERSIONS = {
@@ -20,15 +22,19 @@ const EXPECTED_LOCK_VERSIONS = {
   'node_modules/cheerio': '1.2.0',
   'node_modules/xmlbuilder2': '4.0.3',
   'node_modules/encoding-sniffer': '1.0.2',
-  'node_modules/brace-expansion': '5.0.7',
-  'node_modules/js-yaml': '5.2.1',
+  'node_modules/brace-expansion': '5.0.9',
+  'node_modules/ip-address': '10.5.0',
+  'node_modules/js-yaml': '5.2.2',
+  'node_modules/undici': '7.29.0',
   'node_modules/markdownlint-cli': '0.49.1'
 };
 
 const EXPECTED_OVERRIDE_CONSUMERS = {
   'encoding-sniffer': ['node_modules/cheerio'],
   'brace-expansion': ['node_modules/minimatch'],
-  'js-yaml': ['node_modules/markdownlint-cli', 'node_modules/xmlbuilder2']
+  'ip-address': ['node_modules/socks'],
+  'js-yaml': ['node_modules/markdownlint-cli', 'node_modules/xmlbuilder2'],
+  undici: ['node_modules/cheerio']
 };
 
 function removeDirectoryIfEmpty(directory) {
